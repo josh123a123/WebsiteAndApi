@@ -1,0 +1,23 @@
+﻿	<header>
+		<h1><a href="https://www.devspaceconf.com/">DevSpace</a></h1>
+		<img id="MenuButton" src="images/menu.png" alt="menu" onclick="toggleMenu();" />
+		<menu id="MainMenu">
+			<ul>
+				<li><a href="./">Home</a></li>
+				<li><a href="./sponsors.html">Sponsors</a></li>
+				<li><a href="./blog.html">Blog</a></li>
+			</ul>
+		</menu>
+
+		<script type="text/javascript" defer>
+			function toggleMenu() {
+				var menu = document.getElementById('MainMenu');
+				var styleAttribute = menu.getAttribute('style');
+				if (styleAttribute == 'display: block;') {
+					menu.setAttribute('style', 'display: none;' );
+				} else {
+					menu.setAttribute('style', 'display: block;');
+				}
+			}
+		</script>
+	</header>

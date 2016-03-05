@@ -1,0 +1,122 @@
+﻿h1 {
+	font-size: xx-large;
+	font-weight: 900;
+	margin-bottom: 20px;
+	line-height: 40px;
+}
+
+h2 {
+	font-size: x-large;
+	font-weight: 800;
+	margin-bottom: 20px;
+	line-height: 30px;
+}
+
+h3 {
+	font-size: large;
+	font-weight: 700;
+	margin-bottom: 20px;
+	line-height: 20px;
+}
+
+p {
+	margin-bottom: 20px;
+}
+
+	input {
+		width: 90%;
+		margin: 10px 5%;
+		height: 50px;
+		display: block;
+	}
+
+		input[type=text], input[type=email] {
+			text-indent: 5%;
+			font-weight: 400;
+			font-size: x-large;
+		}
+
+		input[type=submit] {
+			border: none;
+			color: #FFFFFF;
+			font-weight: 600;
+			font-size: xx-large;
+			font-variant: small-caps;
+			background-color: #3852A4;
+		}
+
+	label {
+		color: #000000;
+		margin: 0 5%;
+		font-weight: 400;
+		font-size: large;
+		font-variant: small-caps;
+		background-color: #FFFFFF;
+	}
+
+article {
+	margin: 50px 0;
+	border: 2px solid black;
+}
+
+article h1 {
+	color: #FFFFFF;
+	padding: 10px;
+	font-weight: 600;
+	font-size: xx-large;
+	font-variant: small-caps;
+	background-color: #3852A4;
+}
+
+article p {
+	padding: 10px;
+}
+
+#twitter-widget-0 { /* For Twitter Plugin */
+	margin-top: -20px !important;
+}
+
+#Content {
+	padding-top: 100px;
+	padding-left: 350px;
+	padding-right: 350px;
+}
+
+	#Content #ContentHeader {
+		text-align: center;
+	}
+
+	#Content article {
+		width: 80%;
+		min-width: 500px;
+		max-width: 800px;
+		margin: 50px auto;
+		border: 2px solid black;
+	}
+
+	#Content h2, #Content h3, #Content h4 {
+		color: #000000;
+		margin: 0 5%;
+		font-weight: 400;
+		font-variant: small-caps;
+		background-color: #FFFFFF;
+	}
+
+	#Content h1 a {
+		color: white;
+		text-decoration: none;
+	}
+
+@media only screen and (max-width: 1200px) {
+	#Content {
+		padding: 0;
+		padding-top: 100px;
+		position: initial;
+	}
+
+	#Content article {
+		width: 100%;
+		min-width: 250px;
+		max-width: 600px;
+	}
+}
