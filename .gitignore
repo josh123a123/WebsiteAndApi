@@ -234,3 +234,7 @@ _Pvt_Extensions
 
 # FAKE - F# Make
 .fake/
+
+# Config files with sensitive content
+Web.Production.config
+Web.Staging.config
