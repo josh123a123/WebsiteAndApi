@@ -5,15 +5,15 @@ using System.Threading.Tasks;
 using DevSpace.Common;
 
 namespace DevSpace.Database {
-	public class SponsorDataStore : IDataStore<ISponsor> {
-		public async Task<ISponsor> Get( int Id ) {
+	public class SponsorLevelDataStore : IDataStore<ISponsorLevel> {
+		public async Task<ISponsorLevel> Get( int Id ) {
 			using( SqlConnection connection = new SqlConnection( Settings.ConnectionString ) ) {
-				using( SqlCommand command = new SqlCommand( "SELECT * FROM Sponsors WHERE Id = @Id", connection ) ) {
+				using( SqlCommand command = new SqlCommand( "SELECT * FROM SponsorLevels WHERE Id = @Id", connection ) ) {
 					command.Parameters.Add( "Id", SqlDbType.Int ).Value = Id;
 
 					using( SqlDataReader dataReader = await command.ExecuteReaderAsync() ) {
 						if( await dataReader.ReadAsync() ) {
-							return new Models.SponsorModel( dataReader );
+							return null;
 						}
 					}
 				}
@@ -22,14 +22,14 @@ namespace DevSpace.Database {
 			return null;
 		}
 
-		public async Task<IList<ISponsor>> GetAll() {
-			List<ISponsor> returnList = new List<ISponsor>();
+		public async Task<IList<ISponsorLevel>> GetAll() {
+			List<ISponsorLevel> returnList = new List<ISponsorLevel>();
 
 			using( SqlConnection connection = new SqlConnection( Settings.ConnectionString ) ) {
-				using( SqlCommand command = new SqlCommand( "SELECT * FROM Sponsors", connection ) ) {
+				using( SqlCommand command = new SqlCommand( "SELECT * FROM SponsorLevels", connection ) ) {
 					using( SqlDataReader dataReader = await command.ExecuteReaderAsync() ) {
 						while( await dataReader.ReadAsync() ) {
-							returnList.Add( new Models.SponsorModel( dataReader ) );
+							returnList.Add( new Models.SponsorLevelModel( dataReader ) );
 						}
 					}
 				}

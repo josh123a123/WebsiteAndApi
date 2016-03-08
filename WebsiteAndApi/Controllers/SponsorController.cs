@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
 using DevSpace.Common;
 using Newtonsoft.Json;
@@ -13,10 +14,10 @@ namespace DevSpace.Api.Controllers {
 		}
 
 		[AllowAnonymous]
-		public HttpResponseMessage Get() {
+		public async Task<HttpResponseMessage> Get() {
 			try {
 				HttpResponseMessage response = new HttpResponseMessage( HttpStatusCode.OK );
-				response.Content = new StringContent( JsonConvert.SerializeObject( _DataStore.GetAll() ) );
+				response.Content = new StringContent( JsonConvert.SerializeObject( await _DataStore.GetAll() ) );
 				return response;
 			} catch( NotImplementedException ) {
 				return new HttpResponseMessage( HttpStatusCode.NotImplemented );
@@ -26,9 +27,9 @@ namespace DevSpace.Api.Controllers {
 		}
 
 		[AllowAnonymous]
-		public HttpResponseMessage Get( int id ) {
+		public async Task<HttpResponseMessage> Get( int id ) {
 			try {
-				ISponsor sponsor = _DataStore.Get( id );
+				ISponsor sponsor = await _DataStore.Get( id );
 				if( null == sponsor ) return new HttpResponseMessage( HttpStatusCode.NotFound );
 
 				HttpResponseMessage response = new HttpResponseMessage( HttpStatusCode.OK );

@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace DevSpace.Common {
 	public interface IDataStore<T> {
-		T Get( int Id );
-		IList<T> GetAll();
+		Task<T> Get( int Id );
+		Task<IList<T>> GetAll();
 	}
 }
