@@ -13,7 +13,7 @@ namespace DevSpace.Database {
 
 					using( SqlDataReader dataReader = await command.ExecuteReaderAsync() ) {
 						if( await dataReader.ReadAsync() ) {
-							return null;
+							return new Models.SponsorLevelModel( dataReader );
 						}
 					}
 				}

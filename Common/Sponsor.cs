@@ -8,7 +8,7 @@ namespace DevSpace.Common {
 
 		[DataMember]public int Id { get; private set; }
 
-		[DataMember]private SponsorLevel _level;
+		[DataMember( Name = "Level" )]private SponsorLevel _level;
 		public ISponsorLevel Level { get { return _level; } }
 
 		[DataMember]	public string DisplayName { get; private set; }
