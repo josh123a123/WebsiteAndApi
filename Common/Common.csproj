@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interfaces\IDatabase.cs" />
     <Compile Include="Interfaces\IDataStore.cs" />
     <Compile Include="Interfaces\ISponsor.cs" />
     <Compile Include="Interfaces\ISponsorLevel.cs" />

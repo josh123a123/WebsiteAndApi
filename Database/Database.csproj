@@ -67,6 +67,7 @@
     <Compile Include="Settings.cs" />
     <Compile Include="SponsorDataStore.cs" />
     <Compile Include="SponsorLevelDataStore.cs" />
+    <Compile Include="SqlDatabase.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj">

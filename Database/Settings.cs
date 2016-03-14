@@ -52,16 +52,22 @@ namespace DevSpace.Database {
 
 		public static string ConnectionString {
 			get {
+				if( string.IsNullOrWhiteSpace( Server ) ) {
+					foreach( PropertyInfo property in typeof( Settings ).GetProperties( BindingFlags.Static | BindingFlags.Public ) ) {
+						property.SetValue( null, ConfigurationManager.AppSettings[property.Name] );
+					}
+				}
+
 				StringBuilder builder = new StringBuilder();
-				builder.AppendFormat( "Server={Server};Database={Database};" );
+				builder.AppendFormat( "Server={0};Database={1};", Server, Database );
 
 				if( "TRUE".Equals( Trusted_Connection.ToUpper() ) ) {
 					builder.Append( "Trusted_Connection=True;" );
 				} else {
-					builder.AppendFormat( "User ID={UserID};Password={Password};Trusted_Connection=False;" );
+					builder.AppendFormat( "User ID={0};Password={1};Trusted_Connection=False;", UserID, Password );
 				}
 
-				builder.AppendFormat( "Encrypt={Encrypt};Connection Timeout={ConnectionTimeout};MultipleActiveResultSets={MultipleActiveResultSets}" );
+				builder.AppendFormat( "Encrypt={0};Connection Timeout={1};MultipleActiveResultSets={2}", Encrypt, ConnectionTimeout, MultipleActiveResultSets );
 				return builder.ToString();
 			}
 		}
