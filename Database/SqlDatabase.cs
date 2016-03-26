@@ -10,6 +10,7 @@ namespace DevSpace.Database {
 			try {
 				SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder( Settings.ConnectionString );
 				builder.InitialCatalog = "master";
+				builder.ConnectTimeout = 300; // We have to give enough time for the database to be created
 
 				Connection = new SqlConnection( builder.ConnectionString );
 				Connection.Open();
@@ -19,55 +20,54 @@ namespace DevSpace.Database {
 			}
 		}
 
-		private bool CreateDatabase() {
-			try {
-				SqlCommand Command = new SqlCommand();
-				Command.Connection = Connection;
-				Command.CommandText = "CREATE DATABASE " + Settings.Database + ";";
-				Command.ExecuteNonQuery();
-				return true;
-			} catch( Exception Ex ) {
-				return false;
-			}
-		}
-
 		private bool CreateVersionInfo() {
-			try {
-				SqlCommand Command = new SqlCommand();
-				Command.Connection = Connection;
-				Command.CommandText =
+			SqlCommand Command = new SqlCommand();
+			Command.Connection = Connection;
+			Command.CommandText =
 @"CREATE TABLE VersionInfo (
-	DbVersion	VARCHAR(16)	NOT NULL,
+DbVersion	VARCHAR(16)	NOT NULL,
 
-	CONSTRAINT VersionInfo_PK PRIMARY KEY ( DbVersion )
+CONSTRAINT VersionInfo_PK PRIMARY KEY ( DbVersion )
 );
 
 INSERT VersionInfo ( DbVersion ) VALUES ( '00.00.00.0000' );";
-				Command.ExecuteNonQuery();
-				return true;
-			} catch( Exception Ex ) {
-				return false;
-			}
+			Command.ExecuteNonQuery();
+			return true;
 		}
 
 		private bool ConnectToDb() {
-			try {
-				Connection = new SqlConnection( Settings.ConnectionString );
-				Connection.Open();
-				return true;
-			} catch( Exception Ex ) {
-				return false;
-			}
+			Connection = new SqlConnection( Settings.ConnectionString );
+			Connection.Open();
+			return true;
+		}
+
+		private bool DbVersionTableExists() {
+			SqlCommand Command = new SqlCommand();
+			Command.Connection = Connection;
+			Command.CommandText =
+@"IF(
+	EXISTS(
+		SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'dbo' AND  TABLE_NAME = 'VersionInfo'
+	)
+)
+	SELECT CAST( 1 AS BIT );
+ELSE
+	SELECT CAST( 0 AS BIT );";
+			return (bool)(Command.ExecuteScalar() ?? false);
 		}
 
 		private string GetDatabaseVersion() {
-			try {
+			if( DbVersionTableExists() ) {
 				SqlCommand Command = new SqlCommand();
 				Command.Connection = Connection;
 				Command.CommandText = "SELECT DbVersion FROM VersionInfo;";
 				return Command.ExecuteScalar()?.ToString();
-			} catch( Exception Ex ) {
-				return string.Empty;
+			} else {
+				if( CreateVersionInfo() ) {
+					return "00.00.00.0000";
+				} else {
+					throw new Exception( "Could not create VersionInfo table" );
+				}
 			}
 		}
 
@@ -106,48 +106,21 @@ UPDATE VersionInfo SET DbVersion = '01.00.00.0000';";
 		}
 
 		private bool RunUpgradeScript( string UpgradeScript ) {
-			try {
-				SqlCommand Command = new SqlCommand();
-				Command.Connection = Connection;
-				Command.CommandText = UpgradeScript;
-				Command.ExecuteNonQuery();
-				return true;
-			} catch( Exception Ex ) {
-				return false;
-			}
+			SqlCommand Command = new SqlCommand();
+			Command.Connection = Connection;
+			Command.CommandText = UpgradeScript;
+			Command.ExecuteNonQuery();
+			return true;
 		}
 
 		public void Initialize() {
-			// Yes, this thing in a little nasty...
-
-			if( !ConnectToDb() ) {
-				if( !ConnectToMaster() )
-					throw new Exception( "Database not found." );
-
-				if( !CreateDatabase() )
-					throw new Exception( "Could not create database" );
-
-				// At this point, this is a connection to master;
-				Connection.Close();
-
-				if( !ConnectToDb() )
-					throw new Exception( "Could not connect to database" );
-
-				if( !CreateVersionInfo() )
-					throw new Exception( "Could not create version information" );
-			}
+			ConnectToDb();
 
 			do {
-				string DatabaseVersion = GetDatabaseVersion();
-				if( string.IsNullOrWhiteSpace( DatabaseVersion ) )
-					throw new Exception( "Could not get current database version" );
+				string UpgradeScript = GetUpgradeScript( GetDatabaseVersion() );
 
-				string UpgradeScript = GetUpgradeScript( DatabaseVersion );
-				if( string.IsNullOrWhiteSpace( UpgradeScript ) )
-					break;
-
-				if( !RunUpgradeScript( UpgradeScript ) )
-					throw new Exception( "Error running upgrade script" );
+				if( string.IsNullOrWhiteSpace( UpgradeScript ) ) break;
+				else RunUpgradeScript( UpgradeScript );
 			} while( true );
 
 			Connection.Close();
