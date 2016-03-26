@@ -5,9 +5,10 @@ using System.Text;
 namespace DevSpace.Database {
 	internal static class Settings {
 		static Settings() {
-			foreach( PropertyInfo property in typeof( Settings ).GetProperties( BindingFlags.Static ) ) {
+			foreach( PropertyInfo property in typeof( Settings ).GetProperties( BindingFlags.Static | BindingFlags.Public ) ) {
+				if( null == property.SetMethod ) continue;
 				property.SetValue( null, ConfigurationManager.AppSettings[property.Name] );
-			}	
+			}
 		}
 
 		public static string Server {
@@ -52,12 +53,6 @@ namespace DevSpace.Database {
 
 		public static string ConnectionString {
 			get {
-				if( string.IsNullOrWhiteSpace( Server ) ) {
-					foreach( PropertyInfo property in typeof( Settings ).GetProperties( BindingFlags.Static | BindingFlags.Public ) ) {
-						property.SetValue( null, ConfigurationManager.AppSettings[property.Name] );
-					}
-				}
-
 				StringBuilder builder = new StringBuilder();
 				builder.AppendFormat( "Server={0};Database={1};", Server, Database );
 
