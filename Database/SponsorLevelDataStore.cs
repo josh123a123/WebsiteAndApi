@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
@@ -6,36 +7,34 @@ using DevSpace.Common;
 
 namespace DevSpace.Database {
 	public class SponsorLevelDataStore : IDataStore<ISponsorLevel> {
-		public async Task<ISponsorLevel> Get( int Id ) {
+		private static Dictionary<int, ISponsorLevel> Cache = new Dictionary<int, ISponsorLevel>();
+
+		internal static async Task FillCache() {
 			using( SqlConnection connection = new SqlConnection( Settings.ConnectionString ) ) {
-				using( SqlCommand command = new SqlCommand( "SELECT * FROM SponsorLevels WHERE Id = @Id", connection ) ) {
-					command.Parameters.Add( "Id", SqlDbType.Int ).Value = Id;
+				connection.Open();
 
-					using( SqlDataReader dataReader = await command.ExecuteReaderAsync() ) {
-						if( await dataReader.ReadAsync() ) {
-							return new Models.SponsorLevelModel( dataReader );
-						}
-					}
-				}
-			}
-
-			return null;
-		}
-
-		public async Task<IList<ISponsorLevel>> GetAll() {
-			List<ISponsorLevel> returnList = new List<ISponsorLevel>();
-
-			using( SqlConnection connection = new SqlConnection( Settings.ConnectionString ) ) {
 				using( SqlCommand command = new SqlCommand( "SELECT * FROM SponsorLevels", connection ) ) {
 					using( SqlDataReader dataReader = await command.ExecuteReaderAsync() ) {
 						while( await dataReader.ReadAsync() ) {
-							returnList.Add( new Models.SponsorLevelModel( dataReader ) );
+							ISponsorLevel newLevel = new Models.SponsorLevelModel( dataReader );
+							Cache.Add( newLevel.Id, newLevel );
 						}
 					}
 				}
 			}
+		}
 
-			return returnList;
+		public async Task<ISponsorLevel> Get( int Id ) {
+			if( !Cache.ContainsKey( Id ) ) {
+				Cache.Clear();
+				await FillCache();
+			}
+
+			return Cache[Id];
+		}
+
+		public async Task<IList<ISponsorLevel>> GetAll() {
+			throw new NotImplementedException();
 		}
 	}
 }

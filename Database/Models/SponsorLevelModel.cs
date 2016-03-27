@@ -6,7 +6,7 @@ namespace DevSpace.Database.Models {
 	internal class SponsorLevelModel : ISponsorLevel {
 		internal SponsorLevelModel( SqlDataReader dataReader ) {
 			for( int lcv = 0; lcv < dataReader.FieldCount; ++lcv ) {
-				GetType().GetProperty( dataReader.GetName( lcv ), BindingFlags.Instance | BindingFlags.NonPublic )?.SetValue( this, dataReader.GetValue( lcv ) );
+				GetType().GetProperty( dataReader.GetName( lcv ), BindingFlags.Instance | BindingFlags.Public )?.SetValue( this, dataReader.GetValue( lcv ) );
 			}
 		}
 

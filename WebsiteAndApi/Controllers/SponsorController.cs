@@ -17,7 +17,8 @@ namespace DevSpace.Api.Controllers {
 		public async Task<HttpResponseMessage> Get() {
 			try {
 				HttpResponseMessage response = new HttpResponseMessage( HttpStatusCode.OK );
-				response.Content = new StringContent( JsonConvert.SerializeObject( await _DataStore.GetAll() ) );
+				string val = JsonConvert.SerializeObject( await _DataStore.GetAll() );
+				response.Content = new StringContent( val );
 				return response;
 			} catch( NotImplementedException ) {
 				return new HttpResponseMessage( HttpStatusCode.NotImplemented );

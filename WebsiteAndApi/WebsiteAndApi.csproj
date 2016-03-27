@@ -88,6 +88,7 @@
     <Content Include="images\logos\small\dealnews.png" />
     <Content Include="images\menu.png" />
     <Content Include="index.html" />
+    <Content Include="js\Sponsor.js" />
     <Content Include="sponsors.html" />
     <Content Include="styles\master.css" />
     <Content Include="styles\menu.css" />

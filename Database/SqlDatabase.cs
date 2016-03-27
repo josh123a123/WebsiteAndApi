@@ -93,6 +93,7 @@ CREATE TABLE Sponsors (
 	Level			INT								NOT NULL,
 	LogoSmall		VARCHAR(64)						NOT NULL,
 	LogoLarge		VARCHAR(64)						NOT NULL,
+	Website			VARCHAR(64)						NOT NULL,
 
 	CONSTRAINT Sponsor_PK PRIMARY KEY ( Id ),
 	CONSTRAINT Sponsors_SponsorLevels_FK FOREIGN KEY ( Level ) REFERENCES SponsorLevels ( Id )
@@ -124,6 +125,8 @@ UPDATE VersionInfo SET DbVersion = '01.00.00.0000';";
 			} while( true );
 
 			Connection.Close();
+
+			SponsorLevelDataStore.FillCache().Wait();
 		}
 	}
 }

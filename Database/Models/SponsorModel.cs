@@ -6,10 +6,10 @@ namespace DevSpace.Database.Models {
 	internal class SponsorModel : ISponsor {
 		internal SponsorModel( SqlDataReader dataReader ) {
 			for( int lcv = 0; lcv < dataReader.FieldCount; ++lcv ) {
-				if( "LEVELID".Equals( dataReader.GetName( lcv ).ToUpper() ) ) {
+				if( "LEVEL".Equals( dataReader.GetName( lcv ).ToUpper() ) ) {
 					Level = ( new SponsorLevelDataStore() ).Get( dataReader.GetInt32( lcv ) ).Result;
 				} else {
-					GetType().GetProperty( dataReader.GetName( lcv ), BindingFlags.Instance | BindingFlags.NonPublic )?.SetValue( this, dataReader.GetValue( lcv ) );
+					GetType().GetProperty( dataReader.GetName( lcv ), BindingFlags.Instance | BindingFlags.Public )?.SetValue( this, dataReader.GetValue( lcv ) );
 				}
 			}
 		}
@@ -19,5 +19,6 @@ namespace DevSpace.Database.Models {
 		public ISponsorLevel Level { get; internal set; }
 		public string LogoLarge { get; internal set; }
 		public string LogoSmall { get; internal set; }
+		public string Website { get; internal set; }
 	}
 }

@@ -23,6 +23,7 @@ namespace DevSpace.WebsiteAndApi.Test {
 			public ISponsorLevel Level { get; set; }
 			public string LogoLarge { get; set; }
 			public string LogoSmall { get; set; }
+			public string Website { get; set; }
 		}
 
 		internal class TestDataStore : Common.IDataStore<Common.ISponsor> {
@@ -48,6 +49,7 @@ namespace DevSpace.WebsiteAndApi.Test {
 				DisplayName = "Test Sponsor",
 				LogoLarge = "Logo Large",
 				LogoSmall = "Logo Small",
+				Website = "Test Website",
 				Level = new TestSponsorLevel {
 					Id = 1,
 					DisplayName = "Test Sponsor Level",
@@ -92,6 +94,7 @@ namespace DevSpace.WebsiteAndApi.Test {
 				DisplayName = "Test Sponsor",
 				LogoLarge = "Logo Large",
 				LogoSmall = "Logo Small",
+				Website = "Test Website",
 				Level = new TestSponsorLevel {
 					Id = 1,
 					DisplayName = "Test Sponsor Level",
@@ -101,10 +104,11 @@ namespace DevSpace.WebsiteAndApi.Test {
 				},
 			} );
 			Expected.Add( new TestSponsor {
-				Id = 1,
-				DisplayName = "Test Sponsor",
-				LogoLarge = "Logo Large",
-				LogoSmall = "Logo Small",
+				Id = 2,
+				DisplayName = "Test Sponsor 2",
+				LogoLarge = "Logo Large 2",
+				LogoSmall = "Logo Small 2",
+				Website = "Test Website 2",
 				Level = new TestSponsorLevel {
 					Id = 1,
 					DisplayName = "Test Sponsor Level",
@@ -150,6 +154,7 @@ namespace DevSpace.WebsiteAndApi.Test {
 			Assert.AreEqual( Expected.DisplayName, Actual.DisplayName );
 			Assert.AreEqual( Expected.LogoLarge, Actual.LogoLarge );
 			Assert.AreEqual( Expected.LogoSmall, Actual.LogoSmall );
+			Assert.AreEqual( Expected.Website, Actual.Website );
 			AssertSponorLevelsAreEqual( Expected.Level, Actual.Level );
 		}
 

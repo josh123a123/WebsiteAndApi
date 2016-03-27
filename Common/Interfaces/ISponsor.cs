@@ -5,5 +5,6 @@
 		string DisplayName { get; }
 		string LogoLarge { get; }
 		string LogoSmall { get; }
+		string Website { get; }
 	}
 }
