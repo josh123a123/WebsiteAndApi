@@ -64,4 +64,6 @@ function SponsorSidebarViewModel() {
 	};
 }
 
-ko.applyBindings(new SponsorSidebarViewModel());
+ko.applyBindings(new SponsorSidebarViewModel(), document.getElementById('RightSidebar'));
+
+if (document.getElementById('MainSponsorElement')) ko.applyBindings(new SponsorSidebarViewModel(), document.getElementById('MainSponsorElement'));
