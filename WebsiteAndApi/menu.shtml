@@ -3,9 +3,10 @@
 		<img id="MenuButton" src="images/menu.png" alt="menu" onclick="toggleMenu();" />
 		<menu id="MainMenu">
 			<ul>
-				<li><a href="./">Home</a></li>
-				<li><a href="./sponsors.html">Sponsors</a></li>
-				<li><a href="./blog.html">Blog</a></li>
+				<li><a href="/">Home</a></li>
+				<li><a href="/sessions.html">Sessions</a></li>
+				<li><a href="/sponsors.html">Sponsors</a></li>
+				<li><a href="/blog.html">Blog</a></li>
 			</ul>
 		</menu>
 
