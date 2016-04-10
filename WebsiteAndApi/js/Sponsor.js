@@ -39,7 +39,7 @@ function SponsorSidebarViewModel() {
 	Self.Sponsors = ko.observableArray([]);
 
 	var SponsorRequest = new XMLHttpRequest();
-	SponsorRequest.open('GET', 'api/v1/sponsor', true);
+	SponsorRequest.open('GET', '/api/v1/sponsor', true);
 	SponsorRequest.send();
 
 	SponsorRequest.onreadystatechange = function () {

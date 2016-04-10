@@ -34,7 +34,7 @@
 			Self.Sessions = ko.observableArray([]);
 
 			var SessionsRequest = new XMLHttpRequest();
-				SessionsRequest.open('GET', '2015sessions.json', true);
+				SessionsRequest.open('GET', '/2015/2015sessions.json', true);
 			SessionsRequest.send();
 
 			SessionsRequest.onreadystatechange = function () {
