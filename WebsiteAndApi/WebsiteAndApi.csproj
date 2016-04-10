@@ -81,6 +81,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="2015\sessions.html" />
     <Content Include="blog.html" />
     <Content Include="Global.asax" />
     <Content Include="images\DevSpace_ForWeb_400wide.png" />
@@ -89,6 +90,7 @@
     <Content Include="images\menu.png" />
     <Content Include="index.html" />
     <Content Include="js\Sponsor.js" />
+    <Content Include="sessions.html" />
     <Content Include="sponsors.html" />
     <Content Include="styles\master.css" />
     <Content Include="styles\menu.css" />
@@ -114,6 +116,7 @@
     <Content Include="Files\Prospectus.pdf" />
     <Content Include="menu.shtml" />
     <Content Include="rightSidebar.shtml" />
+    <Content Include="2015\2015sessions.json" />
     <None Include="Properties\PublishProfiles\Staging - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\Production - Web Deploy.pubxml" />
     <None Include="Web.Debug.config">
@@ -179,7 +182,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>60231</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/DevSpace</IISUrl>
+          <IISUrl>http://localhost</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

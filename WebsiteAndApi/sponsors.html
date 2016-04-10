@@ -15,7 +15,7 @@
 			<p>For more information, download our <a href="Files/Prospectus.pdf">Sponsorship Prospectus</a> or email <a href="mailto:info@devspaceconf.com?subject=DevSpace%20Sponsorships">info@devspaceconf.com</a>.</p>
 		</article>
 
-		<article data-bind="foreach: Sponsors">
+		<article id="MainSponsorElement" data-bind="foreach: Sponsors">
 			<h1 data-bind="text: Level.DisplayName"></h1>
 			<p style="text-align: center">
 				<a target="_blank" data-bind="attr: {href: Website}"><img data-bind="attr: { src: LogoLarge, alt: DisplayName }" /></a>
