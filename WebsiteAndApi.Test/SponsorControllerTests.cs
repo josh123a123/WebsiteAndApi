@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -39,6 +40,10 @@ namespace DevSpace.WebsiteAndApi.Test {
 
 			public Task<IList<ISponsor>> GetAll() {
 				return GetAllFunction();
+			}
+
+			public Task<IList<ISponsor>> Get( string Field, object Value ) {
+				throw new NotImplementedException();
 			}
 		}
 

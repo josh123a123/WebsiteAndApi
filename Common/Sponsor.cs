@@ -11,9 +11,9 @@ namespace DevSpace.Common {
 		[DataMember( Name = "Level" )]private SponsorLevel _level;
 		public ISponsorLevel Level { get { return _level; } }
 
-		[DataMember]	public string DisplayName { get; private set; }
+		[DataMember]public string DisplayName { get; private set; }
 		[DataMember]public string LogoLarge { get; private set; }
 		[DataMember]public string LogoSmall { get; private set; }
-		[DataMember]	public string Website { get; private set; }
+		[DataMember]public string Website { get; private set; }
 	}
 }
