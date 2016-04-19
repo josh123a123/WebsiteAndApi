@@ -3,4 +3,4 @@ This is the website used for the DevSpace Technical Conference in Huntsville, Al
 
 The project is a .Net WebAPI project.
 
-The website itself uses SSI for templating. I have the SSI processor running on the standard html pages, so note the special line added to the we.config to add this.
+The website itself uses SSI for templating. I have the SSI processor running on the standard html pages, so note the special line added to the web.config to add this.
