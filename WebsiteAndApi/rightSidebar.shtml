@@ -5,9 +5,11 @@
 	</article>
 
 	<article data-bind="foreach: Sponsors">
+		<!-- ko if: Level.DisplayInSidebar -->
 		<h1 data-bind="text: Level.DisplayName"></h1>
 		<p style="text-align: center">
 			<a target="_blank" data-bind="attr: {href: Website}"><img data-bind="attr: { src: LogoSmall, alt: DisplayName }" /></a>
 		</p>
+		<!-- /ko -->
 	</article>
 </section>
