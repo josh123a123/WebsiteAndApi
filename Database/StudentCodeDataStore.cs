@@ -48,5 +48,25 @@ namespace DevSpace.Database {
 
 			return returnList;
 		}
+
+		public async Task<IStudentCode> Add( IStudentCode ItemToAdd ) {
+			if( string.IsNullOrWhiteSpace( ItemToAdd.Code ) ) return null;
+			if( string.IsNullOrWhiteSpace( ItemToAdd.Email ) ) return null;
+
+			Models.StudentCodeModel returnValue = ItemToAdd as Models.StudentCodeModel;
+
+			using( SqlConnection connection = new SqlConnection( Settings.ConnectionString ) ) {
+				connection.Open();
+
+				using( SqlCommand command = new SqlCommand( "INSERT StudentCodes ( Email, Code ) VALUES ( @Email, @Code ); SELECT SCOPE_IDENTITY();", connection ) ) {
+					command.Parameters.Add( "Code", SqlDbType.VarChar ).Value = ItemToAdd.Code;
+					command.Parameters.Add( "Email", SqlDbType.VarChar ).Value = ItemToAdd.Email;
+
+					returnValue.Id = (int)(await command.ExecuteScalarAsync());
+				}
+			}
+
+			return returnValue;
+		}
 	}
 }

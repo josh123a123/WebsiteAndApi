@@ -46,5 +46,9 @@ namespace DevSpace.Database {
 		public async Task<IList<ISponsor>> Get( string Field, object Value ) {
 			throw new NotImplementedException();
 		}
+
+		public Task<ISponsor> Add( ISponsor ItemToAdd ) {
+			throw new NotImplementedException();
+		}
 	}
 }

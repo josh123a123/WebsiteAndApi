@@ -106,7 +106,7 @@ UPDATE VersionInfo SET DbVersion = '01.00.00.0000';";
 @"CREATE TABLE StudentCodes (
 	Id					INT			IDENTITY(1,1)	NOT NULL,
 	Email				VARCHAR(64)					NOT NULL,
-	Code					VARCHAR(16)					NOT NULL,
+	Code				VARCHAR(16)					NOT NULL,
 
 	CONSTRAINT StudentCodes_PK PRIMARY KEY ( Id ),
 	CONSTRAINT StudentCodes_UI UNIQUE NONCLUSTERED ( Email )
