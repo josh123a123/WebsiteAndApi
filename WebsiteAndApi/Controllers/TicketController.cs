@@ -36,7 +36,9 @@ namespace DevSpace.Api.Controllers {
 
 		[AllowAnonymous]
 		public async Task<HttpResponseMessage> Post( [FromBody]IStudentCode value ) {
-			MutableStudentCode NewStudentCode = value as MutableStudentCode;
+			MutableStudentCode NewStudentCode = new MutableStudentCode {
+				Email = value.Email
+			};
 			if( null == NewStudentCode ) return new HttpResponseMessage( HttpStatusCode.BadRequest );
 
 			// Check for .edu email
@@ -107,20 +109,30 @@ namespace DevSpace.Api.Controllers {
 		}
 
 		private void SendEmail( IStudentCode studentCode ) {
-			MailMessage Mail = new MailMessage( RoleEnvironment.GetConfigurationSettingValue( "SmtpUsername" ), studentCode.Email );
+			MailMessage Mail = new MailMessage(
+				new MailAddress( ConfigurationManager.AppSettings["SmtpEmailAddress"], ConfigurationManager.AppSettings["SmtpDisplayName"] ),
+				new MailAddress( studentCode.Email )
+			);
+
 			Mail.Subject = "Student Ticket Code";
 			Mail.Body = string.Format(
-@"This email is a response to a forgotten password. The link below will force your login into the site. Once you are in, please update your password.
+@"This email is a response to a request for a student discount code. We have validated your email address and are pleased to offer you this code.
 
-The link provided is good for one use and will expire in 5 minutes ({0} {1} UTC).
+This code is tied to your email address is a valid for one use. If you misplace this email, you may supply your email to the DevSpace website on the tickets page to receive another copy of this email. A new code will not be generated.
 
-https://www.devspaceconf.com/login.aspx?force={2}", DateTime.UtcNow.AddMinutes( 5 ).ToShortDateString(), DateTime.UtcNow.AddMinutes( 5 ).ToShortTimeString(), Token.ToString() );
+You may go directly to out ticketing page using the link below.
+ 
+https://www.eventbrite.com/e/devspace-2016-registration-24347789895?access={0}
 
-			NetworkCredential Creds = new NetworkCredential( RoleEnvironment.GetConfigurationSettingValue( "SmtpUsername" ), RoleEnvironment.GetConfigurationSettingValue( "SmtpPassword" ) );
+If you wish, you may also go directly to EventBrite, find out event, and manually enter the code:
 
-			SmtpClient Client = new SmtpClient( RoleEnvironment.GetConfigurationSettingValue( "SmtpHost" ), Convert.ToInt32( RoleEnvironment.GetConfigurationSettingValue( "SmtpPort" ) ) );
-			Client.EnableSsl = false;
-			Client.Credentials = Creds;
+{0}
+
+We thank you for your interest in the DevSpace Technical Conference and look forward to seeing you there.", studentCode.Code );
+
+			SmtpClient Client = new SmtpClient( ConfigurationManager.AppSettings["SmtpServer"], Convert.ToInt32( ConfigurationManager.AppSettings["SmtpPort"] ) );
+			Client.EnableSsl = true;
+			Client.Credentials = new NetworkCredential( ConfigurationManager.AppSettings["SmtpEmailAddress"], ConfigurationManager.AppSettings["SmtpPassword"] );
 			Client.Send( Mail );
 		}
 	}
