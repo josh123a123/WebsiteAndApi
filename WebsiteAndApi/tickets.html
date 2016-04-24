@@ -56,9 +56,11 @@
 				We will verify the email address and send you the access code.
 				Further instructions will be in the email.
 			</p>
-			<input type="email" data-bind="value: Email" />
-			<input type="button" data-bind="click: GetCode" value="Get Student Access Code" />
-			<p data-bind="text: StatusMessage">
+			<form id="StudentCodeForm" data-bind="submit: GetCode">
+				<input type="email" data-bind="value: Email" />
+				<input type="submit" value="Get Student Access Code" />
+				<p data-bind="text: StatusMessage">
+			</form>
 			</p>
 		</article>
 	</section>

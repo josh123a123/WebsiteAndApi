@@ -14,7 +14,11 @@
 			if (CodeRequest.readyState == CodeRequest.DONE) {
 				switch (CodeRequest.status) {
 					case 201:
-						Self.StatusMessage( 'You email address has been verified. The code has been sent.' );
+						Self.StatusMessage('You email address has been verified. The code has been sent.');
+						break;
+
+					case 204:
+						Self.StatusMessage('A previous code was found. Original code was re-sent.');
 						break;
 
 					case 400:
@@ -33,4 +37,4 @@
 	};
 }
 
-ko.applyBindings(new StudentTicketViewModel(), document.getElementById('Content'));
+ko.applyBindings(new StudentTicketViewModel(), document.getElementById('StudentCodeForm'));

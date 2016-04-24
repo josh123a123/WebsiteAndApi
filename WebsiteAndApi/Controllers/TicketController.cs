@@ -64,8 +64,10 @@ namespace DevSpace.Api.Controllers {
 			IList<IStudentCode> ExistingCodes = await _DataStore.Get( "Email", NewStudentCode.Email );
 
 			//	If exists, resent existing code
-			if( ExistingCodes.Count > 0 )
+			if( ExistingCodes.Count > 0 ) {
 				SendEmail( ExistingCodes[0] );
+				return new HttpResponseMessage( HttpStatusCode.NoContent );
+			}
 
 			// Generate Code
 			NewStudentCode.Code = BitConverter.ToString( Guid.NewGuid().ToByteArray() ).Replace( "-", "" ).Substring( 0, 16 );
@@ -104,8 +106,7 @@ namespace DevSpace.Api.Controllers {
 				RequestStream.Write( RequestBytes, 0, RequestBytes.Length );
 
 			try {
-				using( HttpWebResponse EventBriteResponse = await EventBriteRequest.GetResponseAsync() as HttpWebResponse )
-					;
+				using( HttpWebResponse EventBriteResponse = await EventBriteRequest.GetResponseAsync() as HttpWebResponse );
 			} catch( WebException ) {
 				return new HttpResponseMessage( HttpStatusCode.BadGateway );
 			} catch( Exception ) {
