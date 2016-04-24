@@ -8,10 +8,22 @@ using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
+using System.Web.Http.Controllers;
+using System.Web.Http.ModelBinding;
 using DevSpace.Common;
 using Newtonsoft.Json;
 
 namespace DevSpace.Api.Controllers {
+	public class JsonStudentCodeBinder : IModelBinder {
+		public bool BindModel( HttpActionContext actionContext, ModelBindingContext bindingContext ) {
+			HttpContent content = actionContext.Request.Content;
+			string json = content.ReadAsStringAsync().Result;
+			IStudentCode obj = JsonConvert.DeserializeObject<StudentCode>( json );
+			bindingContext.Model = obj;
+			return true;
+		}
+	}
+
 	public class TicketController : ApiController {
 		private class AccessCode {
 			public string code { get; set; }
@@ -35,7 +47,7 @@ namespace DevSpace.Api.Controllers {
 		};
 
 		[AllowAnonymous]
-		public async Task<HttpResponseMessage> Post( [FromBody]IStudentCode value ) {
+		public async Task<HttpResponseMessage> Post( [ModelBinder(typeof(JsonStudentCodeBinder))]IStudentCode value ) {
 			MutableStudentCode NewStudentCode = new MutableStudentCode {
 				Email = value.Email
 			};
@@ -71,7 +83,7 @@ namespace DevSpace.Api.Controllers {
 			string EventBriteTicketId = ConfigurationManager.AppSettings["EventBriteTicketId"];
 #endif
 			EventBriteApiObject JsonObject = new EventBriteApiObject {
-				access_code =  new AccessCode {
+				access_code = new AccessCode {
 					code = NewStudentCode.Code,
 					ticket_ids = new string[] { EventBriteTicketId },
 					quantity_available = 1
@@ -92,7 +104,8 @@ namespace DevSpace.Api.Controllers {
 				RequestStream.Write( RequestBytes, 0, RequestBytes.Length );
 
 			try {
-				using( HttpWebResponse EventBriteResponse = await EventBriteRequest.GetResponseAsync() as HttpWebResponse );
+				using( HttpWebResponse EventBriteResponse = await EventBriteRequest.GetResponseAsync() as HttpWebResponse )
+					;
 			} catch( WebException ) {
 				return new HttpResponseMessage( HttpStatusCode.BadGateway );
 			} catch( Exception ) {

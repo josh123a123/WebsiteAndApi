@@ -3,6 +3,7 @@
 
 <head>
 	<!-- #include file="head.shtml" -->
+	<script type="text/javascript" src="js/tickets.js" defer></script>
 </head>
 
 <body>
@@ -46,6 +47,18 @@
 				These tickets are going for the unbelievable price of $25.
 				The catch is that you have to have a valid .edu email account to get one.
 				Oh, and the fact that there are only 25 of them.
+			</p>
+		</article>
+		<article>
+			<h1>Student Tickets</h1>
+			<p>
+				To receive an access code for a student ticket, enter your email address in the field below.
+				We will verify the email address and send you the access code.
+				Further instructions will be in the email.
+			</p>
+			<input type="email" data-bind="value: Email" />
+			<input type="button" data-bind="click: GetCode" value="Get Student Access Code" />
+			<p data-bind="text: StatusMessage">
 			</p>
 		</article>
 	</section>

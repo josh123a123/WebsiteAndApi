@@ -35,8 +35,8 @@ namespace DevSpace.Database {
 			using( SqlConnection connection = new SqlConnection( Settings.ConnectionString ) ) {
 				connection.Open();
 
-				using( SqlCommand command = new SqlCommand( string.Format( "SELECT * FROM Sponsors WHERE {0} = @value", Field ), connection ) ) {
-					command.Parameters.AddWithValue( Field, Value );
+				using( SqlCommand command = new SqlCommand( string.Format( "SELECT * FROM StudentCodes WHERE {0} = @value", Field ), connection ) ) {
+					command.Parameters.AddWithValue( "value", Value );
 
 					using( SqlDataReader dataReader = await command.ExecuteReaderAsync() ) {
 						while( await dataReader.ReadAsync() ) {
@@ -53,7 +53,10 @@ namespace DevSpace.Database {
 			if( string.IsNullOrWhiteSpace( ItemToAdd.Code ) ) return null;
 			if( string.IsNullOrWhiteSpace( ItemToAdd.Email ) ) return null;
 
-			Models.StudentCodeModel returnValue = ItemToAdd as Models.StudentCodeModel;
+			Models.StudentCodeModel returnValue = new Models.StudentCodeModel {
+				Email = ItemToAdd.Email,
+				Code = ItemToAdd.Code
+			};
 
 			using( SqlConnection connection = new SqlConnection( Settings.ConnectionString ) ) {
 				connection.Open();
@@ -61,8 +64,7 @@ namespace DevSpace.Database {
 				using( SqlCommand command = new SqlCommand( "INSERT StudentCodes ( Email, Code ) VALUES ( @Email, @Code ); SELECT SCOPE_IDENTITY();", connection ) ) {
 					command.Parameters.Add( "Code", SqlDbType.VarChar ).Value = ItemToAdd.Code;
 					command.Parameters.Add( "Email", SqlDbType.VarChar ).Value = ItemToAdd.Email;
-
-					returnValue.Id = (int)(await command.ExecuteScalarAsync());
+					returnValue.Id = Convert.ToInt32( await command.ExecuteScalarAsync() );
 				}
 			}
 

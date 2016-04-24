@@ -90,6 +90,7 @@
     <Content Include="images\menu.png" />
     <Content Include="index.html" />
     <Content Include="js\Sponsor.js" />
+    <Content Include="js\tickets.js" />
     <Content Include="sessions.html" />
     <Content Include="sponsors.html" />
     <Content Include="styles\master.css" />
