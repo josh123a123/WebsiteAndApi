@@ -19,6 +19,9 @@ namespace DevSpace {
 			switch( serviceType.Name ) {
 				case nameof( SponsorController ):
 					return new SponsorController( new Database.SponsorDataStore() );
+
+				case nameof( TicketController ):
+					return new TicketController( new Database.StudentCodeDataStore() );
 			}
 
 			return null;

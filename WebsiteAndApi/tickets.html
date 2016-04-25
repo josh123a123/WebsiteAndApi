@@ -1,0 +1,72 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+	<!-- #include file="head.shtml" -->
+	<script type="text/javascript" src="js/tickets.js" defer></script>
+</head>
+
+<body>
+	<!-- #include file="menu.shtml" -->
+
+	<section id="Content">
+		<article>
+			<h1>Tickets are available on EventBrite</h1>
+			<p>
+				DevSpace uses EventBrite for our tickets and PayPal as our payment processor.
+				This gives you security you can trust.
+				To access our EventBrite page for 2016, just press the stupidly large button below.
+			</p>
+			<input type="button" onclick="window.location.href = 'https://www.eventbrite.com/e/devspace-2016-registration-24347789895';" value="Get Tickets From EventBrite" />
+		</article>
+		<article>
+			<h1>Ticket Types</h1>
+			<p>
+				There is no difference between the various ticket types.
+				Each ticket will give you admittance to the conference, lunches, snacks, and swag.
+				If our budget allows, we may also provide breakfast.
+				You can get more details on that in the FAQ on the EventBrite page.
+			</p>
+			<p>
+				We are currently offering a limited number of Super Early Bird Tickets.
+				These tickets are going for the super affordable price of $50.
+				These will be available until they either sell out or we start announcing  some details.
+			</p>
+			<p>
+				Once the Super Early bird tickets are gone, we will start selling Early Bird Tickets.
+				These tickets are going for the not quite super affordable but still very affordable price of $75.
+				These will be available until they either sell out or we announce  all the details.
+			</p>
+			<p>
+				Once the Early Bird tickets are gone, we will have standard tickets.
+				They are so standard, I didn't even upper case the word ticket.
+				These tickets are going for the not quite very affordable but still affordable price of $100.
+			</p>
+			<p>
+				There will also be a limited number of Student Tickets.
+				These tickets are going for the unbelievable price of $25.
+				The catch is that you have to have a valid .edu email account to get one.
+				Oh, and the fact that there are only 25 of them.
+			</p>
+		</article>
+		<article>
+			<h1>Student Tickets</h1>
+			<p>
+				To receive an access code for a student ticket, enter your email address in the field below.
+				We will verify the email address and send you the access code.
+				Further instructions will be in the email.
+			</p>
+			<form id="StudentCodeForm" data-bind="submit: GetCode">
+				<input type="email" data-bind="value: Email" />
+				<input type="submit" value="Get Student Access Code" />
+				<p data-bind="text: StatusMessage">
+			</form>
+			</p>
+		</article>
+	</section>
+
+	<!-- #include file="leftSidebar.shtml" -->
+	<!-- #include file="rightSidebar.shtml" -->
+</body>
+
+</html>

@@ -36,5 +36,13 @@ namespace DevSpace.Database {
 		public async Task<IList<ISponsorLevel>> GetAll() {
 			throw new NotImplementedException();
 		}
+
+		public async Task<IList<ISponsorLevel>> Get( string Field, object Value ) {
+			throw new NotImplementedException();
+		}
+
+		public Task<ISponsorLevel> Add( ISponsorLevel ItemToAdd ) {
+			throw new NotImplementedException();
+		}
 	}
 }

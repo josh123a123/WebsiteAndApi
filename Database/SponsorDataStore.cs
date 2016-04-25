@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
@@ -40,6 +41,14 @@ namespace DevSpace.Database {
 			}
 
 			return returnList;
+		}
+
+		public async Task<IList<ISponsor>> Get( string Field, object Value ) {
+			throw new NotImplementedException();
+		}
+
+		public Task<ISponsor> Add( ISponsor ItemToAdd ) {
+			throw new NotImplementedException();
 		}
 	}
 }
