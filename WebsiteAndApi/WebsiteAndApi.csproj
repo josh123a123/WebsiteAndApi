@@ -95,7 +95,7 @@
     <Content Include="images\logos\small\dealnews.png" />
     <Content Include="images\menu.png" />
     <Content Include="index.html" />
-    <Content Include="js\Sponsor.js" />
+    <Content Include="js\sponsor.js" />
     <Content Include="js\tickets.js" />
     <Content Include="login.html" />
     <Content Include="sessions.html" />
