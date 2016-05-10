@@ -49,6 +49,10 @@ namespace DevSpace.WebsiteAndApi.Test {
 			public Task<ISponsor> Add( ISponsor ItemToAdd ) {
 				throw new NotImplementedException();
 			}
+
+			public Task<ISponsor> Update( ISponsor ItemToUpdate ) {
+				throw new NotImplementedException();
+			}
 		}
 
 		[TestMethod]

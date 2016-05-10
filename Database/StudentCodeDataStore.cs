@@ -70,5 +70,9 @@ namespace DevSpace.Database {
 
 			return returnValue;
 		}
+
+		public Task<IStudentCode> Update( IStudentCode ItemToUpdate ) {
+			throw new NotImplementedException();
+		}
 	}
 }

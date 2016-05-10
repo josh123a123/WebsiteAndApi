@@ -64,12 +64,14 @@
     <Compile Include="Models\SponsorLevelModel.cs" />
     <Compile Include="Models\SponsorModel.cs" />
     <Compile Include="Models\StudentCodeModel.cs" />
+    <Compile Include="Models\UserModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="SponsorDataStore.cs" />
     <Compile Include="SponsorLevelDataStore.cs" />
     <Compile Include="SqlDatabase.cs" />
     <Compile Include="StudentCodeDataStore.cs" />
+    <Compile Include="UserDataStore.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj">
