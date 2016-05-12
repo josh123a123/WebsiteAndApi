@@ -30,6 +30,8 @@ namespace DevSpace.WebsiteAndApi.Test {
 
 			public Guid SessionToken { get; set; }
 
+			public string Twitter { get; set; }
+
 			public string Website { get; set; }
 
 			public IUser UpdateBio( string newBio ) {
@@ -62,6 +64,10 @@ namespace DevSpace.WebsiteAndApi.Test {
 			}
 
 			public IUser UpdateSessionToken( Guid newSessionToken ) {
+				throw new NotImplementedException();
+			}
+
+			public IUser UpdateTwitter( string newTwitter ) {
 				throw new NotImplementedException();
 			}
 

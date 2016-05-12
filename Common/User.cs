@@ -12,7 +12,8 @@ namespace DevSpace.Common {
 		[DataMember]	public int Id { get; private set; }
 		public string PasswordHash { get; private set; }
 		public byte Permissions { get; private set; }
-		[DataMember]public string Website { get; private set; }
+		[DataMember]	public string Twitter { get; private set; }
+		[DataMember]	public string Website { get; private set; }
 		public Guid SessionToken { get; private set; }
 		public DateTime SessionExpires { get; private set; }
 
@@ -58,6 +59,12 @@ namespace DevSpace.Common {
 			return newUser;
 		}
 
+		public IUser UpdateTwitter( string newTwitter ) {
+			User newUser = Clone();
+			newUser.Twitter = newTwitter;
+			return newUser;
+		}
+
 		public IUser UpdateSessionToken( Guid newSessionToken ) {
 			User newUser = Clone();
 			newUser.SessionToken = newSessionToken;
@@ -78,6 +85,7 @@ namespace DevSpace.Common {
 			cloned.Bio = string.Copy( this.Bio );
 			cloned.Permissions = this.Permissions;
 			cloned.PasswordHash = string.Copy( this.PasswordHash );
+			cloned.Twitter = string.Copy( this.Twitter );
 			cloned.Website = string.Copy( this.Website );
 			cloned.SessionToken = this.SessionToken;
 			cloned.SessionExpires = this.SessionExpires;

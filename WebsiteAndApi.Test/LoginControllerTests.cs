@@ -59,6 +59,12 @@ namespace DevSpace.WebsiteAndApi.Test {
 				}
 			}
 
+			public string Twitter {
+				get {
+					throw new NotImplementedException();
+				}
+			}
+
 			public string Website {
 				get {
 					throw new NotImplementedException();
@@ -94,6 +100,10 @@ namespace DevSpace.WebsiteAndApi.Test {
 			}
 
 			public IUser UpdateSessionToken( Guid newSessionToken ) {
+				throw new NotImplementedException();
+			}
+
+			public IUser UpdateTwitter( string newTwitter ) {
 				throw new NotImplementedException();
 			}
 

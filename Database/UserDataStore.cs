@@ -11,7 +11,7 @@ namespace DevSpace.Database {
 			using( SqlConnection connection = new SqlConnection( Settings.ConnectionString ) ) {
 				connection.Open();
 
-				using( SqlCommand command = new SqlCommand( "INSERT Users ( DisplayName, EmailAddress, Bio, Permissions, PasswordHash, Website, SessionToken, SessionExpires ) VALUES ( @DisplayName, @EmailAddress, @Bio, @Permissions, @PasswordHash, @Website, @SessionToken, @SessionExpires ); SELECT SCOPE_IDENTITY();", connection ) ) {
+				using( SqlCommand command = new SqlCommand( "INSERT Users ( DisplayName, EmailAddress, Bio, Permissions, PasswordHash, Twitter, Website, SessionToken, SessionExpires ) VALUES ( @DisplayName, @EmailAddress, @Bio, @Permissions, @PasswordHash, @Twitter, @Website, @SessionToken, @SessionExpires ); SELECT SCOPE_IDENTITY();", connection ) ) {
 					command.Parameters.Add( "DisplayName", SqlDbType.VarChar ).Value = ItemToAdd.DisplayName;
 					command.Parameters.Add( "EmailAddress", SqlDbType.VarChar ).Value = ItemToAdd.EmailAddress;
 
@@ -22,6 +22,11 @@ namespace DevSpace.Database {
 
 					command.Parameters.Add( "Permissions", SqlDbType.TinyInt ).Value = ItemToAdd.Permissions;
 					command.Parameters.Add( "PasswordHash", SqlDbType.VarChar ).Value = ItemToAdd.PasswordHash;
+
+					if( string.IsNullOrWhiteSpace( ItemToAdd.Twitter ) )
+						command.Parameters.Add( "Twitter", SqlDbType.VarChar ).Value = DBNull.Value;
+					else
+						command.Parameters.Add( "Twitter", SqlDbType.VarChar ).Value = ItemToAdd.Twitter;
 
 					if( string.IsNullOrWhiteSpace( ItemToAdd.Website ) )
 						command.Parameters.Add( "Website", SqlDbType.VarChar ).Value = DBNull.Value;
@@ -76,7 +81,7 @@ namespace DevSpace.Database {
 			using( SqlConnection connection = new SqlConnection( Settings.ConnectionString ) ) {
 				connection.Open();
 
-				using( SqlCommand command = new SqlCommand( "UPDATE Users SET DisplayName = @DisplayName, EmailAddress = @EmailAddress, Bio = @Bio, Permissions = @Permissions, PasswordHash = @PasswordHash, Website = @Website, SessionToken = @SessionToken, SessionExprires = @SessionExpires WHERE Id = @Id", connection ) ) {
+				using( SqlCommand command = new SqlCommand( "UPDATE Users SET DisplayName = @DisplayName, EmailAddress = @EmailAddress, Bio = @Bio, Permissions = @Permissions, PasswordHash = @PasswordHash, Twitter = @Twitter, Website = @Website, SessionToken = @SessionToken, SessionExprires = @SessionExpires WHERE Id = @Id", connection ) ) {
 					command.Parameters.Add( "Id", SqlDbType.Int ).Value = ItemToUpdate.Id;
 					command.Parameters.Add( "DisplayName", SqlDbType.VarChar ).Value = ItemToUpdate.DisplayName;
 					command.Parameters.Add( "EmailAddress", SqlDbType.VarChar ).Value = ItemToUpdate.EmailAddress;
@@ -88,6 +93,11 @@ namespace DevSpace.Database {
 
 					command.Parameters.Add( "Permissions", SqlDbType.TinyInt ).Value = ItemToUpdate.Permissions;
 					command.Parameters.Add( "PasswordHash", SqlDbType.VarChar ).Value = ItemToUpdate.PasswordHash;
+
+					if( string.IsNullOrWhiteSpace( ItemToUpdate.Twitter ) )
+						command.Parameters.Add( "Twitter", SqlDbType.VarChar ).Value = DBNull.Value;
+					else
+						command.Parameters.Add( "Twitter", SqlDbType.VarChar ).Value = ItemToUpdate.Twitter;
 
 					if( string.IsNullOrWhiteSpace( ItemToUpdate.Website ) )
 						command.Parameters.Add( "Website", SqlDbType.VarChar ).Value = DBNull.Value;

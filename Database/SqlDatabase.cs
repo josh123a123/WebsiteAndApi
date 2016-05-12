@@ -114,6 +114,26 @@ UPDATE VersionInfo SET DbVersion = '01.00.00.0000';";
 
 UPDATE VersionInfo SET DbVersion = '01.00.01.0000';";
 
+				case "01.00.01.0000":
+					return
+@"CREATE TABLE Users (
+	Id		INTEGER			IDENTITY(1,1)	NOT NULL,
+	EmailAddress	VARCHAR(100)				NOT NULL,
+	DisplayName	VARCHAR(46)				NOT NULL,
+	PasswordHash	VARCHAR(128)				NOT NULL,
+	Bio		VARCHAR(MAX)				NULL,
+	Twitter		VARCHAR(15)				NULL,
+	Website		VARCHAR(230)				NULL,
+	Permissions	INTEGER					NULL,
+	SessionToken	UNIQUEIDENTIFIER			NULL,
+	SessionExpires	DATETIME				NULL,
+
+	CONSTRAINT Speakers_PK PRIMARY KEY CLUSTERED ( Id ),
+	CONSTRAINT Speakers_IX UNIQUE NONCLUSTERED ( EmailAddress )
+);
+
+UPDATE VersionInfo SET DbVersion = '01.00.01.0001';";
+
 				default:
 					return string.Empty;
 			}

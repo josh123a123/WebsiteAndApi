@@ -6,6 +6,7 @@ namespace DevSpace.Common {
 		string DisplayName { get; }
 		string EmailAddress { get; }
 		string Bio { get; }
+		string Twitter { get; }
 		byte Permissions { get; }
 		string PasswordHash { get; }
 		string Website { get; }
@@ -16,6 +17,7 @@ namespace DevSpace.Common {
 		IUser UpdateDisplayName( string newDisplayName );
 		IUser UpdateEmailAddress( string newEmailAddress );
 		IUser UpdateBio( string newBio );
+		IUser UpdateTwitter( string newTwitter );
 		IUser UpdatePermissions( byte newPermissions );
 		IUser UpdatePasswordHash( string newPasswordHash );
 		IUser UpdateWebsite( string newWebsite );
