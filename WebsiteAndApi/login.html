@@ -3,6 +3,7 @@
 
 <head>
 	<!-- #include file="head.shtml" -->
+	<script type="text/javascript" src="/js/login.js" defer></script>
 </head>
 
 <body>
@@ -10,7 +11,7 @@
 
 	<section id="Content">
 		<h4 id="ErrorMessage" style="display: none;"></h4>
-		<div id="Login">
+		<article id="Login">
 			<h1 class="LoginField">Login</h1>
 			<h1 class="RegistrationField">Register</h1>
 			<h2 class="RegistrationField">Display Name</h2>
@@ -26,7 +27,7 @@
 			<h3>- OR -</h3>
 			<input type="button" onclick="ShowRegister();" value="Register" class="LoginField" tabindex="7" />
 			<input type="button" onclick="ShowLogin();" value="Cancel" class="RegistrationField" tabindex="8" />
-		</div>
+		</article>
 	</section>
 
 	<!-- #include file="leftSidebar.shtml" -->

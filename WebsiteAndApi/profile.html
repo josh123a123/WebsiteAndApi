@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+	<!-- #include file="head.shtml" -->
+</head>
+
+<body>
+	<!-- #include file="menu.shtml" -->
+
+	<section id="Content">
+		<article id="Profile">
+			<h1>Profile</h1>
+			<h2>Display Name</h2>
+			<input type="text" data-bind="value: Profile().DisplayName" />
+			<h2>Email Address</h2>
+			<input type="text" readonly="readonly" data-bind="value: Profile().EmailAddress" />
+			<h2>Twitter</h2>
+			<input type="text" data-bind="value: Profile().Twitter" />
+			<h2>Website</h2>
+			<input type="text" data-bind="value: Profile().Website" />
+			<h2>Bio</h2>
+			<textarea data-bind="value: Profile().Bio"></textarea>
+			<input type="button" data-bind="click: SaveProfile" value="Save Profile" />
+			<input type="button" data-bind="click: ShowCredentials" value="Update Credentials" />
+			<h1>Sessions</h1>
+			<table>
+				<tbody id="SessionList" data-bind="foreach: Sessions">
+					<tr>
+						<td class="Title" data-bind="text: Title"></td>
+						<td><img src="images/Edit.png" alt="Edit" data-bind="click: $root.ShowSession" /></td>
+						<td><img src="images/Trash.png" alt="Delete" data-bind="click: $root.DeleteSession" /></td>
+					</tr>
+				</tbody>
+			</table>
+			<input type="button" data-bind="click: function () { ShowSession(null) }" value="New Session" />
+		</article>
+	</section>
+
+	<!-- #include file="leftSidebar.shtml" -->
+	<!-- #include file="rightSidebar.shtml" -->
+</body>
+
+</html>

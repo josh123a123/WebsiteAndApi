@@ -22,6 +22,12 @@ namespace DevSpace {
 
 				case nameof( TicketController ):
 					return new TicketController( new Database.StudentCodeDataStore() );
+
+				case nameof( LoginController ):
+					return new LoginController( new Database.UserDataStore() );
+
+				case nameof( UserController ):
+					return new UserController( new Database.UserDataStore() );
 			}
 
 			return null;

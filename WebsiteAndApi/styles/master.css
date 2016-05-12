@@ -23,14 +23,14 @@ p {
 	margin-bottom: 20px;
 }
 
-	input {
+	input, textarea {
 		width: 90%;
 		margin: 10px 5%;
 		height: 50px;
 		display: block;
 	}
 
-		input[type=text], input[type=email] {
+		input[type=text], input[type=email], input[type=password], textarea {
 			text-indent: 5%;
 			font-weight: 400;
 			font-size: x-large;
@@ -43,6 +43,12 @@ p {
 			font-size: xx-large;
 			font-variant: small-caps;
 			background-color: #3852A4;
+		}
+
+		textarea {
+			height: 200px;
+			padding: 10px;
+			text-indent: 0;
 		}
 
 	label {

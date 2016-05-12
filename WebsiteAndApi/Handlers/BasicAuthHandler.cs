@@ -9,7 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using DevSpace.Common;
 using DevSpace.Database;
-using Liphsoft.Crypto.Argon2;
+using Scrypt;
 
 namespace DevSpace.Api.Handlers {
 	class BasicAuthHandler : DelegatingHandler {
@@ -19,11 +19,11 @@ namespace DevSpace.Api.Handlers {
 		/// <summary>Argon2i Hash of User's Password</summary>
 		private string Argon2Password { get; set; }
 
-		private PasswordHasher _Hasher = null;
-		private PasswordHasher Hasher {
+		private ScryptEncoder _Hasher = null;
+		private ScryptEncoder Hasher {
 			get {
 				if( null == _Hasher )
-					_Hasher = new PasswordHasher();
+					_Hasher = new ScryptEncoder();
 
 				return _Hasher;
 			}
@@ -35,12 +35,12 @@ namespace DevSpace.Api.Handlers {
 			string RawBasicAuth = Encoding.UTF8.GetString( HeaderBytes );
 			UserEmail = RawBasicAuth.Substring( 0, RawBasicAuth.IndexOf( ':' ) );
 
+			// This has the effect of using the email as a salt for the password.
+			Argon2Password = Hasher.Encode( RawBasicAuth );
+
 			// The RawBasicAuth has the password in clear text
 			// Thus, we want to get rid of it as soon as possible.
 			RawBasicAuth = null;
-
-			// This has the effect of using the email as a salt for the password.
-			Argon2Password = Hasher.Hash( HeaderBytes );
 
 			// The HeaderBytes also has the raw password.
 			// Thus, clear it out, now that we're done with it
@@ -62,7 +62,7 @@ namespace DevSpace.Api.Handlers {
 					// EmailAddress is a unique key, so we can only find one
 					if( 0 != FoundUsers.Count ) {
 						// IF Basic Auth Succeeds
-						if( Hasher.Verify( FoundUsers[0].PasswordHash, Argon2Password ) ) {
+						if( Hasher.Compare( FoundUsers[0].PasswordHash, Argon2Password ) ) {
 							GenericIdentity UserIdentity = new GenericIdentity( UserEmail );
 							GenericPrincipal UserPrincipal = new GenericPrincipal( UserIdentity, null );
 
