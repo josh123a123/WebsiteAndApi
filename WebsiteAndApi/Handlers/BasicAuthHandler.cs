@@ -62,7 +62,7 @@ namespace DevSpace.Api.Handlers {
 					// EmailAddress is a unique key, so we can only find one
 					if( 0 != FoundUsers.Count ) {
 						// IF Basic Auth Succeeds
-						if( Hasher.Compare( FoundUsers[0].PasswordHash, Argon2Password ) ) {
+						if( Hasher.Compare( Encoding.UTF8.GetString( Convert.FromBase64String( Request.Headers.Authorization.Parameter ) ), FoundUsers[0].PasswordHash ) ) {
 							GenericIdentity UserIdentity = new GenericIdentity( UserEmail );
 							GenericPrincipal UserPrincipal = new GenericPrincipal( UserIdentity, null );
 

@@ -124,7 +124,7 @@ UPDATE VersionInfo SET DbVersion = '01.00.01.0000';";
 	Bio		VARCHAR(MAX)				NULL,
 	Twitter		VARCHAR(15)				NULL,
 	Website		VARCHAR(230)				NULL,
-	Permissions	INTEGER					NULL,
+	Permissions	TINYINT				NULL,
 	SessionToken	UNIQUEIDENTIFIER			NULL,
 	SessionExpires	DATETIME				NULL,
 

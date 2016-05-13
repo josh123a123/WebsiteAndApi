@@ -8,8 +8,21 @@ namespace DevSpace.Database.Models {
 		private UserModel() {}
 
 		internal UserModel( SqlDataReader dataReader ) {
-			for( int lcv = 0; lcv < dataReader.FieldCount; ++lcv ) {
-				GetType().GetProperty( dataReader.GetName( lcv ), BindingFlags.Instance | BindingFlags.Public )?.SetValue( this, dataReader.GetValue( lcv ) );
+			try {
+				for( int lcv = 0; lcv < dataReader.FieldCount; ++lcv ) {
+					PropertyInfo property = GetType().GetProperty( dataReader.GetName( lcv ), BindingFlags.Instance | BindingFlags.Public );
+					if( null == property ) continue;
+
+					object value = dataReader.GetValue( lcv );
+					if( DBNull.Value == value ) value = null;
+
+//					if( "Permissions" == property.Name && null != value )
+//						this.Permissions = dataReader.GetByte( lcv );
+//					else
+						property.SetValue( this, value );
+				}
+			} catch( Exception Ex ) {
+				return;
 			}
 		}
 
@@ -89,11 +102,11 @@ namespace DevSpace.Database.Models {
 			cloned.Id = this.Id;
 			cloned.DisplayName = string.Copy( this.DisplayName );
 			cloned.EmailAddress = string.Copy( this.EmailAddress );
-			cloned.Bio = string.Copy( this.Bio );
+			if( null != this.Bio ) cloned.Bio = string.Copy( this.Bio );
 			cloned.Permissions = this.Permissions;
-			cloned.PasswordHash = string.Copy( this.PasswordHash );
-			cloned.Twitter = string.Copy( this.Twitter );
-			cloned.Website = string.Copy( this.Website );
+			if( null != this.PasswordHash ) cloned.PasswordHash = string.Copy( this.PasswordHash );
+			if( null != this.Twitter ) cloned.Twitter = string.Copy( this.Twitter );
+			if( null != this.Website ) cloned.Website = string.Copy( this.Website );
 			cloned.SessionToken = this.SessionToken;
 			cloned.SessionExpires = this.SessionExpires;
 			return cloned;

@@ -9,6 +9,7 @@ using System.Web.Http.Controllers;
 using System.Web.Http.ModelBinding;
 using DevSpace.Common;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Scrypt;
 
 namespace DevSpace.Api.Controllers {
@@ -16,7 +17,9 @@ namespace DevSpace.Api.Controllers {
 		public bool BindModel( HttpActionContext actionContext, ModelBindingContext bindingContext ) {
 			HttpContent content = actionContext.Request.Content;
 			string json = content.ReadAsStringAsync().Result;
-			IStudentCode obj = JsonConvert.DeserializeObject<StudentCode>( json );
+			IUser obj = JsonConvert.DeserializeObject<User>( json );
+			JObject raw = JsonConvert.DeserializeObject<JObject>( json );
+			obj = obj.UpdatePasswordHash( raw["PasswordHash"].ToString() );
 			bindingContext.Model = obj;
 			return true;
 		}

@@ -82,11 +82,11 @@ namespace DevSpace.Common {
 			cloned.Id = this.Id;
 			cloned.DisplayName = string.Copy( this.DisplayName );
 			cloned.EmailAddress = string.Copy( this.EmailAddress );
-			cloned.Bio = string.Copy( this.Bio );
+			if( null != this.Bio ) cloned.Bio = string.Copy( this.Bio );
 			cloned.Permissions = this.Permissions;
-			cloned.PasswordHash = string.Copy( this.PasswordHash );
-			cloned.Twitter = string.Copy( this.Twitter );
-			cloned.Website = string.Copy( this.Website );
+			if( null != this.PasswordHash ) cloned.PasswordHash = string.Copy( this.PasswordHash );
+			if( null != this.Twitter ) cloned.Twitter = string.Copy( this.Twitter );
+			if( null != this.Website ) cloned.Website = string.Copy( this.Website );
 			cloned.SessionToken = this.SessionToken;
 			cloned.SessionExpires = this.SessionExpires;
 			return cloned;

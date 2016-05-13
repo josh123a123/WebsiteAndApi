@@ -99,7 +99,7 @@ function Register() {
 		var RequestJson = {
 			DisplayName: document.getElementById('Name').value,
 			EmailAddress: document.getElementById('Email').value,
-			Password: document.getElementById('Password').value
+			PasswordHash: document.getElementById('Password').value
 		};
 
 		var Request = new XMLHttpRequest();

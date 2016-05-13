@@ -81,7 +81,7 @@ namespace DevSpace.Database {
 			using( SqlConnection connection = new SqlConnection( Settings.ConnectionString ) ) {
 				connection.Open();
 
-				using( SqlCommand command = new SqlCommand( "UPDATE Users SET DisplayName = @DisplayName, EmailAddress = @EmailAddress, Bio = @Bio, Permissions = @Permissions, PasswordHash = @PasswordHash, Twitter = @Twitter, Website = @Website, SessionToken = @SessionToken, SessionExprires = @SessionExpires WHERE Id = @Id", connection ) ) {
+				using( SqlCommand command = new SqlCommand( "UPDATE Users SET DisplayName = @DisplayName, EmailAddress = @EmailAddress, Bio = @Bio, Permissions = @Permissions, PasswordHash = @PasswordHash, Twitter = @Twitter, Website = @Website, SessionToken = @SessionToken, SessionExpires = @SessionExpires WHERE Id = @Id", connection ) ) {
 					command.Parameters.Add( "Id", SqlDbType.Int ).Value = ItemToUpdate.Id;
 					command.Parameters.Add( "DisplayName", SqlDbType.VarChar ).Value = ItemToUpdate.DisplayName;
 					command.Parameters.Add( "EmailAddress", SqlDbType.VarChar ).Value = ItemToUpdate.EmailAddress;
