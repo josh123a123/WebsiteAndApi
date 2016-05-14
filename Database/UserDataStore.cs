@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Text;
 using System.Threading.Tasks;
 using DevSpace.Common;
 
@@ -11,7 +12,7 @@ namespace DevSpace.Database {
 			using( SqlConnection connection = new SqlConnection( Settings.ConnectionString ) ) {
 				connection.Open();
 
-				using( SqlCommand command = new SqlCommand( "INSERT Users ( DisplayName, EmailAddress, Bio, Permissions, PasswordHash, Twitter, Website, SessionToken, SessionExpires ) VALUES ( @DisplayName, @EmailAddress, @Bio, @Permissions, @PasswordHash, @Twitter, @Website, @SessionToken, @SessionExpires ); SELECT SCOPE_IDENTITY();", connection ) ) {
+				using( SqlCommand command = new SqlCommand( "INSERT Users ( DisplayName, EmailAddress, Bio, Permissions, PasswordHash, Twitter, Website ) VALUES ( @DisplayName, @EmailAddress, @Bio, @Permissions, @PasswordHash, @Twitter, @Website ); SELECT SCOPE_IDENTITY();", connection ) ) {
 					command.Parameters.Add( "DisplayName", SqlDbType.VarChar ).Value = ItemToAdd.DisplayName;
 					command.Parameters.Add( "EmailAddress", SqlDbType.VarChar ).Value = ItemToAdd.EmailAddress;
 
@@ -33,24 +34,27 @@ namespace DevSpace.Database {
 					else
 						command.Parameters.Add( "Website", SqlDbType.VarChar ).Value = ItemToAdd.Website;
 
-					if( Guid.Empty.Equals( ItemToAdd.SessionToken ) )
-						command.Parameters.Add( "SessionToken", SqlDbType.UniqueIdentifier ).Value = DBNull.Value;
-					else
-						command.Parameters.Add( "SessionToken", SqlDbType.UniqueIdentifier ).Value = ItemToAdd.SessionToken;
-
-					if( DateTime.MinValue.Equals( ItemToAdd.SessionExpires ) )
-						command.Parameters.Add( "SessionExpires", SqlDbType.DateTime ).Value = DBNull.Value;
-					else
-						command.Parameters.Add( "SessionExpires", SqlDbType.DateTime ).Value = ItemToAdd.SessionExpires;
-
-
 					return ItemToAdd.UpdateId( Convert.ToInt32( await command.ExecuteScalarAsync() ) );
 				}
 			}
 		}
 
 		public async Task<IUser> Get( int Id ) {
-			throw new NotImplementedException();
+			using( SqlConnection connection = new SqlConnection( Settings.ConnectionString ) ) {
+				connection.Open();
+
+				using( SqlCommand command = new SqlCommand( "SELECT * FROM Users WHERE Id = @Id", connection ) ) {
+					command.Parameters.Add( "Id", SqlDbType.Int ).Value = Id;
+
+					using( SqlDataReader dataReader = await command.ExecuteReaderAsync() ) {
+						if( await dataReader.ReadAsync() ) {
+							return new Models.UserModel( dataReader );
+						}
+					}
+				}
+			}
+
+			return null;
 		}
 
 		public async Task<IList<IUser>> Get( string Field, object Value ) {
@@ -81,7 +85,13 @@ namespace DevSpace.Database {
 			using( SqlConnection connection = new SqlConnection( Settings.ConnectionString ) ) {
 				connection.Open();
 
-				using( SqlCommand command = new SqlCommand( "UPDATE Users SET DisplayName = @DisplayName, EmailAddress = @EmailAddress, Bio = @Bio, Permissions = @Permissions, PasswordHash = @PasswordHash, Twitter = @Twitter, Website = @Website, SessionToken = @SessionToken, SessionExpires = @SessionExpires WHERE Id = @Id", connection ) ) {
+				// PasswordHash should only be updated if it has a value
+				StringBuilder sqlQuery = new StringBuilder( "UPDATE Users SET DisplayName = @DisplayName, EmailAddress = @EmailAddress, Bio = @Bio, Permissions = @Permissions, " );
+				if( !string.IsNullOrWhiteSpace( ItemToUpdate.PasswordHash ) )
+					sqlQuery.Append( "PasswordHash = @PasswordHash, " );
+				sqlQuery.Append( "Twitter = @Twitter, Website = @Website WHERE Id = @Id" );
+
+				using( SqlCommand command = new SqlCommand( sqlQuery.ToString(), connection ) ) {
 					command.Parameters.Add( "Id", SqlDbType.Int ).Value = ItemToUpdate.Id;
 					command.Parameters.Add( "DisplayName", SqlDbType.VarChar ).Value = ItemToUpdate.DisplayName;
 					command.Parameters.Add( "EmailAddress", SqlDbType.VarChar ).Value = ItemToUpdate.EmailAddress;
@@ -92,7 +102,10 @@ namespace DevSpace.Database {
 						command.Parameters.Add( "Bio", SqlDbType.VarChar ).Value = ItemToUpdate.Bio;
 
 					command.Parameters.Add( "Permissions", SqlDbType.TinyInt ).Value = ItemToUpdate.Permissions;
-					command.Parameters.Add( "PasswordHash", SqlDbType.VarChar ).Value = ItemToUpdate.PasswordHash;
+
+					// PasswordHash should only be updated if it has a value
+					if( !string.IsNullOrWhiteSpace( ItemToUpdate.PasswordHash ) )
+						command.Parameters.Add( "PasswordHash", SqlDbType.VarChar ).Value = ItemToUpdate.PasswordHash;
 
 					if( string.IsNullOrWhiteSpace( ItemToUpdate.Twitter ) )
 						command.Parameters.Add( "Twitter", SqlDbType.VarChar ).Value = DBNull.Value;
@@ -104,21 +117,49 @@ namespace DevSpace.Database {
 					else
 						command.Parameters.Add( "Website", SqlDbType.VarChar ).Value = ItemToUpdate.Website;
 
-					if(  Guid.Empty.Equals( ItemToUpdate.SessionToken ) )
-						command.Parameters.Add( "SessionToken", SqlDbType.UniqueIdentifier ).Value = DBNull.Value;
-					else
-						command.Parameters.Add( "SessionToken", SqlDbType.UniqueIdentifier ).Value = ItemToUpdate.SessionToken;
-
-					if( DateTime.MinValue.Equals( ItemToUpdate.SessionExpires ) )
-						command.Parameters.Add( "SessionExpires", SqlDbType.DateTime ).Value = DBNull.Value;
-					else
-						command.Parameters.Add( "SessionExpires", SqlDbType.DateTime ).Value = ItemToUpdate.SessionExpires;
-
 					await command.ExecuteNonQueryAsync();
 				}
 			}
 
 			return ItemToUpdate;
+		}
+
+		public async Task<IUser> CreateSession( IUser ItemToUpdate ) {
+			IUser UpdatedItem = ItemToUpdate
+				.UpdateSessionToken( Guid.NewGuid() )
+				.UpdateSessionExpires( DateTime.UtcNow.AddMinutes( 20 ) );
+
+			using( SqlConnection connection = new SqlConnection( Settings.ConnectionString ) ) {
+				connection.Open();
+
+				using( SqlCommand command = new SqlCommand( "UPDATE Users SET SessionToken = @SessionToken, SessionExpires = @SessionExpires WHERE Id = @Id", connection ) ) {
+					command.Parameters.Add( "Id", SqlDbType.Int ).Value = UpdatedItem.Id;
+					command.Parameters.Add( "SessionToken", SqlDbType.UniqueIdentifier ).Value = UpdatedItem.SessionToken;
+					command.Parameters.Add( "SessionExpires", SqlDbType.DateTime ).Value = UpdatedItem.SessionExpires;
+
+					await command.ExecuteNonQueryAsync();
+				}
+			}
+
+			return UpdatedItem;
+		}
+
+		public async Task<IUser> UpdateSession( IUser ItemToUpdate ) {
+			IUser UpdatedItem = ItemToUpdate
+				.UpdateSessionExpires( DateTime.UtcNow.AddMinutes( 20 ) );
+
+			using( SqlConnection connection = new SqlConnection( Settings.ConnectionString ) ) {
+				connection.Open();
+
+				using( SqlCommand command = new SqlCommand( "UPDATE Users SET SessionExpires = @SessionExpires WHERE Id = @Id", connection ) ) {
+					command.Parameters.Add( "Id", SqlDbType.Int ).Value = UpdatedItem.Id;
+					command.Parameters.Add( "SessionExpires", SqlDbType.DateTime ).Value = UpdatedItem.SessionExpires;
+
+					await command.ExecuteNonQueryAsync();
+				}
+			}
+
+			return UpdatedItem;
 		}
 	}
 }

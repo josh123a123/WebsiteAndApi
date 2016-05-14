@@ -48,7 +48,7 @@ namespace DevSpace.Api.Handlers {
 
 				HttpResponseMessage Response = await base.SendAsync( Request, CancelToken );
 
-				await Users.Update( FoundUser.UpdateSessionExpires( DateTime.UtcNow.AddMinutes( 20 ) ) );
+				await Users.UpdateSession( ( Thread.CurrentPrincipal.Identity as DevSpaceIdentity ).Identity );
 
 				return Response;
 			}

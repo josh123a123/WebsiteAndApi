@@ -3,6 +3,7 @@
 
 <head>
 	<!-- #include file="head.shtml" -->
+	<script type="text/javascript" src="/js/profile.js" defer></script>
 </head>
 
 <body>
@@ -28,8 +29,8 @@
 				<tbody id="SessionList" data-bind="foreach: Sessions">
 					<tr>
 						<td class="Title" data-bind="text: Title"></td>
-						<td><img src="images/Edit.png" alt="Edit" data-bind="click: $root.ShowSession" /></td>
-						<td><img src="images/Trash.png" alt="Delete" data-bind="click: $root.DeleteSession" /></td>
+						<td><img src="/images/Edit.png" alt="Edit" data-bind="click: $root.ShowSession" /></td>
+						<td><img src="/images/Trash.png" alt="Delete" data-bind="click: $root.DeleteSession" /></td>
 					</tr>
 				</tbody>
 			</table>

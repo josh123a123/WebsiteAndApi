@@ -50,14 +50,7 @@ namespace DevSpace.Api.Handlers {
 					// Complete the request. We'll set the login cookie on the way out
 					HttpResponseMessage Response = await base.SendAsync( Request, CancelToken );
 
-					IUser UserToUpdate =
-						( Thread.CurrentPrincipal.Identity as DevSpaceIdentity ).Identity
-						.UpdateSessionToken( Guid.NewGuid() )
-						.UpdateSessionExpires( DateTime.UtcNow.AddMinutes( 20 ) );
-
-					await Users.Update( UserToUpdate 	);
-
-					CookieHeaderValue SessionCookie = new CookieHeaderValue( "SessionToken", UserToUpdate.SessionToken.ToString() );
+					CookieHeaderValue SessionCookie = new CookieHeaderValue( "SessionToken", ( await Users.CreateSession( ( Thread.CurrentPrincipal.Identity as DevSpaceIdentity ).Identity ) ).SessionToken.ToString() );
 #if DEBUG == false
 					SessionCookie.Secure = true;
 #endif
