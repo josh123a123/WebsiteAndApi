@@ -91,13 +91,16 @@
     <Content Include="blog.html" />
     <Content Include="Global.asax" />
     <Content Include="images\DevSpace_ForWeb_400wide.png" />
+    <Content Include="images\Edit.png" />
     <Content Include="images\logos\large\dannagle.png" />
     <Content Include="images\logos\large\dealnews.png" />
     <Content Include="images\logos\small\dannagle.png" />
     <Content Include="images\logos\small\dealnews.png" />
     <Content Include="images\menu.png" />
+    <Content Include="images\Trash.png" />
     <Content Include="index.html" />
     <Content Include="js\login.js" />
+    <Content Include="js\profile.js" />
     <Content Include="js\sponsor.js" />
     <Content Include="js\tickets.js" />
     <Content Include="login.html" />
@@ -116,6 +119,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\DependencyInjector.cs" />
+    <Compile Include="App_Start\DevSpaceIdentity.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\SponsorController.cs" />

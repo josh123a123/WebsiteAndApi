@@ -32,13 +32,11 @@ namespace DevSpace.Api.Handlers {
 			Guid SessionToken = GetSessionToken( Request );
 			if( !SessionToken.Equals( Guid.Empty ) ) {
 				UserDataStore Users = new UserDataStore();
-				IList<IUser> FoundUsers = await Users.Get( "SessionToken", SessionToken );
-				if( 0 != FoundUsers.Count ) {
-					if( DateTime.UtcNow < FoundUsers[0].SessionExpires ) {
-						GenericIdentity UserIdentity = new GenericIdentity( FoundUsers[0].EmailAddress );
-						GenericPrincipal UserPrincipal = new GenericPrincipal( UserIdentity, null );
-						Thread.CurrentPrincipal = UserPrincipal;
-						Request.GetRequestContext().Principal = UserPrincipal;
+				IUser FoundUser = ( await Users.Get( "SessionToken", SessionToken ) ).FirstOrDefault();
+				if( null != FoundUser ) {
+					if( DateTime.UtcNow < FoundUser.SessionExpires ) {
+						Thread.CurrentPrincipal = new GenericPrincipal( new DevSpaceIdentity( FoundUser ), null );
+						Request.GetRequestContext().Principal = Thread.CurrentPrincipal;
 					} else {
 						// return 401
 						HttpResponseMessage Response401 = new HttpResponseMessage( System.Net.HttpStatusCode.Unauthorized );
@@ -50,8 +48,7 @@ namespace DevSpace.Api.Handlers {
 
 				HttpResponseMessage Response = await base.SendAsync( Request, CancelToken );
 
-				IUser UpdatedUser = FoundUsers[0].UpdateSessionExpires( DateTime.UtcNow.AddMinutes( 20 ) );
-				await Users.Update( UpdatedUser );
+				await Users.Update( FoundUser.UpdateSessionExpires( DateTime.UtcNow.AddMinutes( 20 ) ) );
 
 				return Response;
 			}
