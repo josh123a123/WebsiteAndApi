@@ -36,6 +36,17 @@
 			</table>
 			<input type="button" data-bind="click: function () { ShowSession(null) }" value="New Session" />
 		</article>
+		<article id="Credentials" style="display: none;">
+			<h1>Credentials</h1>
+			<h2>Email Address</h2>
+			<input type="text" data-bind="value: Profile().EmailAddress" />
+			<h2>Password</h2>
+			<input type="password" data-bind="value: Profile().PasswordHash" />
+			<h2>Verify</h2>
+			<input type="password" data-bind="value: Verify" />
+			<input type="button" data-bind="click: SaveCredentials" value="Save" />
+			<input type="button" data-bind="click: ShowProfile" value="Cancel" />
+		</article>
 	</section>
 
 	<!-- #include file="leftSidebar.shtml" -->

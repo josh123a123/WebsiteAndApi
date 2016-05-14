@@ -3,7 +3,7 @@
 	Self.Id = ko.observable();
 	Self.DisplayName = ko.observable();
 	Self.EmailAddress = ko.observable();
-	Self.Password = ko.observable();
+	Self.PasswordHash = ko.observable();
 	Self.Bio = ko.observable();
 	Self.Twitter = ko.observable();
 	Self.Website = ko.observable();
@@ -95,7 +95,7 @@ function ViewModel() {
 
 	//var SessionsRequest = new XMLHttpRequest();
 	//SessionsRequest.withCredentials = true;
-	//SessionsRequest.open('GET', ApiUrl + 'Speakers/' + sessionStorage.getItem('Id') + '/Sessions', true);
+	//SessionsRequest.open('GET', '/api/v1/user/' + sessionStorage.getItem('Id') + '/Sessions', true);
 	//SessionsRequest.send();
 	//
 	//SessionsRequest.onreadystatechange = function () {
@@ -118,7 +118,7 @@ function ViewModel() {
 	//
 	//var TagsRequest = new XMLHttpRequest();
 	//TagsRequest.withCredentials = true;
-	//TagsRequest.open('GET', ApiUrl + 'Tags', true);
+	//TagsRequest.open('GET', '/api/v1/Tags', true);
 	//TagsRequest.send();
 	//
 	//TagsRequest.onreadystatechange = function () {
@@ -141,13 +141,13 @@ function ViewModel() {
 
 	Self.ShowProfile = function () {
 		document.getElementById('Profile').style.display = 'block';
-		document.getElementById('Session').style.display = 'none';
+//		document.getElementById('Session').style.display = 'none';
 		document.getElementById('Credentials').style.display = 'none';
 	}
 
 	Self.ShowCredentials = function () {
 		document.getElementById('Profile').style.display = 'none';
-		document.getElementById('Session').style.display = 'none';
+//		document.getElementById('Session').style.display = 'none';
 		document.getElementById('Credentials').style.display = 'block';
 	}
 	
@@ -178,8 +178,16 @@ function ViewModel() {
 					case 200:
 						break;
 
+					case 400:
+						// Not logged in
+						window.location.href = "/login.html";
+						break;
+
 					case 401:
-						// Login failed
+						// Not your profile
+
+					case 404:
+						// Profile Not Found
 
 					default:
 						break;
@@ -188,39 +196,41 @@ function ViewModel() {
 		};
 	}
 
-	//Self.SaveCredentials = function () {
-	//	if (Self.Verify() != Self.Profile().Password()) {
-	//		alert('Password and Verify did not match');
-	//		return;
-	//	}
-	//
-	//	var Request = new XMLHttpRequest();
-	//	Request.withCredentials = true;
-	//	Request.open('POST', ApiUrl + 'Speakers/' + sessionStorage.getItem('Id'), true);
-	//	Request.setRequestHeader('Content-Type', 'application/json');
-	//	Request.send(ko.toJSON(Self.Profile));
-	//
-	//	Request.onreadystatechange = function () {
-	//		if (Request.readyState == Request.DONE) {
-	//			switch (Request.status) {
-	//				case 200:
-	//					Self.ShowProfile();
-	//					break;
-	//
-	//				case 400:
-	//					// Login failed
-	//
-	//				default:
-	//					break;
-	//			}
-	//		}
-	//	};
-	//}
-	//
+	Self.SaveCredentials = function () {
+		if (Self.Verify() != Self.Profile().PasswordHash()) {
+			alert('Password and Verify did not match');
+			return;
+		}
+	
+		var Request = new XMLHttpRequest();
+		Request.withCredentials = true;
+		Request.open('POST', '/api/v1/user/' + sessionStorage.getItem('Id'), true);
+		Request.setRequestHeader('Content-Type', 'application/json');
+		Request.send(ko.toJSON(Self.Profile));
+	
+		Request.onreadystatechange = function () {
+			if (Request.readyState == Request.DONE) {
+				switch (Request.status) {
+					case 200:
+						Self.Verify('');
+						Self.Profile().PasswordHash('');
+						Self.ShowProfile();
+						break;
+	
+					case 400:
+						// Login failed
+	
+					default:
+						break;
+				}
+			}
+		};
+	}
+	
 	//Self.SaveSession = function () {
 	//	var Request = new XMLHttpRequest();
 	//	Request.withCredentials = true;
-	//	Request.open('POST', ApiUrl + 'Sessions', true);
+	//	Request.open('POST', '/api/v1/Sessions', true);
 	//	Request.setRequestHeader('Accept', 'application/json');
 	//	Request.setRequestHeader('Content-Type', 'application/json');
 	//	Request.send(ko.toJSON(Self.SelectedSession()));
@@ -245,7 +255,7 @@ function ViewModel() {
 	//Self.DeleteSession = function (data) {
 	//	var Request = new XMLHttpRequest();
 	//	Request.withCredentials = true;
-	//	Request.open('DELETE', ApiUrl + 'Sessions/' + data.Id(), true);
+	//	Request.open('DELETE', '/api/v1/Sessions/' + data.Id(), true);
 	//	Request.send();
 	//
 	//	Request.onreadystatechange = function () {
@@ -288,7 +298,7 @@ function ViewModel() {
 	//
 	//	var TagRequest = new XMLHttpRequest();
 	//	TagRequest.withCredentials = true;
-	//	TagRequest.open('POST', ApiUrl + 'Tags', true);
+	//	TagRequest.open('POST', '/api/v1/Tags', true);
 	//	TagRequest.setRequestHeader('Content-Type', 'application/json');
 	//	TagRequest.send('{ Id: -1, Text: "' + TagText + '" }');
 	//

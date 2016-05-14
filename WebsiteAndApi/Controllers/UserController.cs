@@ -75,12 +75,10 @@ namespace DevSpace.Api.Controllers {
 			}
 
 			if( !string.IsNullOrWhiteSpace( NewUser.PasswordHash ) ) {
-				NewUser.UpdatePasswordHash( Hasher.Encode( string.Format( "{0}:{1}", NewUser.EmailAddress, NewUser.PasswordHash ) ) );
+				NewUser = NewUser.UpdatePasswordHash( Hasher.Encode( string.Format( "{0}:{1}", NewUser.EmailAddress, NewUser.PasswordHash ) ) );
 			}
 
-			// The User gets updated on the way out with SessionExpires and, sometimes, SessionToken
-			// As such, we need to make sure those changes get passed through
-			Thread.CurrentPrincipal = new System.Security.Principal.GenericPrincipal( new DevSpaceIdentity( await _DataStore.Update( NewUser ) ), null );
+			await _DataStore.Update( NewUser );
 			return new HttpResponseMessage( HttpStatusCode.OK );
 		}
 	}
