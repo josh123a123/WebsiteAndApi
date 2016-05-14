@@ -141,13 +141,13 @@ function ViewModel() {
 
 	Self.ShowProfile = function () {
 		document.getElementById('Profile').style.display = 'block';
-//		document.getElementById('Session').style.display = 'none';
+		document.getElementById('Session').style.display = 'none';
 		document.getElementById('Credentials').style.display = 'none';
 	}
 
 	Self.ShowCredentials = function () {
 		document.getElementById('Profile').style.display = 'none';
-//		document.getElementById('Session').style.display = 'none';
+		document.getElementById('Session').style.display = 'none';
 		document.getElementById('Credentials').style.display = 'block';
 	}
 	
@@ -227,7 +227,7 @@ function ViewModel() {
 		};
 	}
 	
-	//Self.SaveSession = function () {
+	Self.SaveSession = function () {
 	//	var Request = new XMLHttpRequest();
 	//	Request.withCredentials = true;
 	//	Request.open('POST', '/api/v1/Sessions', true);
@@ -250,9 +250,9 @@ function ViewModel() {
 	//			}
 	//		}
 	//	};
-	//}
-	//
-	//Self.DeleteSession = function (data) {
+	}
+	
+	Self.DeleteSession = function (data) {
 	//	var Request = new XMLHttpRequest();
 	//	Request.withCredentials = true;
 	//	Request.open('DELETE', '/api/v1/Sessions/' + data.Id(), true);
@@ -271,9 +271,9 @@ function ViewModel() {
 	//			}
 	//		}
 	//	};
-	//}
-	//
-	//Self.AddOrRemoveTagToSession = function (data) {
+	}
+	
+	Self.AddOrRemoveTagToSession = function (data) {
 	//	for (var index = 0; index < Self.SelectedSession().Tags().length; ++index) {
 	//		if (data.Text().toUpperCase() == Self.SelectedSession().Tags()[index].Text().toUpperCase()) {
 	//			Self.SelectedSession().Tags.remove(Self.SelectedSession().Tags()[index]);
@@ -282,9 +282,9 @@ function ViewModel() {
 	//	}
 	//
 	//	Self.SelectedSession().Tags.push(data);
-	//}
-	//
-	//Self.SaveTag = function () {
+	}
+	
+	Self.SaveTag = function () {
 	//	var TagText = document.getElementById('NewTagText').value.trim();
 	//	if (!TagText) return;
 	//
@@ -320,7 +320,7 @@ function ViewModel() {
 	//			}
 	//		}
 	//	}
-	//}
+	}
 }
 
 ko.applyBindings(new ViewModel(), document.getElementById('Content'));

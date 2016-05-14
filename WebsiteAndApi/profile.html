@@ -36,6 +36,27 @@
 			</table>
 			<input type="button" data-bind="click: function () { ShowSession(null) }" value="New Session" />
 		</article>
+		<article id="Session" style="display: none;">
+			<h1>Session</h1>
+			<h2>Title</h2>
+			<input type="text" data-bind="value: SelectedSession().Title" />
+			<h2>Abstract</h2>
+			<textarea data-bind="value: SelectedSession().Abstract"></textarea>
+			<h2>Notes to Reviewer</h2>
+			<textarea data-bind="value: SelectedSession().Notes"></textarea>
+			<h2>Tags</h2>
+			<input type="text" readonly="readonly" data-bind="value: SelectedSession().TagList" />
+			<h2>Tag List (Click to Add or Remove)</h2>
+			<ul data-bind="foreach: Tags">
+				<li data-bind="text: Text, click: $root.AddOrRemoveTagToSession" />
+			</ul>
+			<h3>- OR -</h3>
+			<h2>New Tag</h2>
+			<input type="text" id="NewTagText" style="width: 50%; display: inline-block;" />
+			<input type="button" value="Add New" style="width: 35%; display: inline-block;" data-bind="click: SaveTag" />
+			<input type="button" data-bind="click: SaveSession" value="Save" />
+			<input type="button" data-bind="click: ShowProfile" value="Cancel" />
+		</article>
 		<article id="Credentials" style="display: none;">
 			<h1>Credentials</h1>
 			<h2>Email Address</h2>
