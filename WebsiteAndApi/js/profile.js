@@ -27,13 +27,6 @@ function Session(data) {
 	Self.Notes = ko.observable();
 	Self.Tags = ko.observableArray([]);
 
-	Self.TagList = ko.pureComputed(function () {
-		var TagList = '';
-		for (var index = 0; index < this.Tags().length; ++index)
-			TagList += this.Tags()[index].Text() + '; ';
-		return TagList;
-	}, Self);
-
 	if (data) {
 		Self.Id(data.Id);
 		Self.Speaker(data.Speaker);
@@ -115,29 +108,29 @@ function ViewModel() {
 	//		}
 	//	}
 	//};
-	//
-	//var TagsRequest = new XMLHttpRequest();
-	//TagsRequest.withCredentials = true;
-	//TagsRequest.open('GET', '/api/v1/Tags', true);
-	//TagsRequest.send();
-	//
-	//TagsRequest.onreadystatechange = function () {
-	//	if (TagsRequest.readyState == TagsRequest.DONE) {
-	//		switch (TagsRequest.status) {
-	//			case 200:
-	//				var TagList = JSON.parse(TagsRequest.responseText);
-	//				for (var index = 0; index < TagList.length; ++index)
-	//					Self.Tags.push(new Tag(TagList[index]));
-	//				break;
-	//
-	//			case 401:
-	//				// Login failed
-	//
-	//			default:
-	//				break;
-	//		}
-	//	}
-	//};
+	
+	var TagsRequest = new XMLHttpRequest();
+	TagsRequest.withCredentials = true;
+	TagsRequest.open('GET', '/api/v1/tag', true);
+	TagsRequest.send();
+	
+	TagsRequest.onreadystatechange = function () {
+		if (TagsRequest.readyState == TagsRequest.DONE) {
+			switch (TagsRequest.status) {
+				case 200:
+					var TagList = JSON.parse(TagsRequest.responseText);
+					for (var index = 0; index < TagList.length; ++index)
+						Self.Tags.push(new Tag(TagList[index]));
+					break;
+	
+				case 401:
+					// Login failed
+	
+				default:
+					break;
+			}
+		}
+	};
 
 	Self.ShowProfile = function () {
 		document.getElementById('Profile').style.display = 'block';
@@ -274,52 +267,57 @@ function ViewModel() {
 	}
 	
 	Self.AddOrRemoveTagToSession = function (data) {
-	//	for (var index = 0; index < Self.SelectedSession().Tags().length; ++index) {
-	//		if (data.Text().toUpperCase() == Self.SelectedSession().Tags()[index].Text().toUpperCase()) {
-	//			Self.SelectedSession().Tags.remove(Self.SelectedSession().Tags()[index]);
-	//			return;
-	//		}
-	//	}
-	//
-	//	Self.SelectedSession().Tags.push(data);
+		for (var index = 0; index < Self.SelectedSession().Tags().length; ++index) {
+			if (data.Text().toUpperCase() == Self.SelectedSession().Tags()[index].Text().toUpperCase()) {
+				Self.SelectedSession().Tags.remove(Self.SelectedSession().Tags()[index]);
+				return;
+			}
+		}
+	
+		Self.SelectedSession().Tags.push(data);
 	}
 	
 	Self.SaveTag = function () {
-	//	var TagText = document.getElementById('NewTagText').value.trim();
-	//	if (!TagText) return;
-	//
-	//	for (var index = 0; index < Self.Tags().length; ++index) {
-	//		if (TagText.toUpperCase() == Self.Tags()[index].Text().toUpperCase()) {
-	//			Self.AddOrRemoveTagToSession(Self.Tags()[index]);
-	//			document.getElementById('NewTagText').value = '';
-	//			return;
-	//		}
-	//	}
-	//
-	//	var TagRequest = new XMLHttpRequest();
-	//	TagRequest.withCredentials = true;
-	//	TagRequest.open('POST', '/api/v1/Tags', true);
-	//	TagRequest.setRequestHeader('Content-Type', 'application/json');
-	//	TagRequest.send('{ Id: -1, Text: "' + TagText + '" }');
-	//
-	//	TagRequest.onreadystatechange = function () {
-	//		if (TagRequest.readyState == TagRequest.DONE) {
-	//			switch (TagRequest.status) {
-	//				case 201:
-	//					var NewTag = new Tag(JSON.parse(TagRequest.responseText));
-	//					Self.Tags.push(NewTag);
-	//					Self.AddOrRemoveTagToSession(NewTag);
-	//					document.getElementById('NewTagText').value = '';
-	//					break;
-	//
-	//				case 401:
-	//					// Login failed
-	//
-	//				default:
-	//					break;
-	//			}
-	//		}
-	//	}
+		var TagText = document.getElementById('NewTagText').value.trim();
+		if (!TagText) return;
+	
+		for (var index = 0; index < Self.Tags().length; ++index) {
+			if (TagText.toUpperCase() == Self.Tags()[index].Text().toUpperCase()) {
+				Self.AddOrRemoveTagToSession(Self.Tags()[index]);
+				document.getElementById('NewTagText').value = '';
+				return;
+			}
+		}
+	
+		var RequestJson = {
+			Id: -1,
+			Text: TagText
+		};
+
+		var TagRequest = new XMLHttpRequest();
+		TagRequest.withCredentials = true;
+		TagRequest.open('POST', '/api/v1/tag', true);
+		TagRequest.setRequestHeader('Content-Type', 'application/json');
+		TagRequest.send(JSON.stringify(RequestJson));
+	
+		TagRequest.onreadystatechange = function () {
+			if (TagRequest.readyState == TagRequest.DONE) {
+				switch (TagRequest.status) {
+					case 201:
+						var NewTag = new Tag(JSON.parse(TagRequest.responseText));
+						Self.Tags.push(NewTag);
+						Self.AddOrRemoveTagToSession(NewTag);
+						document.getElementById('NewTagText').value = '';
+						break;
+	
+					case 401:
+						// Login failed
+	
+					default:
+						break;
+				}
+			}
+		}
 	}
 }
 

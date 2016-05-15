@@ -113,6 +113,29 @@ article p {
 		text-decoration: none;
 	}
 
+	#Session ul {
+		width: 94%;
+		margin: 3%;
+		min-width: 350px;
+	}
+
+		#Session li {
+			padding: 5px;
+			margin-right: 10px;
+			margin-bottom: 10px;
+
+			font-size: large;
+			font-weight: 400;
+			font-variant: small-caps;
+
+			cursor: pointer;
+			display: inline-block;
+			list-style-type: none;
+
+			border: 1px solid black;
+			background: #F0F0F0;
+		}
+
 @media only screen and (max-width: 1200px) {
 	#Content {
 		padding: 0;

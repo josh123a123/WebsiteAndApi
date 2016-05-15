@@ -28,6 +28,9 @@ namespace DevSpace {
 
 				case nameof( UserController ):
 					return new UserController( new Database.UserDataStore() );
+
+				case nameof( TagController ):
+					return new TagController( new Database.TagDataStore() );
 			}
 
 			return null;

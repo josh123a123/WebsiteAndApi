@@ -44,9 +44,11 @@
 			<textarea data-bind="value: SelectedSession().Abstract"></textarea>
 			<h2>Notes to Reviewer</h2>
 			<textarea data-bind="value: SelectedSession().Notes"></textarea>
-			<h2>Tags</h2>
-			<input type="text" readonly="readonly" data-bind="value: SelectedSession().TagList" />
-			<h2>Tag List (Click to Add or Remove)</h2>
+			<h2>Selected Tags (Click to Remove)</h2>
+			<ul data-bind="foreach: SelectedSession().Tags">
+				<li data-bind="text: Text, click: $root.AddOrRemoveTagToSession" />
+			</ul>
+			<h2>All Tags (Click to Add or Remove)</h2>
 			<ul data-bind="foreach: Tags">
 				<li data-bind="text: Text, click: $root.AddOrRemoveTagToSession" />
 			</ul>

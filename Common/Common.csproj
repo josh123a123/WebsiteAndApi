@@ -69,11 +69,13 @@
     <Compile Include="Interfaces\ISponsor.cs" />
     <Compile Include="Interfaces\ISponsorLevel.cs" />
     <Compile Include="Interfaces\IStudentCode.cs" />
+    <Compile Include="Interfaces\ITag.cs" />
     <Compile Include="Interfaces\IUser.cs" />
     <Compile Include="Sponsor.cs" />
     <Compile Include="SponsorLevel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StudentCode.cs" />
+    <Compile Include="Tag.cs" />
     <Compile Include="User.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -134,6 +134,25 @@ UPDATE VersionInfo SET DbVersion = '01.00.01.0000';";
 
 UPDATE VersionInfo SET DbVersion = '01.00.01.0001';";
 
+				case "01.00.01.0001":
+					return
+@"CREATE TABLE Tags (
+	Id		INTEGER			IDENTITY(1,1)	NOT NULL,
+	Text		VARCHAR(100)						NOT NULL,
+
+	CONSTRAINT Tags_PK PRIMARY KEY CLUSTERED ( Id )
+);
+
+UPDATE VersionInfo SET DbVersion = '01.00.01.0002';";
+
+				case "01.00.01.0002":
+					return
+@"INSERT Tags ( Text ) VALUES ( 'Beginner' );
+INSERT Tags ( Text ) VALUES ( 'Intermediate' );
+INSERT Tags ( Text ) VALUES ( 'Advanced' );
+
+UPDATE VersionInfo SET DbVersion = '01.00.01.0003';";
+
 				default:
 					return string.Empty;
 			}
