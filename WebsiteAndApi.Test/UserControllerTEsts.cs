@@ -86,6 +86,10 @@ namespace DevSpace.WebsiteAndApi.Test {
 				return Task.FromResult( blah as IUser );
 			}
 
+			public Task<bool> Delete( int Id ) {
+				throw new NotImplementedException();
+			}
+
 			public Task<IUser> Get( int Id ) {
 				throw new NotImplementedException();
 			}

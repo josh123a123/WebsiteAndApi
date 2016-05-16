@@ -20,6 +20,10 @@ namespace DevSpace.Database {
 			}
 		}
 
+		public Task<bool> Delete( int Id ) {
+			throw new NotImplementedException();
+		}
+
 		public async Task<ITag> Get( int Id ) {
 			throw new NotImplementedException();
 		}

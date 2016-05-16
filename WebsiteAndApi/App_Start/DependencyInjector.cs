@@ -31,6 +31,9 @@ namespace DevSpace {
 
 				case nameof( TagController ):
 					return new TagController( new Database.TagDataStore() );
+
+				case nameof( SessionController ):
+					return new SessionController( new Database.SessionDataStore() );
 			}
 
 			return null;

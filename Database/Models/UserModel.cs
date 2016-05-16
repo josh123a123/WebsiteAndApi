@@ -8,21 +8,14 @@ namespace DevSpace.Database.Models {
 		private UserModel() {}
 
 		internal UserModel( SqlDataReader dataReader ) {
-			try {
-				for( int lcv = 0; lcv < dataReader.FieldCount; ++lcv ) {
-					PropertyInfo property = GetType().GetProperty( dataReader.GetName( lcv ), BindingFlags.Instance | BindingFlags.Public );
-					if( null == property ) continue;
+			for( int lcv = 0; lcv < dataReader.FieldCount; ++lcv ) {
+				PropertyInfo property = GetType().GetProperty( dataReader.GetName( lcv ), BindingFlags.Instance | BindingFlags.Public );
+				if( null == property ) continue;
 
-					object value = dataReader.GetValue( lcv );
-					if( DBNull.Value == value ) value = null;
+				object value = dataReader.GetValue( lcv );
+				if( DBNull.Value == value ) value = null;
 
-//					if( "Permissions" == property.Name && null != value )
-//						this.Permissions = dataReader.GetByte( lcv );
-//					else
-						property.SetValue( this, value );
-				}
-			} catch( Exception Ex ) {
-				return;
+				property.SetValue( this, value );
 			}
 		}
 

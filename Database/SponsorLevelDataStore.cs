@@ -48,5 +48,9 @@ namespace DevSpace.Database {
 		public Task<ISponsorLevel> Update( ISponsorLevel ItemToUpdate ) {
 			throw new NotImplementedException();
 		}
+
+		public Task<bool> Delete( int Id ) {
+			throw new NotImplementedException();
+		}
 	}
 }

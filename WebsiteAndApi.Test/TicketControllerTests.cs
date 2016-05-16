@@ -22,6 +22,10 @@ namespace DevSpace.WebsiteAndApi.Test {
 				throw new NotImplementedException();
 			}
 
+			public Task<bool> Delete( int Id ) {
+				throw new NotImplementedException();
+			}
+
 			public Task<IStudentCode> Get( int Id ) {
 				throw new NotImplementedException();
 			}

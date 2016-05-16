@@ -27,7 +27,7 @@ namespace DevSpace.WebsiteAndApi.Test {
 			public string Website { get; set; }
 		}
 
-		internal class TestDataStore : Common.IDataStore<Common.ISponsor> {
+		internal class TestDataStore : IDataStore<ISponsor> {
 			public delegate Task<ISponsor> GetDelegate( int Id );
 			public GetDelegate GetFunction { get; set; }
 
@@ -51,6 +51,10 @@ namespace DevSpace.WebsiteAndApi.Test {
 			}
 
 			public Task<ISponsor> Update( ISponsor ItemToUpdate ) {
+				throw new NotImplementedException();
+			}
+
+			public Task<bool> Delete( int Id ) {
 				throw new NotImplementedException();
 			}
 		}

@@ -5,6 +5,12 @@ namespace DevSpace.Common {
 	public class Tag : ITag {
 		private Tag() {}
 
+		// Needed for Session
+		internal Tag( ITag tag ) {
+			this.Id = tag.Id;
+			this.Text = string.Copy( tag.Text );
+		}
+
 		#region ITag
 		[DataMember]public int Id { get; private set; }
 		[DataMember]public string Text { get; private set; }

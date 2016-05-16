@@ -161,5 +161,9 @@ namespace DevSpace.Database {
 
 			return UpdatedItem;
 		}
+
+		public Task<bool> Delete( int Id ) {
+			throw new NotImplementedException();
+		}
 	}
 }

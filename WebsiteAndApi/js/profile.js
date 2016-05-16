@@ -21,7 +21,7 @@
 function Session(data) {
 	var Self = this;
 	Self.Id = ko.observable();
-	Self.Speaker = ko.observable();
+	Self.UserId = ko.observable();
 	Self.Title = ko.observable();
 	Self.Abstract = ko.observable();
 	Self.Notes = ko.observable();
@@ -29,7 +29,7 @@ function Session(data) {
 
 	if (data) {
 		Self.Id(data.Id);
-		Self.Speaker(data.Speaker);
+		Self.UserId(data.UserId);
 		Self.Title(data.Title);
 		Self.Abstract(data.Abstract);
 		Self.Notes(data.Notes);
@@ -86,28 +86,28 @@ function ViewModel() {
 		}
 	};
 
-	//var SessionsRequest = new XMLHttpRequest();
-	//SessionsRequest.withCredentials = true;
-	//SessionsRequest.open('GET', '/api/v1/user/' + sessionStorage.getItem('Id') + '/Sessions', true);
-	//SessionsRequest.send();
-	//
-	//SessionsRequest.onreadystatechange = function () {
-	//	if (SessionsRequest.readyState == SessionsRequest.DONE) {
-	//		switch (SessionsRequest.status) {
-	//			case 200:
-	//				var SessionList = JSON.parse(SessionsRequest.responseText);
-	//				for (var index = 0; index < SessionList.length; ++index)
-	//					Self.Sessions.push(new Session(SessionList[index]));
-	//				break;
-	//
-	//			case 401:
-	//				// Login failed
-	//
-	//			default:
-	//				break;
-	//		}
-	//	}
-	//};
+	var SessionsRequest = new XMLHttpRequest();
+	SessionsRequest.withCredentials = true;
+	SessionsRequest.open('GET', '/api/v1/session/user/' + sessionStorage.getItem('Id'), true);
+	SessionsRequest.send();
+	
+	SessionsRequest.onreadystatechange = function () {
+		if (SessionsRequest.readyState == SessionsRequest.DONE) {
+			switch (SessionsRequest.status) {
+				case 200:
+					var SessionList = JSON.parse(SessionsRequest.responseText);
+					for (var index = 0; index < SessionList.length; ++index)
+						Self.Sessions.push(new Session(SessionList[index]));
+					break;
+	
+				case 401:
+					// Login failed
+	
+				default:
+					break;
+			}
+		}
+	};
 	
 	var TagsRequest = new XMLHttpRequest();
 	TagsRequest.withCredentials = true;
@@ -154,7 +154,7 @@ function ViewModel() {
 		} else {
 			Self.SelectedSession(new Session());
 			Self.SelectedSession().Id(-1);
-			Self.SelectedSession().Speaker(Self.Profile);
+			Self.SelectedSession().UserId(Self.Profile().Id);
 		}
 	}
 	
@@ -221,49 +221,52 @@ function ViewModel() {
 	}
 	
 	Self.SaveSession = function () {
-	//	var Request = new XMLHttpRequest();
-	//	Request.withCredentials = true;
-	//	Request.open('POST', '/api/v1/Sessions', true);
-	//	Request.setRequestHeader('Accept', 'application/json');
-	//	Request.setRequestHeader('Content-Type', 'application/json');
-	//	Request.send(ko.toJSON(Self.SelectedSession()));
-	//
-	//	Request.onreadystatechange = function () {
-	//		if (Request.readyState == Request.DONE) {
-	//			switch (Request.status) {
-	//				case 201:
-	//					Self.Sessions.push(new Session(JSON.parse(Request.responseText)));
-	//
-	//				case 200:
-	//					Self.ShowProfile();
-	//					break;
-	//
-	//				default:
-	//					break;
-	//			}
-	//		}
-	//	};
+		var Request = new XMLHttpRequest();
+		Request.withCredentials = true;
+		Request.open('POST', '/api/v1/session', true);
+		Request.setRequestHeader('Accept', 'application/json');
+		Request.setRequestHeader('Content-Type', 'application/json');
+		Request.send(ko.toJSON(Self.SelectedSession()));
+	
+		Request.onreadystatechange = function () {
+			if (Request.readyState == Request.DONE) {
+				switch (Request.status) {
+					case 201:
+						Self.Sessions.push(new Session(JSON.parse(Request.responseText)));
+	
+					case 204:
+						Self.ShowProfile();
+						break;
+	
+					default:
+						break;
+				}
+			}
+		};
 	}
 	
 	Self.DeleteSession = function (data) {
-	//	var Request = new XMLHttpRequest();
-	//	Request.withCredentials = true;
-	//	Request.open('DELETE', '/api/v1/Sessions/' + data.Id(), true);
-	//	Request.send();
-	//
-	//	Request.onreadystatechange = function () {
-	//		if (Request.readyState == Request.DONE) {
-	//			switch (Request.status) {
-	//				case 204:
-	//					Self.Sessions.remove(data);
-	//					Self.Sessions.valueHasMutated();
-	//					break;
-	//
-	//				default:
-	//					break;
-	//			}
-	//		}
-	//	};
+		var Request = new XMLHttpRequest();
+		Request.withCredentials = true;
+		Request.open('DELETE', '/api/v1/session/' + data.Id(), true);
+		Request.send();
+	
+		Request.onreadystatechange = function () {
+			if (Request.readyState == Request.DONE) {
+				switch (Request.status) {
+					case 204: // It's gone because we deleted it
+					case 404: // Never found it in the first place
+						Self.Sessions.remove(data);
+						Self.Sessions.valueHasMutated();
+						break;
+	
+					case 401: // Not your session to delete
+					case 500: // Something happened
+					default:
+						break;
+				}
+			}
+		};
 	}
 	
 	Self.AddOrRemoveTagToSession = function (data) {

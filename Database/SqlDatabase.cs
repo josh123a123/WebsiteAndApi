@@ -153,6 +153,31 @@ INSERT Tags ( Text ) VALUES ( 'Advanced' );
 
 UPDATE VersionInfo SET DbVersion = '01.00.01.0003';";
 
+				case "01.00.01.0003":
+					return
+@"CREATE TABLE Sessions (
+	Id			INTEGER		IDENTITY(1,1)	NOT NULL,
+	UserId		INTEGER						NOT NULL,
+	Title		VARCHAR(250)					NOT NULL,
+	Abstract		VARCHAR(MAX)					NOT NULL,
+	Notes		VARCHAR(MAX)					NULL,
+	Accepted		BIT							NULL,
+
+	CONSTRAINT Sessions_PK PRIMARY KEY CLUSTERED ( Id ),
+	CONSTRAINT Sessions_Users_FK FOREIGN KEY ( UserId ) REFERENCES Users ( Id ) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+CREATE TABLE SessionTags (
+	SessionId	INTEGER						NOT NULL,
+	TagId		INTEGER						NOT NULL,
+
+	CONSTRAINT SessionTags_PK PRIMARY KEY CLUSTERED ( SessionId, TagId ),
+	CONSTRAINT SessionTags_Tags_FK FOREIGN KEY ( TagId ) REFERENCES Tags ( Id ) ON UPDATE CASCADE ON DELETE CASCADE,
+	CONSTRAINT SessionTags_Sessions_FK FOREIGN KEY ( SessionId ) REFERENCES Sessions ( Id ) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+UPDATE VersionInfo SET DbVersion = '01.00.01.0004';";
+
 				default:
 					return string.Empty;
 			}
