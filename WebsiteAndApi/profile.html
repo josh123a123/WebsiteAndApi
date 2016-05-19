@@ -1,0 +1,80 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+	<!-- #include file="head.shtml" -->
+	<script type="text/javascript" src="/js/profile.js" defer></script>
+</head>
+
+<body>
+	<!-- #include file="menu.shtml" -->
+
+	<section id="Content">
+		<h4 id="ErrorMessage" style="display: none;"></h4>
+		<article id="Profile">
+			<h1>Profile</h1>
+			<h2>Display Name</h2>
+			<input type="text" data-bind="value: Profile().DisplayName" />
+			<h2>Email Address</h2>
+			<input type="text" readonly="readonly" data-bind="value: Profile().EmailAddress" />
+			<h2>Twitter</h2>
+			<input type="text" data-bind="value: Profile().Twitter" />
+			<h2>Website</h2>
+			<input type="text" data-bind="value: Profile().Website" />
+			<h2>Bio</h2>
+			<textarea data-bind="value: Profile().Bio"></textarea>
+			<input type="button" data-bind="click: SaveProfile" value="Save Profile" />
+			<input type="button" data-bind="click: ShowCredentials" value="Update Credentials" />
+			<h1>Sessions</h1>
+			<table>
+				<tbody id="SessionList" data-bind="foreach: Sessions">
+					<tr>
+						<td class="Title" data-bind="text: Title"></td>
+						<td><img src="/images/Edit.png" alt="Edit" data-bind="click: $root.ShowSession" /></td>
+						<td><img src="/images/Trash.png" alt="Delete" data-bind="click: $root.DeleteSession" /></td>
+					</tr>
+				</tbody>
+			</table>
+			<input type="button" data-bind="click: function () { ShowSession(null) }" value="New Session" />
+		</article>
+		<article id="Session" style="display: none;">
+			<h1>Session</h1>
+			<h2>Title</h2>
+			<input type="text" data-bind="value: SelectedSession().Title" />
+			<h2>Abstract</h2>
+			<textarea data-bind="value: SelectedSession().Abstract"></textarea>
+			<h2>Notes to Reviewer</h2>
+			<textarea data-bind="value: SelectedSession().Notes"></textarea>
+			<h2>Selected Tags (Click to Remove)</h2>
+			<ul data-bind="foreach: SelectedSession().Tags">
+				<li data-bind="text: Text, click: $root.AddOrRemoveTagToSession" />
+			</ul>
+			<h2>All Tags (Click to Add or Remove)</h2>
+			<ul data-bind="foreach: Tags">
+				<li data-bind="text: Text, click: $root.AddOrRemoveTagToSession" />
+			</ul>
+			<h3>- OR -</h3>
+			<h2>New Tag</h2>
+			<input type="text" id="NewTagText" style="width: 50%; display: inline-block;" />
+			<input type="button" value="Add New" style="width: 35%; display: inline-block;" data-bind="click: SaveTag" />
+			<input type="button" data-bind="click: SaveSession" value="Save" />
+			<input type="button" data-bind="click: ShowProfile" value="Cancel" />
+		</article>
+		<article id="Credentials" style="display: none;">
+			<h1>Credentials</h1>
+			<h2>Email Address</h2>
+			<input type="text" data-bind="value: Profile().EmailAddress" />
+			<h2>Password</h2>
+			<input type="password" data-bind="value: Profile().PasswordHash" />
+			<h2>Verify</h2>
+			<input type="password" data-bind="value: Verify" />
+			<input type="button" data-bind="click: SaveCredentials" value="Save" />
+			<input type="button" data-bind="click: ShowProfile" value="Cancel" />
+		</article>
+	</section>
+
+	<!-- #include file="leftSidebar.shtml" -->
+	<!-- #include file="rightSidebar.shtml" -->
+</body>
+
+</html>

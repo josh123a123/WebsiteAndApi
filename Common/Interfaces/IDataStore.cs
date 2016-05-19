@@ -7,5 +7,7 @@ namespace DevSpace.Common {
 		Task<IList<T>> GetAll();
 		Task<IList<T>> Get( string Field, object Value );
 		Task<T> Add( T ItemToAdd );
+		Task<T> Update( T ItemToUpdate );
+		Task<bool> Delete( int Id );
 	}
 }

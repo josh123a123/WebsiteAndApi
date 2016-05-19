@@ -6,6 +6,10 @@ namespace DevSpace {
 			// Web API configuration and services
 			config.DependencyResolver = new DependencyInjector();
 
+			config.MessageHandlers.Add( new Api.Handlers.BasicAuthHandler() );
+			config.MessageHandlers.Add( new Api.Handlers.SessionHandler() );
+			//config.MessageHandlers.Add( new Api.Handlers.ForcedAuthHandler() );
+
 			// Web API routes
 			config.MapHttpAttributeRoutes();
 

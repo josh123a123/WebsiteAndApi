@@ -22,6 +22,10 @@ namespace DevSpace.WebsiteAndApi.Test {
 				throw new NotImplementedException();
 			}
 
+			public Task<bool> Delete( int Id ) {
+				throw new NotImplementedException();
+			}
+
 			public Task<IStudentCode> Get( int Id ) {
 				throw new NotImplementedException();
 			}
@@ -31,6 +35,10 @@ namespace DevSpace.WebsiteAndApi.Test {
 			}
 
 			public Task<IList<IStudentCode>> GetAll() {
+				throw new NotImplementedException();
+			}
+
+			public Task<IStudentCode> Update( IStudentCode ItemToUpdate ) {
 				throw new NotImplementedException();
 			}
 		}

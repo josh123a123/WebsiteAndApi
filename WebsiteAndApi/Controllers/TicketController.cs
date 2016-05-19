@@ -51,6 +51,7 @@ namespace DevSpace.Api.Controllers {
 			MutableStudentCode NewStudentCode = new MutableStudentCode {
 				Email = value.Email
 			};
+
 			if( null == NewStudentCode ) return new HttpResponseMessage( HttpStatusCode.BadRequest );
 
 			// Check for .edu email
