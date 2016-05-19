@@ -58,7 +58,7 @@
 			</p>
 			<form id="StudentCodeForm" data-bind="submit: GetCode">
 				<input type="email" data-bind="value: Email" />
-				<input type="submit" value="Get Student Access Code" />
+				<span data-bind="html:showSpinner"><input type="submit" value="Get Student Access Code" /></span>
 				<p data-bind="text: StatusMessage">
 			</form>
 			</p>
