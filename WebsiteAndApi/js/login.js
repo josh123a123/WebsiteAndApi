@@ -1,4 +1,12 @@
-﻿function Login() {
+﻿function ShowMessage(msg) {
+	var ErrorMessage = document.getElementById('ErrorMessage');
+	ErrorMessage.innerText = msg;
+	ErrorMessage.style.display = '';
+
+	setTimeout( 'ErrorMessage.style.display = "none";', 5000 );
+}
+
+function Login() {
 	var Request = new XMLHttpRequest();
 	Request.withCredentials = true;
 	Request.open('GET', '/api/v1/Login', true);
@@ -16,15 +24,11 @@
 					break;
 
 				case 401:
-					var ErrorMessage = document.getElementById('ErrorMessage');
-					ErrorMessage.innerText = "Bad Email or Password";
-					ErrorMessage.style.display = '';
+					ShowMessage('Bad Email or Password');
 					break;
 
 				default:
-					var ErrorMessage = document.getElementById('ErrorMessage');
-					ErrorMessage.innerText = "Unknown Error";
-					ErrorMessage.style.display = '';
+					ShowMessage('Unknown Error');
 					break;
 			}
 		}

@@ -10,6 +10,7 @@
 	<!-- #include file="menu.shtml" -->
 
 	<section id="Content">
+		<h4 id="ErrorMessage" style="display: none;"></h4>
 		<article id="Profile">
 			<h1>Profile</h1>
 			<h2>Display Name</h2>
@@ -26,11 +27,6 @@
 			<input type="button" data-bind="click: ShowCredentials" value="Update Credentials" />
 			<h1>Sessions</h1>
 			<table>
-				<colgroup>
-					<col  />
-					<col width="50" />
-					<col width="50" />
-				</colgroup>
 				<tbody id="SessionList" data-bind="foreach: Sessions">
 					<tr>
 						<td class="Title" data-bind="text: Title"></td>

@@ -1,4 +1,12 @@
-﻿function Profile(data) {
+﻿function ShowMessage(msg) {
+	var ErrorMessage = document.getElementById('ErrorMessage');
+	ErrorMessage.innerText = msg;
+	ErrorMessage.style.display = '';
+
+	setTimeout('ErrorMessage.style.display = "none";', 5000);
+}
+
+function Profile(data) {
 	var Self = this;
 	Self.Id = ko.observable();
 	Self.DisplayName = ko.observable();
@@ -136,19 +144,22 @@ function ViewModel() {
 		document.getElementById('Profile').style.display = 'block';
 		document.getElementById('Session').style.display = 'none';
 		document.getElementById('Credentials').style.display = 'none';
+		document.getElementById('ErrorMessage').style.display = 'none';
 	}
 
 	Self.ShowCredentials = function () {
 		document.getElementById('Profile').style.display = 'none';
 		document.getElementById('Session').style.display = 'none';
 		document.getElementById('Credentials').style.display = 'block';
+		document.getElementById('ErrorMessage').style.display = 'none';
 	}
 	
 	Self.ShowSession = function (data) {
 		document.getElementById('Profile').style.display = 'none';
 		document.getElementById('Session').style.display = 'block';
 		document.getElementById('Credentials').style.display = 'none';
-	
+		document.getElementById('ErrorMessage').style.display = 'none';
+
 		if (data) {
 			Self.SelectedSession(data);
 		} else {
@@ -169,6 +180,7 @@ function ViewModel() {
 			if (Request.readyState == Request.DONE) {
 				switch (Request.status) {
 					case 200:
+						ShowMessage('Profile Saved');
 						break;
 
 					case 400:
@@ -191,7 +203,7 @@ function ViewModel() {
 
 	Self.SaveCredentials = function () {
 		if (Self.Verify() != Self.Profile().PasswordHash()) {
-			alert('Password and Verify did not match');
+			ShowMessage('Password and Verify did not match');
 			return;
 		}
 	

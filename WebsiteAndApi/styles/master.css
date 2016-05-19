@@ -163,6 +163,11 @@ article p {
 			cursor: auto;
 		}
 
+	#ErrorMessage {
+		text-align: center;
+		font-size: xx-large;
+	}
+
 @media only screen and (max-width: 1200px) {
 	#Content {
 		padding: 0;
