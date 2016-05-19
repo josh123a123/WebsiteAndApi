@@ -56,7 +56,7 @@ namespace DevSpace.Api.Controllers {
 				return new HttpResponseMessage( HttpStatusCode.BadRequest );
 
 			ScryptEncoder Hasher = new ScryptEncoder();
-			IUser ExistingRecord = ( await _DataStore.Get( "EmailAddress", NewUser.EmailAddress ) ).FirstOrDefault();
+			IUser ExistingRecord = await _DataStore.Get( NewUser.Id );
 
 			// Register new profile
 			if( null == ExistingRecord ) {
@@ -70,7 +70,7 @@ namespace DevSpace.Api.Controllers {
 			}
 
 			// You can only update yourself
-			if( !Thread.CurrentPrincipal.Identity.Name.ToUpper().Equals( NewUser.EmailAddress.ToUpper() ) ) {
+			if( !( Thread.CurrentPrincipal.Identity as DevSpaceIdentity ).Identity.Id.Equals( NewUser.Id ) ) {
 				return new HttpResponseMessage( HttpStatusCode.Unauthorized );
 			}
 
