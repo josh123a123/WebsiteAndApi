@@ -61,6 +61,15 @@ namespace DevSpace.Api.Controllers {
 			// Register new profile
 			if( null == ExistingRecord ) {
 				await _DataStore.Add( NewUser.UpdatePasswordHash( Hasher.Encode( string.Format( "{0}:{1}", NewUser.EmailAddress, NewUser.PasswordHash ) ) ) );
+
+				Email NewMail = new Email( NewUser.EmailAddress, NewUser.DisplayName );
+				NewMail.Subject = "New Account Created";
+				NewMail.Body =
+@"This email is to confirm the creation of your account on the DevSpace website.
+
+If you did not create this account, please contact info@devspaceconf.com.";
+				NewMail.Send();
+
 				return new HttpResponseMessage( HttpStatusCode.Created );
 			}
 
@@ -79,6 +88,15 @@ namespace DevSpace.Api.Controllers {
 			}
 
 			await _DataStore.Update( NewUser );
+
+			Email UpdateMail = new Email( NewUser.EmailAddress, NewUser.DisplayName );
+			UpdateMail.Subject = "Account Updated";
+			UpdateMail.Body =
+@"This email is to confirm your account on the DevSpace website was updated.
+
+If you did not update this account, please contact info@devspaceconf.com.";
+			UpdateMail.Send();
+
 			return new HttpResponseMessage( HttpStatusCode.OK );
 		}
 	}
