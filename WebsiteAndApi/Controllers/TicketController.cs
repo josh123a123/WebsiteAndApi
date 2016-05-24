@@ -12,6 +12,7 @@ using System.Web.Http.Controllers;
 using System.Web.Http.ModelBinding;
 using DevSpace.Common;
 using Newtonsoft.Json;
+using Microsoft.FSharp.Collections;
 
 namespace DevSpace.Api.Controllers {
 	public class JsonStudentCodeBinder : IModelBinder {
@@ -35,8 +36,8 @@ namespace DevSpace.Api.Controllers {
 			public AccessCode access_code { get; set; }
 		}
 
-		private IDataStore<IStudentCode> _DataStore;
-		public TicketController( IDataStore<IStudentCode> DataStore ) {
+		private FSharp.Database.DataStore<FSharp.Common.StudentCode> _DataStore;
+		public TicketController( FSharp.Database.DataStore<FSharp.Common.StudentCode> DataStore ) {
 			this._DataStore = DataStore;
 		}
 
@@ -48,9 +49,7 @@ namespace DevSpace.Api.Controllers {
 
 		[AllowAnonymous]
 		public async Task<HttpResponseMessage> Post( [ModelBinder(typeof(JsonStudentCodeBinder))]IStudentCode value ) {
-			MutableStudentCode NewStudentCode = new MutableStudentCode {
-				Email = value.Email
-			};
+			FSharp.Common.StudentCode NewStudentCode = new FSharp.Common.StudentCode( -1, value.Email, null );
 
 			if( null == NewStudentCode ) return new HttpResponseMessage( HttpStatusCode.BadRequest );
 
@@ -62,18 +61,18 @@ namespace DevSpace.Api.Controllers {
 				return new HttpResponseMessage( HttpStatusCode.BadRequest );
 
 			// Check DataStore for existing code
-			IList<IStudentCode> ExistingCodes = await _DataStore.Get( "Email", NewStudentCode.Email );
+			FSharpList<FSharp.Common.StudentCode> ExistingCodes = await _DataStore.Get( "Email", NewStudentCode.Email );
 
 			//	If exists, resent existing code
-			if( ExistingCodes.Count > 0 ) {
-				SendEmail( ExistingCodes[0] );
+			if( ExistingCodes.Length > 0 ) {
+				SendEmail( ExistingCodes.Head );
 				return new HttpResponseMessage( HttpStatusCode.NoContent );
 			}
 
 			// Generate Code
-			NewStudentCode.Code = BitConverter.ToString( Guid.NewGuid().ToByteArray() ).Replace( "-", "" ).Substring( 0, 16 );
-			while( 1 == ( await _DataStore.Get( "Code", NewStudentCode.Code ) ).Count )
-				NewStudentCode.Code = BitConverter.ToString( Guid.NewGuid().ToByteArray() ).Replace( "-", "" ).Substring( 0, 16 );
+			NewStudentCode = NewStudentCode.WithCode( BitConverter.ToString( Guid.NewGuid().ToByteArray() ).Replace( "-", "" ).Substring( 0, 16 ) );
+			while( 1 == ( await _DataStore.Get( "Code", NewStudentCode.Code ) ).Length )
+				NewStudentCode = NewStudentCode.WithCode( BitConverter.ToString( Guid.NewGuid().ToByteArray() ).Replace( "-", "" ).Substring( 0, 16 ) );
 
 			// Call EventBrite to create code
 #if DEBUG
@@ -115,7 +114,7 @@ namespace DevSpace.Api.Controllers {
 			}
 
 			// Store Code in DataStore
-			NewStudentCode.Id = ( await _DataStore.Add( NewStudentCode ) ).Id;
+			NewStudentCode = NewStudentCode.WithId( ( await _DataStore.Add( NewStudentCode ) ).Id );
 
 			// Email Code
 			SendEmail( NewStudentCode );
@@ -123,7 +122,7 @@ namespace DevSpace.Api.Controllers {
 			return new HttpResponseMessage( HttpStatusCode.Created );
 		}
 
-		private void SendEmail( IStudentCode studentCode ) {
+		private void SendEmail( FSharp.Common.StudentCode studentCode ) {
 			MailMessage Mail = new MailMessage(
 				new MailAddress( ConfigurationManager.AppSettings["SmtpEmailAddress"], ConfigurationManager.AppSettings["SmtpDisplayName"] ),
 				new MailAddress( studentCode.Email )

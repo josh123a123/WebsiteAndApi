@@ -46,6 +46,10 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FSharp.Core, Version=4.4.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\FSharp.Core.4.0.0.1\lib\net40\FSharp.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
       <Private>True</Private>
@@ -177,6 +181,14 @@
     <ProjectReference Include="..\Database\Database.csproj">
       <Project>{990b7efd-e395-4d37-82b4-d00dab0dce7f}</Project>
       <Name>Database</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FSharp.Common\FSharp.Common.fsproj">
+      <Project>{d56e6252-e246-4777-a41f-7007ce8ff341}</Project>
+      <Name>FSharp.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FSharp.Database\FSharp.Database.fsproj">
+      <Project>{ec27942c-0d57-4391-b392-2381bc577de6}</Project>
+      <Name>FSharp.Database</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

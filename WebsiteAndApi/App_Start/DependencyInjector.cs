@@ -21,7 +21,7 @@ namespace DevSpace {
 					return new SponsorController( new Database.SponsorDataStore() );
 
 				case nameof( TicketController ):
-					return new TicketController( new Database.StudentCodeDataStore() );
+					return new TicketController( new DevSpace.FSharp.Database.StudentCodeDataStore() );
 
 				case nameof( LoginController ):
 					return new LoginController( new Database.UserDataStore() );
