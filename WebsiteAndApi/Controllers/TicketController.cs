@@ -124,10 +124,7 @@ namespace DevSpace.Api.Controllers {
 		}
 
 		private void SendEmail( IStudentCode studentCode ) {
-			MailMessage Mail = new MailMessage(
-				new MailAddress( ConfigurationManager.AppSettings["SmtpEmailAddress"], ConfigurationManager.AppSettings["SmtpDisplayName"] ),
-				new MailAddress( studentCode.Email )
-			);
+			Email Mail = new Email( studentCode.Email );
 
 			Mail.Subject = "Student Ticket Code";
 			Mail.Body = string.Format(
@@ -145,10 +142,7 @@ If you wish, you may also go directly to EventBrite, find out event, and manuall
 
 We thank you for your interest in the DevSpace Technical Conference and look forward to seeing you there.", studentCode.Code );
 
-			SmtpClient Client = new SmtpClient( ConfigurationManager.AppSettings["SmtpServer"], Convert.ToInt32( ConfigurationManager.AppSettings["SmtpPort"] ) );
-			Client.EnableSsl = true;
-			Client.Credentials = new NetworkCredential( ConfigurationManager.AppSettings["SmtpEmailAddress"], ConfigurationManager.AppSettings["SmtpPassword"] );
-			Client.Send( Mail );
+			Mail.Send();
 		}
 	}
 }
