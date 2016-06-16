@@ -180,8 +180,8 @@ UPDATE VersionInfo SET DbVersion = '01.00.01.0004';";
 
 				case "01.00.01.0004":
 					return
-@"CREATE TABLE Tokens (
-	Token		INTEGER		IDENTITY(1,1)	NOT NULL,
+@"CREATE TABLE AuthTokens (
+	Token		UNIQUEIDENTIFIER				NOT NULL,
 	UserId		INTEGER						NOT NULL,
 	Expires		DATETIME						NOT NULL,
 

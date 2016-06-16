@@ -103,6 +103,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AuthTokenDataStore.cs" />
+    <Compile Include="Models\AuthTokenModel.cs" />
     <Compile Include="Models\SessionModel.cs" />
     <Compile Include="Models\SponsorLevelModel.cs" />
     <Compile Include="Models\SponsorModel.cs" />
