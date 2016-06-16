@@ -139,6 +139,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Handlers\BasicAuthHandler.cs" />
+    <Compile Include="Handlers\ForcedAuthHandler.cs" />
     <Compile Include="Handlers\SessionHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
