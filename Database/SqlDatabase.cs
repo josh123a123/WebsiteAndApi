@@ -178,6 +178,19 @@ CREATE TABLE SessionTags (
 
 UPDATE VersionInfo SET DbVersion = '01.00.01.0004';";
 
+				case "01.00.01.0004":
+					return
+@"CREATE TABLE Tokens (
+	Token		INTEGER		IDENTITY(1,1)	NOT NULL,
+	UserId		INTEGER						NOT NULL,
+	Expires		DATETIME						NOT NULL,
+
+	CONSTRAINT Tokens_PK PRIMARY KEY ( Token ),
+	CONSTRAINT Tokens_Users_FK FOREIGN KEY ( UserId ) REFERENCES Users( Id )
+);
+
+UPDATE VersionInfo SET DbVersion = '01.00.02.0000';";
+
 				default:
 					return string.Empty;
 			}
