@@ -8,6 +8,8 @@ namespace DevSpace.Database.Models {
 		private AuthTokenModel() { }
 
 		internal AuthTokenModel( SqlDataReader dataReader ) {
+			if( null == dataReader ) return;
+
 			for( int lcv = 0; lcv < dataReader.FieldCount; ++lcv ) {
 				GetType().GetProperty( dataReader.GetName( lcv ), BindingFlags.Instance | BindingFlags.Public )?.SetValue( this, dataReader.GetValue( lcv ) );
 			}

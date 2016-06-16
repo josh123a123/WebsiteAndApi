@@ -7,6 +7,11 @@ using DevSpace.Common;
 
 namespace DevSpace.Database {
 	public class AuthTokenDataStore : IDataStore<IAuthToken> {
+		public async Task<IAuthToken> Create( int UserId ) {
+			Models.AuthTokenModel newToken = new Models.AuthTokenModel( null );
+			return await Add( new Models.AuthTokenModel( null ).UpdateToken( Guid.NewGuid() ).UpdateUserId( UserId ).UpdateExpires( DateTime.UtcNow.AddMinutes( 5 ) ) );
+		}
+
 		public async Task<IAuthToken> Add( IAuthToken ItemToAdd ) {
 			using( SqlConnection connection = new SqlConnection( Settings.ConnectionString ) ) {
 				connection.Open();
