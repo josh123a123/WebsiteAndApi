@@ -16,10 +16,10 @@ namespace DevSpace.Database {
 			using( SqlConnection connection = new SqlConnection( Settings.ConnectionString ) ) {
 				connection.Open();
 
-				using( SqlCommand command = new SqlCommand( "INSERT Tokens ( Token, UserId, Expires ) VALUES ( @Token, @UserId, @Expires );", connection ) ) {
+				using( SqlCommand command = new SqlCommand( "INSERT AuthTokens ( Token, UserId, Expires ) VALUES ( @Token, @UserId, @Expires );", connection ) ) {
 					command.Parameters.Add( "Token", SqlDbType.UniqueIdentifier ).Value = ItemToAdd.Token;
 					command.Parameters.Add( "UserId", SqlDbType.Int ).Value = ItemToAdd.UserId;
-					command.Parameters.Add( "Expries", SqlDbType.DateTime ).Value = ItemToAdd.Expires;
+					command.Parameters.Add( "Expires", SqlDbType.DateTime ).Value = ItemToAdd.Expires;
 
 					await command.ExecuteNonQueryAsync();
 					return ItemToAdd;
@@ -31,7 +31,7 @@ namespace DevSpace.Database {
 			using( SqlConnection connection = new SqlConnection( Settings.ConnectionString ) ) {
 				connection.Open();
 
-				using( SqlCommand command = new SqlCommand( "DELETE Tokens WHERE Expires < @CurrentTime;", connection ) ) {
+				using( SqlCommand command = new SqlCommand( "DELETE AuthTokens WHERE Expires < @CurrentTime;", connection ) ) {
 					command.Parameters.Add( "CurrentTime", SqlDbType.DateTime ).Value = DateTime.UtcNow;
 
 					return 0 < await command.ExecuteNonQueryAsync();
@@ -69,7 +69,7 @@ namespace DevSpace.Database {
 			using( SqlConnection connection = new SqlConnection( Settings.ConnectionString ) ) {
 				connection.Open();
 
-				using( SqlCommand command = new SqlCommand( "SELECT * FROM Tokens", connection ) ) {
+				using( SqlCommand command = new SqlCommand( "SELECT * FROM AuthTokens", connection ) ) {
 					using( SqlDataReader dataReader = await command.ExecuteReaderAsync() ) {
 						while( await dataReader.ReadAsync() ) {
 							returnList.Add( new Models.AuthTokenModel( dataReader ) );
@@ -85,7 +85,7 @@ namespace DevSpace.Database {
 			using( SqlConnection connection = new SqlConnection( Settings.ConnectionString ) ) {
 				connection.Open();
 
-				using( SqlCommand command = new SqlCommand( "UPDATE AuthTokens SET USerId = @UserId, @Expires = @Expires WHERE Token = @Token;", connection ) ) {
+				using( SqlCommand command = new SqlCommand( "UPDATE AuthTokens SET UserId = @UserId, Expires = @Expires WHERE Token = @Token;", connection ) ) {
 					command.Parameters.Add( "Token", SqlDbType.UniqueIdentifier ).Value = ItemToUpdate.Token;
 					command.Parameters.Add( "UserId", SqlDbType.Int ).Value = ItemToUpdate.UserId;
 					command.Parameters.Add( "Expires", SqlDbType.DateTime ).Value = ItemToUpdate.Expires;

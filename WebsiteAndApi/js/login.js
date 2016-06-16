@@ -59,7 +59,7 @@ function Force() {
 			switch (Request.status) {
 				case 200:
 					sessionStorage.setItem('Id', Request.responseText);
-					window.location = 'Profile.aspx';
+					window.location = '/profile.html';
 					break;
 
 				default:
@@ -90,7 +90,7 @@ function GetToken() {
 		if (Request.readyState == Request.DONE) {
 			document.body.style.cursor = '';
 			var ErrorMessage = document.getElementById('ErrorMessage');
-			ErrorMessage.innerText = Request.responseText.trim('"');
+			ErrorMessage.innerText = Request.responseText.replace('\"', '').replace('\"', '');
 			ErrorMessage.style.display = '';
 		}
 	};

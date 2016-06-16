@@ -26,7 +26,7 @@ namespace DevSpace.Api.Controllers {
 		}
 
 		public async Task<string> Get( [FromUri] string Email ) {
-			IUser SelectedUser = ( await _DataStore.Get( "Email", Email ) ).FirstOrDefault();
+			IUser SelectedUser = ( await _DataStore.Get( "EmailAddress", Email ) ).FirstOrDefault();
 
 			if( null == SelectedUser ) {
 				return "Email Not Found";
@@ -42,7 +42,7 @@ namespace DevSpace.Api.Controllers {
 
 The link provided is good for one use and will expire in 5 minutes ({0} {1} UTC).
 
-https://www.devspaceconf.com/login.aspx?force={2}", DateTime.UtcNow.AddMinutes( 5 ).ToShortDateString(), DateTime.UtcNow.AddMinutes( 5 ).ToShortTimeString(), Token.ToString() );
+https://www.devspaceconf.com/login.html?force={2}", DateTime.UtcNow.AddMinutes( 5 ).ToShortDateString(), DateTime.UtcNow.AddMinutes( 5 ).ToShortTimeString(), Token.Token.ToString() );
 
 			Mail.Send();
 			return "Email Sent";
