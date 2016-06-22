@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -37,13 +36,7 @@ namespace DevSpace.Api.Handlers {
 						// ELSE Basic Auth Fails
 						else {
 							// return 401
-							//Access-Control-Allow-Origin: https://www.devspaceconf.com
-							//Access-Control-Allow-Credentials: true
-
-							HttpResponseMessage Response401 = new HttpResponseMessage( System.Net.HttpStatusCode.Unauthorized );
-							Response401.Headers.Add( "Access-Control-Allow-Origin", Request.Headers.GetValues( "Origin" ).First() );
-							Response401.Headers.Add( "Access-Control-Allow-Credentials", "true" );
-							return Response401;
+							return new HttpResponseMessage( System.Net.HttpStatusCode.Unauthorized );
 						}
 					}
 

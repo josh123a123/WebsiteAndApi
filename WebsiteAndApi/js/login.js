@@ -89,9 +89,19 @@ function GetToken() {
 	Request.onreadystatechange = function () {
 		if (Request.readyState == Request.DONE) {
 			document.body.style.cursor = '';
-			var ErrorMessage = document.getElementById('ErrorMessage');
-			ErrorMessage.innerText = Request.responseText.replace('\"', '').replace('\"', '');
-			ErrorMessage.style.display = '';
+			switch (Request.status) {
+				case 200:
+					var ErrorMessage = document.getElementById('ErrorMessage');
+					ErrorMessage.innerText = Request.responseText.replace('\"', '').replace('\"', '');
+					ErrorMessage.style.display = '';
+					break;
+
+				default:
+					var ErrorMessage = document.getElementById('ErrorMessage');
+					ErrorMessage.innerText = "Error Processing Request";
+					ErrorMessage.style.display = '';
+					break;
+			}
 		}
 	};
 

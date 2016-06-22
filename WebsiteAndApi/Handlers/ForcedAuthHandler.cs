@@ -15,10 +15,7 @@ namespace DevSpace.Api.Handlers {
 				if( Request.Headers.Authorization.Scheme.ToUpper() == "FORCE" ) {
 					Guid Token;
 					if( !Guid.TryParse( Request.Headers.Authorization.Parameter, out Token ) ) {
-						HttpResponseMessage Response401 = new HttpResponseMessage( System.Net.HttpStatusCode.Unauthorized );
-						Response401.Headers.Add( "Access-Control-Allow-Origin", Request.Headers.GetValues( "Origin" ).First() );
-						Response401.Headers.Add( "Access-Control-Allow-Credentials", "true" );
-						return Response401;
+						return new HttpResponseMessage( System.Net.HttpStatusCode.Unauthorized );
 					}
 
 					AuthTokenDataStore Tokens = new AuthTokenDataStore();
@@ -26,20 +23,14 @@ namespace DevSpace.Api.Handlers {
 					IAuthToken ValidToken = ( await Tokens.Get( "Token", Token ) ).FirstOrDefault();
 
 					if( null == ValidToken ) {
-						HttpResponseMessage Response401 = new HttpResponseMessage( System.Net.HttpStatusCode.Unauthorized );
-						Response401.Headers.Add( "Access-Control-Allow-Origin", Request.Headers.GetValues( "Origin" ).First() );
-						Response401.Headers.Add( "Access-Control-Allow-Credentials", "true" );
-						return Response401;
+						return new HttpResponseMessage( System.Net.HttpStatusCode.Unauthorized );
 					}
 
 					UserDataStore Users = new UserDataStore();
 					IUser User = await Users.Get( ValidToken.UserId );
 
 					if( null == User ) {
-						HttpResponseMessage Response401 = new HttpResponseMessage( System.Net.HttpStatusCode.Unauthorized );
-						Response401.Headers.Add( "Access-Control-Allow-Origin", Request.Headers.GetValues( "Origin" ).First() );
-						Response401.Headers.Add( "Access-Control-Allow-Credentials", "true" );
-						return Response401;
+						return new HttpResponseMessage( System.Net.HttpStatusCode.Unauthorized );
 					}
 
 					Thread.CurrentPrincipal = new GenericPrincipal( new DevSpaceIdentity( User ), null );
