@@ -92,6 +92,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="2015\sessions.html" />
+    <Content Include="conduct.html" />
     <Content Include="blog.html" />
     <Content Include="Global.asax" />
     <Content Include="images\ajax-loader.gif" />
