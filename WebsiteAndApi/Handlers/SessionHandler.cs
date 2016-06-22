@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -38,11 +37,11 @@ namespace DevSpace.Api.Handlers {
 						Thread.CurrentPrincipal = new GenericPrincipal( new DevSpaceIdentity( FoundUser ), null );
 						Request.GetRequestContext().Principal = Thread.CurrentPrincipal;
 					} else {
-						// return 401
-						HttpResponseMessage Response401 = new HttpResponseMessage( System.Net.HttpStatusCode.Unauthorized );
-						Response401.Headers.Add( "Access-Control-Allow-Origin", Request.Headers.GetValues( "Origin" ).First() );
-						Response401.Headers.Add( "Access-Control-Allow-Credentials", "true" );
-						return Response401;
+						// We previously sent expired tokens back with a 401.
+						// This was causing errors with password retreval.
+						// So, just don't validate an expired token and let
+						// the Authorize attributes handle the 401
+						return await base.SendAsync( Request, CancelToken );
 					}
 				}
 
