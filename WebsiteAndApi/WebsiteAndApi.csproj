@@ -107,6 +107,8 @@
     <Content Include="index.html" />
     <Content Include="js\login.js" />
     <Content Include="js\profile.js" />
+    <Content Include="js\sessions.js" />
+    <Content Include="js\speakers.js" />
     <Content Include="js\sponsor.js" />
     <Content Include="js\tickets.js" />
     <Content Include="login.html" />

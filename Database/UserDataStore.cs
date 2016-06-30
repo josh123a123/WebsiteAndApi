@@ -78,7 +78,21 @@ namespace DevSpace.Database {
 		}
 
 		public async Task<IList<IUser>> GetAll() {
-			throw new NotImplementedException();
+			List<IUser> returnList = new List<IUser>();
+
+			using( SqlConnection connection = new SqlConnection( Settings.ConnectionString ) ) {
+				connection.Open();
+
+				using( SqlCommand command = new SqlCommand( "SELECT * FROM Users WHERE Id IN ( SELECT DISTINCT UserId FROM Sessions WHERE Accepted = 1 )", connection ) ) {
+					using( SqlDataReader dataReader = await command.ExecuteReaderAsync() ) {
+						while( await dataReader.ReadAsync() ) {
+							returnList.Add( new Models.UserModel( dataReader ) );
+						}
+					}
+				}
+			}
+
+			return returnList;
 		}
 
 		public async Task<IUser> Update( IUser ItemToUpdate ) {
