@@ -19,7 +19,7 @@ namespace DevSpace.Api.Controllers {
 			this._DataStore = DataStore;
 		}
 
-		private async Task<string> CreateJsonSession( ISession session ) {
+		private async Task<string> CreateJsonSession( ISession session, IList<IUser> Users ) {
 			JObject SessionData = new JObject();
 
 			SessionData["Id"] = session.Id;
@@ -35,12 +35,11 @@ namespace DevSpace.Api.Controllers {
 			}
 			SessionData["Tags"] = Tags;
 
-			Database.UserDataStore Users = new Database.UserDataStore();
-			IUser user = await Users.Get( session.UserId );
+			IUser User = Users.Where( user => user.Id == session.UserId ).FirstOrDefault();
 
 			JObject SpeakerData = new JObject();
-			SpeakerData["Id"] = user.Id;
-			SpeakerData["DisplayName"] = user.DisplayName;
+			SpeakerData["Id"] = User.Id;
+			SpeakerData["DisplayName"] = User.DisplayName;
 
 			SessionData["Speaker"] = SpeakerData;
 
@@ -48,9 +47,11 @@ namespace DevSpace.Api.Controllers {
 		}
 
 		private async Task<string> CreateJsonSessionArray( IList<ISession> Sessions ) {
+			IList<IUser> Users = await ( new Database.UserDataStore() ).GetAll();
+
 			JArray JsonArray = new JArray();
 			foreach( ISession Session in Sessions ) {
-				JsonArray.Add( JObject.Parse( await CreateJsonSession( Session ) ) );
+				JsonArray.Add( JObject.Parse( await CreateJsonSession( Session, Users ) ) );
 			}
 			return JsonArray.ToString( Formatting.None );
 		}
@@ -58,7 +59,7 @@ namespace DevSpace.Api.Controllers {
 		[AllowAnonymous]
 		public async Task<HttpResponseMessage> Get() {
 			try {
-				IList<ISession> Sessions = await _DataStore.Get( "Accepted", true );
+				IList<ISession> Sessions = ( await _DataStore.GetAll() ).Where( ses => ses.Accepted ).ToList();
 
 				HttpResponseMessage Response = new HttpResponseMessage( HttpStatusCode.OK );
 				Response.Content = new StringContent( await CreateJsonSessionArray( Sessions.OrderBy( ses => ses.Title ).ToList() ) ); // new StringContent( await Task.Factory.StartNew( () => JsonConvert.SerializeObject( Sessions.OrderBy( ses => ses.Title ), Formatting.None ) ) );
@@ -72,7 +73,7 @@ namespace DevSpace.Api.Controllers {
 		public async Task<HttpResponseMessage> Get( int Id ) {
 			try {
 				HttpResponseMessage Response = new HttpResponseMessage( HttpStatusCode.OK );
-				Response.Content = new StringContent( await CreateJsonSession( await _DataStore.Get( Id ) ) );
+				Response.Content = new StringContent( await CreateJsonSession( await _DataStore.Get( Id ), await ( new Database.UserDataStore() ).GetAll() ) );
 				return Response;
 			} catch {
 				return new HttpResponseMessage( HttpStatusCode.InternalServerError );
@@ -83,7 +84,7 @@ namespace DevSpace.Api.Controllers {
 		[Route( "api/v1/session/tag/{Id}" )]
 		public async Task<HttpResponseMessage> GetSessionsByTag( int Id ) {
 			try {
-				IList<ISession> Sessions = await _DataStore.Get( "Accepted", true );
+				IList<ISession> Sessions = ( await _DataStore.GetAll() ).Where( ses => ses.Accepted ).ToList();
 
 				HttpResponseMessage Response = new HttpResponseMessage( HttpStatusCode.OK );
 				Response.Content = new StringContent( await CreateJsonSessionArray( Sessions.Where( ses => ses.Tags.ToDictionary( tag => tag.Id ).ContainsKey( Id ) ).OrderBy( ses => ses.Title ).ToList() ) ); // new StringContent( await Task.Factory.StartNew( () => JsonConvert.SerializeObject( Sessions.OrderBy( ses => ses.Title ), Formatting.None ) ) );
@@ -98,7 +99,7 @@ namespace DevSpace.Api.Controllers {
 		public async Task<HttpResponseMessage> GetSessionFromUser( int Id ) {
 			try {
 				HttpResponseMessage Response = new HttpResponseMessage( HttpStatusCode.OK );
-				Response.Content = new StringContent( await Task.Factory.StartNew( () => JsonConvert.SerializeObject( _DataStore.Get( "UserId", Id ).Result, Formatting.None ) ) );
+				Response.Content = new StringContent( await Task.Factory.StartNew( () => JsonConvert.SerializeObject( _DataStore.GetAll().Result.Where( ses => ses.UserId == Id ).FirstOrDefault(), Formatting.None ) ) );
 				return Response;
 			} catch {
 				return new HttpResponseMessage( HttpStatusCode.InternalServerError );

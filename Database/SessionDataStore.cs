@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using DevSpace.Common;
 
@@ -43,15 +43,19 @@ namespace DevSpace.Database {
 		}
 
 		public async Task<bool> Delete( int Id ) {
+			bool Deleted = false;
+
 			using( SqlConnection connection = new SqlConnection( Settings.ConnectionString ) ) {
 				connection.Open();
 
 				using( SqlCommand command = new SqlCommand( "DELETE Sessions WHERE Id = @Id", connection ) ) {
 					command.Parameters.Add( "Id", SqlDbType.Int ).Value = Id;
 
-					return 0 < await command.ExecuteNonQueryAsync();
+					Deleted = 0 < await command.ExecuteNonQueryAsync();
 				}
 			}
+
+			return Deleted;
 		}
 
 		public async Task<ISession> Get( int Id ) {
@@ -103,20 +107,24 @@ namespace DevSpace.Database {
 					}
 				}
 
+				List<Tuple<int, ITag>> TagData = new List<Tuple<int, ITag>>();
+				using( SqlCommand tagCommand = new SqlCommand( "SELECT SessionId, TagId AS Id, Text FROM Tags INNER JOIN SessionTags ON Id = TagId ORDER BY SessionId, TagId;", connection ) ) {
+					using( SqlDataReader dataReader = await tagCommand.ExecuteReaderAsync() ) {
+						while( await dataReader.ReadAsync() ) {
+							TagData.Add( new Tuple<int, ITag>( dataReader.GetInt32( 0 ), new Models.TagModel( dataReader ) ) );
+						}
+					}
+				}
+
 				ISession sessionWithTags = null;
 				foreach( ISession session in sessionList ) {
 					sessionWithTags = session;
-					using( SqlCommand tagCommand = new SqlCommand( "SELECT * FROM Tags WHERE Id IN ( SELECT TagId FROM SessionTags WHERE SessionId = @SessionId );", connection ) ) {
-						tagCommand.Parameters.Add( "SessionId", SqlDbType.Int ).Value = session.Id;
 
-						using( SqlDataReader dataReader = await tagCommand.ExecuteReaderAsync() ) {
-							while( await dataReader.ReadAsync() ) {
-								sessionWithTags = sessionWithTags.AddTag( new Models.TagModel( dataReader ) );
-							}
-						}
+					foreach( Tuple<int, ITag> Tag in TagData.Where( data => data.Item1 == session.Id ) ) {
+						sessionWithTags = sessionWithTags.AddTag( Tag.Item2 );
 					}
 
-					returnList.Add( sessionWithTags ?? session );
+					returnList.Add( sessionWithTags );
 				}
 			}
 
@@ -124,7 +132,42 @@ namespace DevSpace.Database {
 		}
 
 		public async Task<IList<ISession>> GetAll() {
-			throw new NotImplementedException();
+			List<ISession> returnList = new List<ISession>();
+			List<ISession> sessionList = new List<ISession>();
+
+			using( SqlConnection connection = new SqlConnection( Settings.ConnectionString ) ) {
+				connection.Open();
+
+				using( SqlCommand sessionCommand = new SqlCommand( "SELECT * FROM Sessions", connection ) ) {
+					using( SqlDataReader dataReader = await sessionCommand.ExecuteReaderAsync() ) {
+						while( await dataReader.ReadAsync() ) {
+							sessionList.Add( new Models.SessionModel( dataReader ) );
+						}
+					}
+				}
+
+				List<Tuple<int, ITag>> TagData = new List<Tuple<int, ITag>>();
+				using( SqlCommand tagCommand = new SqlCommand( "SELECT SessionId, TagId AS Id, Text FROM Tags INNER JOIN SessionTags ON Id = TagId ORDER BY SessionId, TagId;", connection ) ) {
+					using( SqlDataReader dataReader = await tagCommand.ExecuteReaderAsync() ) {
+						while( await dataReader.ReadAsync() ) {
+							TagData.Add( new Tuple<int, ITag>( dataReader.GetInt32( 0 ), new Models.TagModel( dataReader ) ) );
+						}
+					}
+				}
+
+				ISession sessionWithTags = null;
+				foreach( ISession session in sessionList ) {
+					sessionWithTags = session;
+
+					foreach( Tuple<int, ITag> Tag in TagData.Where( data => data.Item1 == session.Id ) ) {
+						sessionWithTags = sessionWithTags.AddTag( Tag.Item2 );
+					}
+
+					returnList.Add( sessionWithTags );
+				}
+			}
+
+			return returnList;
 		}
 
 		public async Task<ISession> Update( ISession ItemToUpdate ) {

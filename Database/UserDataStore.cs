@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DevSpace.Common;
@@ -34,9 +35,11 @@ namespace DevSpace.Database {
 					else
 						command.Parameters.Add( "Website", SqlDbType.VarChar ).Value = ItemToAdd.Website;
 
-					return ItemToAdd.UpdateId( Convert.ToInt32( await command.ExecuteScalarAsync() ) );
+					ItemToAdd = ItemToAdd.UpdateId( Convert.ToInt32( await command.ExecuteScalarAsync() ) );
 				}
 			}
+
+			return ItemToAdd;
 		}
 
 		public async Task<IUser> Get( int Id ) {

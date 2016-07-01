@@ -35,7 +35,7 @@ namespace DevSpace.Api.Controllers {
 			this._DataStore = DataStore;
 		}
 
-		private async Task<string> CreateJsonUser( IUser User ) {
+		private async Task<string> CreateJsonUser( IUser User, IList<ISession> SessionList ) {
 			JObject UserData = new JObject();
 
 			UserData["Id"] = User.Id;
@@ -44,11 +44,8 @@ namespace DevSpace.Api.Controllers {
 			UserData["Twitter"] = User.Twitter;
 			UserData["Website"] = User.Website;
 
-			Database.SessionDataStore SessionsDS = new Database.SessionDataStore();
-			IList<ISession> SessionList = ( await SessionsDS.Get( "UserId", User.Id ) ).Where( ses => ses.Accepted ).ToList();
-
 			JArray Sessions = new JArray();
-			foreach( ISession Session in SessionList ) {
+			foreach( ISession Session in SessionList.Where( ses => ses.UserId == User.Id ) ) {
 				JObject jses = new JObject();
 				jses["Id"] = Session.Id;
 				jses["Title"] = Session.Title;
@@ -60,9 +57,12 @@ namespace DevSpace.Api.Controllers {
 		}
 
 		private async Task<string> CreateJsonUserArray( IList<IUser> Users ) {
+			Database.SessionDataStore SessionsDS = new Database.SessionDataStore();
+			IList<ISession> SessionList = ( await SessionsDS.GetAll() ).Where( ses => ses.Accepted ).ToList();
+
 			JArray JsonArray = new JArray();
 			foreach( IUser User in Users ) {
-				JsonArray.Add( JObject.Parse( await CreateJsonUser( User ) ) );
+				JsonArray.Add( JObject.Parse( await CreateJsonUser( User, SessionList ) ) );
 			}
 			return JsonArray.ToString( Formatting.None );
 		}
@@ -70,7 +70,7 @@ namespace DevSpace.Api.Controllers {
 		[AllowAnonymous]
 		public async Task<HttpResponseMessage> Get() {
 			try {
-				IList<IUser> Users = await _DataStore.GetAll();
+				IList<IUser> Users = ( await _DataStore.GetAll() ).Where( u => u.Permissions == 1 ).ToList();
 
 				HttpResponseMessage Response = new HttpResponseMessage( HttpStatusCode.OK );
 				Response.Content = new StringContent( await CreateJsonUserArray( Users.OrderBy( ses => ses.DisplayName ).ToList() ) );
@@ -97,8 +97,11 @@ namespace DevSpace.Api.Controllers {
 				}
 			} else {
 				try {
+					Database.SessionDataStore SessionsDS = new Database.SessionDataStore();
+					IList<ISession> SessionList = ( await SessionsDS.GetAll() ).Where( ses => ses.UserId == Id ).Where( ses => ses.Accepted ).ToList();
+
 					HttpResponseMessage Response = new HttpResponseMessage( HttpStatusCode.OK );
-					Response.Content = new StringContent( await CreateJsonUser( await _DataStore.Get( Id ) ) );
+					Response.Content = new StringContent( await CreateJsonUser( await _DataStore.Get( Id ), SessionList ) );
 					return Response;
 				} catch {
 					return new HttpResponseMessage( HttpStatusCode.InternalServerError );
