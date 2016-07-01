@@ -3,17 +3,28 @@
 
 <head>
 	<!-- #include file="head.shtml" -->
+	<script type="text/javascript" src="/js/Sessions.js" defer></script>
 </head>
 
 <body>
 	<!-- #include file="menu.shtml" -->
 
 	<section id="Content">
+		<section data-bind="foreach: Sessions">
+			<article>
+				<h1 data-bind="text: Title"></h1>
+				<p data-bind="html: Abstract"></p>
+
+				<!--h2> data-bind="text: TimeSlot"></h2-->
+				<h2>Speaker: <a data-bind="text: Speaker().DisplayName, attr: { href: Speaker().Link }"></a></h2>
+				<h2>Tags: <!-- ko foreach: Tags --><a data-bind="text: Text, attr: { href: Link }"></a>; <!-- /ko --></h2>
+			</article>
+		</section>
+
 		<article>
-			<h1>Sessions coming soon</h1>
+			<h1>Previous Sessions</h1>
 			<p>
-				We're still getting everything ready, and we are not ready to announce the sessions for this year.
-				However, if you would like to get a taste of what we could offer, take a look at the <a href="/2015/sessions.html">sessions from last year</a>.
+				If you would like to look at the <a href="/2015/sessions.html">sessions from last year</a>, just follow the link.
 			</p>
 		</article>
 	</section>

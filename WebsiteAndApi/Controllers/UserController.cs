@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading;
@@ -34,19 +35,77 @@ namespace DevSpace.Api.Controllers {
 			this._DataStore = DataStore;
 		}
 
-		[Authorize]
-		public async Task<HttpResponseMessage> Get( int Id ) {
-			IUser ExistingUser = await _DataStore.Get( Id );
+		private async Task<string> CreateJsonUser( IUser User, IList<ISession> SessionList ) {
+			JObject UserData = new JObject();
 
-			if( null == ExistingUser )
-				return new HttpResponseMessage( HttpStatusCode.NotFound );
+			UserData["Id"] = User.Id;
+			UserData["DisplayName"] = User.DisplayName;
+			UserData["Bio"] = User.Bio;
+			UserData["Twitter"] = User.Twitter;
+			UserData["Website"] = User.Website;
 
-			if( Thread.CurrentPrincipal?.Identity?.Name.Equals( ExistingUser.EmailAddress, System.StringComparison.InvariantCultureIgnoreCase ) ?? false ) {
+			JArray Sessions = new JArray();
+			foreach( ISession Session in SessionList.Where( ses => ses.UserId == User.Id ) ) {
+				JObject jses = new JObject();
+				jses["Id"] = Session.Id;
+				jses["Title"] = Session.Title;
+				Sessions.Add( jses );
+			}
+			UserData["Sessions"] = Sessions;
+
+			return UserData.ToString( Formatting.None );
+		}
+
+		private async Task<string> CreateJsonUserArray( IList<IUser> Users ) {
+			Database.SessionDataStore SessionsDS = new Database.SessionDataStore();
+			IList<ISession> SessionList = ( await SessionsDS.GetAll() ).Where( ses => ses.Accepted ).ToList();
+
+			JArray JsonArray = new JArray();
+			foreach( IUser User in Users ) {
+				JsonArray.Add( JObject.Parse( await CreateJsonUser( User, SessionList ) ) );
+			}
+			return JsonArray.ToString( Formatting.None );
+		}
+
+		[AllowAnonymous]
+		public async Task<HttpResponseMessage> Get() {
+			try {
+				IList<IUser> Users = ( await _DataStore.GetAll() ).Where( u => u.Permissions == 1 ).ToList();
+
 				HttpResponseMessage Response = new HttpResponseMessage( HttpStatusCode.OK );
-				Response.Content = new StringContent( await Task.Factory.StartNew( () => JsonConvert.SerializeObject( ExistingUser, Formatting.None ) ) );
+				Response.Content = new StringContent( await CreateJsonUserArray( Users.OrderBy( ses => ses.DisplayName ).ToList() ) );
 				return Response;
+			} catch {
+				return new HttpResponseMessage( HttpStatusCode.InternalServerError );
+			}
+		}
+
+		[AllowAnonymous]
+		public async Task<HttpResponseMessage> Get( int Id ) {
+			if( Thread.CurrentPrincipal.Identity.IsAuthenticated ) {
+				IUser ExistingUser = await _DataStore.Get( Id );
+
+				if( null == ExistingUser )
+					return new HttpResponseMessage( HttpStatusCode.NotFound );
+
+				if( Thread.CurrentPrincipal?.Identity?.Name.Equals( ExistingUser.EmailAddress, System.StringComparison.InvariantCultureIgnoreCase ) ?? false ) {
+					HttpResponseMessage Response = new HttpResponseMessage( HttpStatusCode.OK );
+					Response.Content = new StringContent( await Task.Factory.StartNew( () => JsonConvert.SerializeObject( ExistingUser, Formatting.None ) ) );
+					return Response;
+				} else {
+					return new HttpResponseMessage( HttpStatusCode.Unauthorized );
+				}
 			} else {
-				return new HttpResponseMessage( HttpStatusCode.Unauthorized );
+				try {
+					Database.SessionDataStore SessionsDS = new Database.SessionDataStore();
+					IList<ISession> SessionList = ( await SessionsDS.GetAll() ).Where( ses => ses.UserId == Id ).Where( ses => ses.Accepted ).ToList();
+
+					HttpResponseMessage Response = new HttpResponseMessage( HttpStatusCode.OK );
+					Response.Content = new StringContent( await CreateJsonUser( await _DataStore.Get( Id ), SessionList ) );
+					return Response;
+				} catch {
+					return new HttpResponseMessage( HttpStatusCode.InternalServerError );
+				}
 			}
 		}
 

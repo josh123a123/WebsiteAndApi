@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DevSpace.Common;
@@ -34,9 +35,11 @@ namespace DevSpace.Database {
 					else
 						command.Parameters.Add( "Website", SqlDbType.VarChar ).Value = ItemToAdd.Website;
 
-					return ItemToAdd.UpdateId( Convert.ToInt32( await command.ExecuteScalarAsync() ) );
+					ItemToAdd = ItemToAdd.UpdateId( Convert.ToInt32( await command.ExecuteScalarAsync() ) );
 				}
 			}
+
+			return ItemToAdd;
 		}
 
 		public async Task<IUser> Get( int Id ) {
@@ -78,7 +81,21 @@ namespace DevSpace.Database {
 		}
 
 		public async Task<IList<IUser>> GetAll() {
-			throw new NotImplementedException();
+			List<IUser> returnList = new List<IUser>();
+
+			using( SqlConnection connection = new SqlConnection( Settings.ConnectionString ) ) {
+				connection.Open();
+
+				using( SqlCommand command = new SqlCommand( "SELECT * FROM Users WHERE Id IN ( SELECT DISTINCT UserId FROM Sessions WHERE Accepted = 1 )", connection ) ) {
+					using( SqlDataReader dataReader = await command.ExecuteReaderAsync() ) {
+						while( await dataReader.ReadAsync() ) {
+							returnList.Add( new Models.UserModel( dataReader ) );
+						}
+					}
+				}
+			}
+
+			return returnList;
 		}
 
 		public async Task<IUser> Update( IUser ItemToUpdate ) {

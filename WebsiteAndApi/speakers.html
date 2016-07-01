@@ -3,73 +3,36 @@
 
 <head>
 	<!-- #include file="head.shtml" -->
+	<script type="text/javascript" src="/js/speakers.js" defer></script>
 </head>
 
 <body>
 	<!-- #include file="menu.shtml" -->
 
 	<section id="Content">
-		<article>
-			<h1>Call for Speakers Now Closed</h1>
-			<p>
-				Call for Speakers is now closed.
-				We plan to publish our list of speakers and session on Friday, July 1st.
-			</p>
-		</article>
-
-		<article>
-			<h1>Call for Speakers FAQ</h1>
-			<h2>What topics are you looking for?</h2>
-			<p>
-				We want DevSpace to be about community.
-				The conversation is almost as important as the content.
-				As such, we want speakers and attendees from every area.
-				This shouldn't be limited to development technologies.
-				Talks on testing, design, management, planning, personal improvement, and anything else you can think up will be accepted.
-			</p>
-			<h2>What incentives will I get as a speaker?</h2>
-			<p>
-				As a non-profit, there is not much I can offer.
-				I will promise you a free ticket to the event.
-				I will also offer you lunch and snacks.
-				Unfortunately, that is all I can promise.
-				If a sponsor steps up, I would like to have a speaker dinner, as well.
-				Anything else will be decided by the remaining budget as we approach the event.
-				Trust me, I will personally bend over backwards to do whatever I can.
-			</p>
-			<h2>What is the timeframe?</h2>
-			<p>
-				We plan on closing the call on June 27th at noon.
-				We hope to send out results by July 1st.
-			</p>
-			<h2>Why is the site so buggy?</h2>
-			<p>
-				This site is created for the community and by the community.
-				We work on it, in the evenings, after a full day of coding at our day jobs.
-				We try to test it on as many different platforms and browsers as possible.
-				We don't have every device.
-				We miss things.
-				We are very tired.
-			</p>
-			<p>
-				If you run into a small problem with the site, please let us know.
-				You can always contact us at <a href="mailto:info@devpsaceconf.com">info@devspaceconf.com</a>.
-				Furthermore, the entire code for the site is open sourced.
-				Feel free to fork the code and submit a pull request.
-				The code is on <a href="https://github.com" target="gh">GitHub</a> at <a href="https://github.com/DevSpaceHuntsville/WebsiteAndApi" target="ghds">https://github.com/DevSpaceHuntsville/WebsiteAndApi</a>.
-			</p>
-			<h2>Why doesn't my account from last year work?</h2>
-			<p>
-				With this year's rewrite, I changed the hashing algorithm used for your credentials.
-				Unfortunately, this means I could not port the accounts over from last year.
-				You will have to create a new account.
-			</p>
-			<h2>Why can't I just OAuth from my &lt;other place&gt; account?</h2>
-			<p>
-				We wanted to do that, but did not have time.
-				Remember that comment about being very tired?
-			</p>
-		</article>
+		<section data-bind="foreach: Profiles">
+			<article>
+				<h1 data-bind="text: DisplayName"></h1>
+				<p data-bind="text: Bio"></p>
+				<!-- ko if: Twitter || Website -->
+				<p>
+					<!-- ko if: Twitter -->
+					<a target="_blank" data-bind="text: Twitter, attr: { href: TwitterLink }"></a>
+					<!-- /ko -->
+					<!-- ko if: Website -->
+					<!-- ko if: Twitter -->
+					<br />
+					<!-- /ko -->
+					<a target="_blank" data-bind="text: Website, attr: { href: Website }"></a>
+					<!-- /ko -->
+				</p>
+				<!-- /ko -->
+				<h1>Sessions</h1>
+				<p data-bind="foreach: Sessions">
+					<span><a data-bind="text: Title, attr: { href: Link }"></a></span><br />
+				</p>
+			</article>
+		</section>
 	</section>
 
 	<!-- #include file="leftSidebar.shtml" -->

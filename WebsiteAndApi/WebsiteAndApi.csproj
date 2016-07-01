@@ -107,6 +107,8 @@
     <Content Include="index.html" />
     <Content Include="js\login.js" />
     <Content Include="js\profile.js" />
+    <Content Include="js\sessions.js" />
+    <Content Include="js\speakers.js" />
     <Content Include="js\sponsor.js" />
     <Content Include="js\tickets.js" />
     <Content Include="login.html" />
@@ -249,7 +251,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>False</UseIIS>
+          <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>60231</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
