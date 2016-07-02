@@ -4,12 +4,14 @@
 		<p>Visit the Sponsors page to learn how you can help DevSpace happen.</p>
 	</article>
 
-	<article data-bind="foreach: Sponsors">
-		<!-- ko if: Level.DisplayInSidebar -->
-		<h1 data-bind="text: Level.DisplayName"></h1>
-		<p style="text-align: center">
+	<article data-bind="foreach: SponsorLevels">
+		<!-- ko if: DisplayInSidebar -->
+		<h1 data-bind="text: DisplayName"></h1>
+		<!-- ko foreach: Sponsors -->
+		<p style="text-align: center;">
 			<a target="_blank" data-bind="attr: {href: Website}"><img data-bind="attr: { src: LogoSmall, alt: DisplayName }" /></a>
 		</p>
+		<!-- /ko -->
 		<!-- /ko -->
 	</article>
 </section>

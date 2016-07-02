@@ -100,6 +100,7 @@
     <Content Include="images\Edit.png" />
     <Content Include="images\logos\large\dannagle.png" />
     <Content Include="images\logos\large\dealnews.png" />
+    <Content Include="images\logos\small\cabinet.png" />
     <Content Include="images\logos\small\dannagle.png" />
     <Content Include="images\logos\small\dealnews.png" />
     <Content Include="images\menu.png" />

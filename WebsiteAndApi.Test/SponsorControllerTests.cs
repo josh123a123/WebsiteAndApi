@@ -60,50 +60,6 @@ namespace DevSpace.WebsiteAndApi.Test {
 		}
 
 		[TestMethod]
-		public void GetTest() {
-			ISponsor Expected = new TestSponsor {
-				Id = 1,
-				DisplayName = "Test Sponsor",
-				LogoLarge = "Logo Large",
-				LogoSmall = "Logo Small",
-				Website = "Test Website",
-				Level = new TestSponsorLevel {
-					Id = 1,
-					DisplayName = "Test Sponsor Level",
-					DisplayOrder = 1,
-					DisplayInEmails = false,
-					DisplayInSidebar = false
-				}
-			};
-
-			TestDataStore testDataStore = new TestDataStore();
-			testDataStore.GetFunction = ( id ) => {
-				return Task.FromResult<ISponsor>( Expected );
-			};
-
-			SponsorController ControllerToTest = new SponsorController( testDataStore );
-			HttpResponseMessage Actual = ControllerToTest.Get( 1 ).Result;
-
-			Assert.IsNotNull( Actual );
-			Assert.AreEqual( HttpStatusCode.OK, Actual.StatusCode );
-			AssertSponorsAreEqual( Expected, Newtonsoft.Json.JsonConvert.DeserializeObject<Common.Sponsor>( Actual.Content.ReadAsStringAsync().Result ) );
-		}
-
-		[TestMethod]
-		public void GetTest_NotFound() {
-			TestDataStore testDataStore = new TestDataStore();
-			testDataStore.GetFunction = ( id ) => {
-				return Task.FromResult<ISponsor>( null );
-			};
-
-			SponsorController ControllerToTest = new SponsorController( testDataStore );
-			HttpResponseMessage Actual = ControllerToTest.Get( 1 ).Result;
-
-			Assert.IsNotNull( Actual );
-			Assert.AreEqual( HttpStatusCode.NotFound, Actual.StatusCode );
-		}
-
-		[TestMethod]
 		public void GetAllTest() {
 			IList<ISponsor> Expected = new List<ISponsor>( 2 );
 			Expected.Add( new TestSponsor {
