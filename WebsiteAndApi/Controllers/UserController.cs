@@ -130,6 +130,10 @@ If you did not create this account, please contact info@devspaceconf.com.";
 				NewMail.Send();
 
 				return new HttpResponseMessage( HttpStatusCode.Created );
+			} else {
+				// BUG: The permissions, which is currently being used as a hack to speed up database queries
+				// was being reset.  The reclains the existing value.
+				NewUser = NewUser.UpdatePermissions( ExistingRecord.Permissions );
 			}
 
 			// You can only post a new profile if you're not authenticated
