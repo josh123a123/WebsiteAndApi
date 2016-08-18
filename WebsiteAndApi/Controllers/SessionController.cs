@@ -99,7 +99,7 @@ namespace DevSpace.Api.Controllers {
 		public async Task<HttpResponseMessage> GetSessionFromUser( int Id ) {
 			try {
 				HttpResponseMessage Response = new HttpResponseMessage( HttpStatusCode.OK );
-				Response.Content = new StringContent( await Task.Factory.StartNew( () => JsonConvert.SerializeObject( _DataStore.GetAll().Result.Where( ses => ses.UserId == Id ).FirstOrDefault(), Formatting.None ) ) );
+				Response.Content = new StringContent( await Task.Factory.StartNew( () => JsonConvert.SerializeObject( _DataStore.GetAll().Result.Where( ses => ses.UserId == Id ), Formatting.None ) ) );
 				return Response;
 			} catch {
 				return new HttpResponseMessage( HttpStatusCode.InternalServerError );

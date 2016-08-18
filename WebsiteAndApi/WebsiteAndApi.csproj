@@ -108,6 +108,7 @@
     <Content Include="images\menu.png" />
     <Content Include="images\Trash.png" />
     <Content Include="index.html" />
+    <Content Include="js\analytics.js" />
     <Content Include="js\login.js" />
     <Content Include="js\profile.js" />
     <Content Include="js\sessions.js" />
