@@ -16,19 +16,22 @@ namespace DevSpace.Database {
 		}
 
 		public async Task<ITimeSlot> Get( int Id ) {
-			using( SqlConnection connection = new SqlConnection( Settings.ConnectionString ) ) {
-				connection.Open();
+			try {
+				using( SqlConnection connection = new SqlConnection( Settings.ConnectionString ) ) {
+					connection.Open();
 
-				using( SqlCommand command = new SqlCommand( "SELECT * FROM TimeSlots WHERE Id = @Id", connection ) ) {
-					command.Parameters.Add( "Id", SqlDbType.Int ).Value = Id;
-					using( SqlDataReader dataReader = await command.ExecuteReaderAsync() ) {
-						if( await dataReader.ReadAsync() ) {
-							return new Models.TimeSlotModel( dataReader );
+					using( SqlCommand command = new SqlCommand( "SELECT * FROM TimeSlots WHERE Id = @Id", connection ) ) {
+						command.Parameters.Add( "Id", SqlDbType.Int ).Value = Id;
+						using( SqlDataReader dataReader = await command.ExecuteReaderAsync().ConfigureAwait( false ) ) {
+							if( await dataReader.ReadAsync() ) {
+								return new Models.TimeSlotModel( dataReader );
+							}
 						}
 					}
 				}
+			} catch( Exception ex ) {
+				return null;
 			}
-
 			return null;
 		}
 

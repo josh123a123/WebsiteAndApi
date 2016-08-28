@@ -7,6 +7,12 @@ namespace DevSpace.Database.Models {
 	public class TimeSlotModel : ITimeSlot {
 		private TimeSlotModel() { }
 
+		internal TimeSlotModel( ITimeSlot timeSlot ) {
+			this.Id = timeSlot.Id;
+			this.StartTime = timeSlot.StartTime;
+			this.EndTime = timeSlot.EndTime;
+		}
+
 		internal TimeSlotModel( SqlDataReader dataReader ) {
 			for( int lcv = 0; lcv < dataReader.FieldCount; ++lcv ) {
 				GetType().GetProperty( dataReader.GetName( lcv ), BindingFlags.Instance | BindingFlags.Public )?.SetValue( this, dataReader.GetValue( lcv ) );

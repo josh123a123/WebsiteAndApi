@@ -12,19 +12,15 @@ namespace DevSpace.Database.Models {
 
 		internal SessionModel( SqlDataReader dataReader ) : this() {
 			for( int lcv = 0; lcv < dataReader.FieldCount; ++lcv ) {
-				if( "TIMESLOT".Equals( dataReader.GetName( lcv ).ToUpper() ) ) {
-					TimeSlot = ( new TimeSlotDataStore() ).Get( dataReader.GetInt32( lcv ) ).Result;
-				} else {
-					PropertyInfo property = GetType().GetProperty( dataReader.GetName( lcv ), BindingFlags.Instance | BindingFlags.Public );
-					if( null == property )
-						continue;
+				PropertyInfo property = GetType().GetProperty( dataReader.GetName( lcv ), BindingFlags.Instance | BindingFlags.Public );
+				if( null == property )
+					continue;
 
-					object value = dataReader.GetValue( lcv );
-					if( DBNull.Value == value )
-						value = null;
+				object value = dataReader.GetValue( lcv );
+				if( DBNull.Value == value )
+					value = null;
 
-					property.SetValue( this, value );
-				}
+				property.SetValue( this, value );
 			}
 		}
 
@@ -36,6 +32,8 @@ namespace DevSpace.Database.Models {
 		public ImmutableList<ITag> Tags { get; private set; }
 		public string Title { get; internal set; }
 		public int UserId { get; internal set; }
+
+		public int TimeSlotId { get; internal set; }
 		public ITimeSlot TimeSlot { get; internal set; }
 
 		public ISession UpdateAbstract( string value ) {
@@ -88,7 +86,13 @@ namespace DevSpace.Database.Models {
 
 		public ISession UpdateTimeSlot( ITimeSlot value ) {
 			SessionModel newSession = this.Clone();
-			newSession.TimeSlot = ( new TimeSlotDataStore() ).Get( value.Id ).Result;
+			if( null == value ) {
+				newSession.TimeSlotId = 0;
+				newSession.TimeSlot = null;
+			} else {
+				newSession.TimeSlotId = value.Id;
+				newSession.TimeSlot = new TimeSlotModel( value );
+			}
 			return newSession;
 		}
 		#endregion
@@ -101,8 +105,11 @@ namespace DevSpace.Database.Models {
 				Abstract = string.Copy( this.Abstract ),
 				Accepted = this.Accepted,
 				Tags = this.Tags?.ToImmutableList(),
-				TimeSlot = ( new TimeSlotDataStore() ).Get( this.TimeSlot.Id ).Result
+				TimeSlotId = this.TimeSlotId
 			};
+
+			if( null != this.TimeSlot )
+				TimeSlot = new TimeSlotModel( this.TimeSlot );
 
 			if( !string.IsNullOrWhiteSpace( cloned.Notes ) )
 				cloned.Notes = string.Copy( this.Notes );
