@@ -12,15 +12,19 @@ namespace DevSpace.Database.Models {
 
 		internal SessionModel( SqlDataReader dataReader ) : this() {
 			for( int lcv = 0; lcv < dataReader.FieldCount; ++lcv ) {
-				PropertyInfo property = GetType().GetProperty( dataReader.GetName( lcv ), BindingFlags.Instance | BindingFlags.Public );
-				if( null == property )
-					continue;
+				if( "TIMESLOT".Equals( dataReader.GetName( lcv ).ToUpper() ) ) {
+					TimeSlot = ( new TimeSlotDataStore() ).Get( dataReader.GetInt32( lcv ) ).Result;
+				} else {
+					PropertyInfo property = GetType().GetProperty( dataReader.GetName( lcv ), BindingFlags.Instance | BindingFlags.Public );
+					if( null == property )
+						continue;
 
-				object value = dataReader.GetValue( lcv );
-				if( DBNull.Value == value )
-					value = null;
+					object value = dataReader.GetValue( lcv );
+					if( DBNull.Value == value )
+						value = null;
 
-				property.SetValue( this, value );
+					property.SetValue( this, value );
+				}
 			}
 		}
 
@@ -32,6 +36,7 @@ namespace DevSpace.Database.Models {
 		public ImmutableList<ITag> Tags { get; private set; }
 		public string Title { get; internal set; }
 		public int UserId { get; internal set; }
+		public ITimeSlot TimeSlot { get; internal set; }
 
 		public ISession UpdateAbstract( string value ) {
 			SessionModel newSession = this.Clone();
@@ -80,6 +85,12 @@ namespace DevSpace.Database.Models {
 			newSession.Tags = this.Tags.Remove( value );
 			return newSession;
 		}
+
+		public ISession UpdateTimeSlot( ITimeSlot value ) {
+			SessionModel newSession = this.Clone();
+			newSession.TimeSlot = ( new TimeSlotDataStore() ).Get( value.Id ).Result;
+			return newSession;
+		}
 		#endregion
 
 		private SessionModel Clone() {
@@ -89,7 +100,8 @@ namespace DevSpace.Database.Models {
 				Title = string.Copy( this.Title ),
 				Abstract = string.Copy( this.Abstract ),
 				Accepted = this.Accepted,
-				Tags = this.Tags?.ToImmutableList()
+				Tags = this.Tags?.ToImmutableList(),
+				TimeSlot = ( new TimeSlotDataStore() ).Get( this.TimeSlot.Id ).Result
 			};
 
 			if( !string.IsNullOrWhiteSpace( cloned.Notes ) )

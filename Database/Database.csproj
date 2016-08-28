@@ -110,6 +110,7 @@
     <Compile Include="Models\SponsorModel.cs" />
     <Compile Include="Models\StudentCodeModel.cs" />
     <Compile Include="Models\TagModel.cs" />
+    <Compile Include="Models\TimeSlotModel.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SessionDataStore.cs" />
@@ -119,6 +120,7 @@
     <Compile Include="SqlDatabase.cs" />
     <Compile Include="StudentCodeDataStore.cs" />
     <Compile Include="TagDataStore.cs" />
+    <Compile Include="TimeSlotDataStore.cs" />
     <Compile Include="UserDataStore.cs" />
   </ItemGroup>
   <ItemGroup>

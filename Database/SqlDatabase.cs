@@ -191,6 +191,21 @@ UPDATE VersionInfo SET DbVersion = '01.00.01.0004';";
 
 UPDATE VersionInfo SET DbVersion = '01.00.02.0000';";
 
+				case "01.00.02.0000":
+					return
+@"CREATE TABLE TimeSlots (
+	Id			INTEGER		IDENTITY	(1,1)	NOT NULL,
+	StartTime	DATETIME						NOT NULL,
+	EndTime		DATETIME						NOT NULL,
+
+	CONSTRAINT TimeSlots_PK PRIMARY KEY ( Id )
+);
+
+ALTER TABLE Sessions ADD TimeSlotId INTEGER NULL;
+ALTER TABLE Sessions ADD CONSTRAINT Sessions_TimeSlots_FK FOREIGN KEY ( TimeSlotId ) REFERENCES TimeSlots( Id );
+
+UPDATE VersionInfo SET DbVersion = '01.00.02.0001';";
+
 				default:
 					return string.Empty;
 			}

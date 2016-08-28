@@ -76,6 +76,7 @@
     <Compile Include="Interfaces\IStudentCode.cs" />
     <Compile Include="Interfaces\ITag.cs" />
     <Compile Include="Interfaces\IAuthToken.cs" />
+    <Compile Include="Interfaces\ITimeSlot.cs" />
     <Compile Include="Interfaces\IUser.cs" />
     <Compile Include="Session.cs" />
     <Compile Include="Sponsor.cs" />
@@ -84,6 +85,7 @@
     <Compile Include="StudentCode.cs" />
     <Compile Include="Tag.cs" />
     <Compile Include="AuthToken.cs" />
+    <Compile Include="TimeSlot.cs" />
     <Compile Include="User.cs" />
   </ItemGroup>
   <ItemGroup>
