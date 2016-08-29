@@ -87,7 +87,8 @@ namespace DevSpace.Database {
 				}
 			}
 
-			return returnValue;
+			TimeSlotDataStore timeSlots = new TimeSlotDataStore();
+			return returnValue.UpdateTimeSlot( await timeSlots.Get( ( returnValue as Models.SessionModel ).TimeSlotId ) );
 		}
 
 		public async Task<IList<ISession>> Get( string Field, object Value ) {

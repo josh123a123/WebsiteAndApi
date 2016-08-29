@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -43,6 +44,17 @@ namespace DevSpace.Api.Controllers {
 
 			SessionData["Speaker"] = SpeakerData;
 
+			// NOTE: There are many ways to convert UTC to Local Time in JS.
+			// However, I don't want local time.  I want the time zone of my event.
+			// Thus, I'm converting it out of UTC here, where I can force my time zone.
+			TimeZoneInfo timeZone = TimeZoneInfo.FindSystemTimeZoneById( "Central Standard Time" );
+
+			JObject TimeSlotData = new JObject();
+			TimeSlotData["StartTime"] = TimeZoneInfo.ConvertTimeFromUtc( session.TimeSlot.StartTime, timeZone );
+			TimeSlotData["EndTime"] = TimeZoneInfo.ConvertTimeFromUtc( session.TimeSlot.EndTime, timeZone );
+
+			SessionData["TimeSlot"] = TimeSlotData;
+
 			return SessionData.ToString( Formatting.None );
 		}
 
@@ -62,7 +74,7 @@ namespace DevSpace.Api.Controllers {
 				IList<ISession> Sessions = ( await _DataStore.GetAll() ).Where( ses => ses.Accepted ).ToList();
 
 				HttpResponseMessage Response = new HttpResponseMessage( HttpStatusCode.OK );
-				Response.Content = new StringContent( await CreateJsonSessionArray( Sessions.OrderBy( ses => ses.Title ).ToList() ) ); // new StringContent( await Task.Factory.StartNew( () => JsonConvert.SerializeObject( Sessions.OrderBy( ses => ses.Title ), Formatting.None ) ) );
+				Response.Content = new StringContent( await CreateJsonSessionArray( Sessions.OrderBy( ses => ses.TimeSlot.StartTime ).ToList() ) ); // new StringContent( await Task.Factory.StartNew( () => JsonConvert.SerializeObject( Sessions.OrderBy( ses => ses.Title ), Formatting.None ) ) );
 				return Response;
 			} catch {
 				return new HttpResponseMessage( HttpStatusCode.InternalServerError );

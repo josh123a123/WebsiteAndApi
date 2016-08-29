@@ -109,7 +109,7 @@ namespace DevSpace.Database.Models {
 			};
 
 			if( null != this.TimeSlot )
-				TimeSlot = new TimeSlotModel( this.TimeSlot );
+				cloned.TimeSlot = new TimeSlotModel( this.TimeSlot );
 
 			if( !string.IsNullOrWhiteSpace( cloned.Notes ) )
 				cloned.Notes = string.Copy( this.Notes );
