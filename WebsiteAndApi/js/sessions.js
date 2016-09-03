@@ -1,4 +1,70 @@
-﻿function Profile(data) {
+﻿// You're lucky I have too much respect for bandwidth to reproduce
+// the profanity filled rant that accompanied the following functions...
+function GetDay(date) {
+	switch (date.getDay()) {
+		case 0:
+			return 'Sunday';
+		case 1:
+			return 'Monday';
+		case 2:
+			return 'Tuesday';
+		case 3:
+			return 'Wednesday';
+		case 4:
+			return 'Thursday';
+		case 5:
+			return 'Friday';
+		case 6:
+			return 'Saturday';
+	}
+}
+
+function GetMonth(date) {
+	switch (date.getMonth()) {
+		case 0:
+			return 'January';
+		case 1:
+			return 'February';
+		case 2:
+			return 'March';
+		case 3:
+			return 'April';
+		case 4:
+			return 'May';
+		case 5:
+			return 'June';
+		case 6:
+			return 'July';
+		case 7:
+			return 'August';
+		case 8:
+			return 'September';
+		case 9:
+			return 'October';
+		case 10:
+			return 'November';
+		case 11:
+			return 'December';
+	}
+}
+
+function FormatDate(date) {
+	var AmPm = 'AM';
+	var hours = date.getHours();
+	if (hours > 12) {
+		AmPm = 'Pm';
+		hours -= 12;
+	}
+
+	var minutes = date.getMinutes();
+	if (minutes < 10) {
+		minutes = '0' + new String(date.getMinutes());
+	}
+
+	return GetDay(date) + ', ' + GetMonth(date) + ' ' + date.getDate() + ' at ' + hours + ':' + minutes + ' ' + AmPm;
+}
+
+function Profile(data) {
 	var Self = this;
 	Self.Id = ko.observable();
 	Self.DisplayName = ko.observable();
@@ -9,6 +75,20 @@
 		Self.DisplayName(data.DisplayName);
 
 		Self.Link('/speakers.html?id=' + data.Id);
+	}
+}
+
+function TimeSlot(data) {
+	var Self = this;
+	Self.StartTime = ko.observable();
+	Self.EndTime = ko.observable();
+	Self.DisplayDateTime = ko.pureComputed(function () {
+		return FormatDate(this.StartTime());
+	}, Self);
+
+	if (data) {
+		Self.StartTime(new Date(data.StartTime));
+		Self.EndTime(new Date(data.EndTime));
 	}
 }
 
@@ -33,7 +113,7 @@ function Session(data) {
 		Self.Speaker(new Profile(data.Speaker));
 		Self.Title(data.Title);
 		Self.Abstract('<p>' + data.Abstract.trim().replace('\n', '</p><p>') + '</p>');
-		Self.TimeSlot(data.TimeSlot);
+		Self.TimeSlot(new TimeSlot(data.TimeSlot));
 
 		if (data.Tags)
 			for (var index = 0; index < data.Tags.length; ++index)

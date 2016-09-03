@@ -4,7 +4,8 @@ using System.Runtime.Serialization;
 
 namespace DevSpace.Common {
 	[DataContract]
-	[KnownType( typeof(Tag))]
+	[KnownType( typeof( Tag ) )]
+	[KnownType( typeof( TimeSlot ) )]
 	public class Session : ISession {
 		private Session() {
 			this._tags = new List<Tag>();
@@ -22,6 +23,16 @@ namespace DevSpace.Common {
 		public ImmutableList<ITag> Tags {
 			get {
 				return ImmutableList<ITag>.Empty.AddRange( _tags );
+			}
+		}
+
+		[DataMember]	private TimeSlot _timeSlot;
+		public ITimeSlot TimeSlot {
+			get {
+				return _timeSlot;
+			}
+			private set {
+				_timeSlot = new TimeSlot( value );
 			}
 		}
 
@@ -72,6 +83,12 @@ namespace DevSpace.Common {
 			newSession._tags.Remove( new Tag( value ) );
 			return newSession;
 		}
+
+		public ISession UpdateTimeSlot( ITimeSlot value ) {
+			Session newSession = this.Clone();
+			newSession.TimeSlot = value;
+			return newSession;
+		}
 		#endregion
 
 		private Session Clone() {
@@ -82,6 +99,9 @@ namespace DevSpace.Common {
 				Abstract = string.Copy( this.Abstract ),
 				Accepted = this.Accepted
 			};
+
+			if( null != TimeSlot )
+				cloned.TimeSlot = new TimeSlot( this.TimeSlot );
 
 			if( !string.IsNullOrWhiteSpace( this.Notes ) )
 				cloned.Notes = string.Copy( this.Notes );

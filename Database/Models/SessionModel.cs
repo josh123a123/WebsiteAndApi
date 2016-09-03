@@ -33,6 +33,9 @@ namespace DevSpace.Database.Models {
 		public string Title { get; internal set; }
 		public int UserId { get; internal set; }
 
+		public int TimeSlotId { get; internal set; }
+		public ITimeSlot TimeSlot { get; internal set; }
+
 		public ISession UpdateAbstract( string value ) {
 			SessionModel newSession = this.Clone();
 			newSession.Abstract = value;
@@ -80,6 +83,18 @@ namespace DevSpace.Database.Models {
 			newSession.Tags = this.Tags.Remove( value );
 			return newSession;
 		}
+
+		public ISession UpdateTimeSlot( ITimeSlot value ) {
+			SessionModel newSession = this.Clone();
+			if( null == value ) {
+				newSession.TimeSlotId = 0;
+				newSession.TimeSlot = null;
+			} else {
+				newSession.TimeSlotId = value.Id;
+				newSession.TimeSlot = new TimeSlotModel( value );
+			}
+			return newSession;
+		}
 		#endregion
 
 		private SessionModel Clone() {
@@ -89,8 +104,12 @@ namespace DevSpace.Database.Models {
 				Title = string.Copy( this.Title ),
 				Abstract = string.Copy( this.Abstract ),
 				Accepted = this.Accepted,
-				Tags = this.Tags?.ToImmutableList()
+				Tags = this.Tags?.ToImmutableList(),
+				TimeSlotId = this.TimeSlotId
 			};
+
+			if( null != this.TimeSlot )
+				cloned.TimeSlot = new TimeSlotModel( this.TimeSlot );
 
 			if( !string.IsNullOrWhiteSpace( cloned.Notes ) )
 				cloned.Notes = string.Copy( this.Notes );
