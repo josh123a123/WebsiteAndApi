@@ -49,9 +49,13 @@ namespace DevSpace.Api.Controllers {
 			// Thus, I'm converting it out of UTC here, where I can force my time zone.
 			TimeZoneInfo timeZone = TimeZoneInfo.FindSystemTimeZoneById( "Central Standard Time" );
 
+
+			// Yes, I'm sure there is a way to get that -05:00 generated from the TimeZoneInfo
+			// Yes, that will have to be address before other confs start using this
+			// No, I don't have time to do it right now.
 			JObject TimeSlotData = new JObject();
-			TimeSlotData["StartTime"] = TimeZoneInfo.ConvertTimeFromUtc( session.TimeSlot.StartTime, timeZone );
-			TimeSlotData["EndTime"] = TimeZoneInfo.ConvertTimeFromUtc( session.TimeSlot.EndTime, timeZone );
+			TimeSlotData["StartTime"] = TimeZoneInfo.ConvertTimeFromUtc( session.TimeSlot.StartTime, timeZone ).ToString( "yyyy-MM-ddTHH:mm:ss.fff-05:00" );
+			TimeSlotData["EndTime"] = TimeZoneInfo.ConvertTimeFromUtc( session.TimeSlot.EndTime, timeZone ).ToString( "yyyy-MM-ddTHH:mm:ss.fff-05:00" );
 
 			SessionData["TimeSlot"] = TimeSlotData;
 
