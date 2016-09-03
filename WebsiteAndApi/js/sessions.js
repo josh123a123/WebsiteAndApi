@@ -83,12 +83,12 @@ function TimeSlot(data) {
 	Self.StartTime = ko.observable();
 	Self.EndTime = ko.observable();
 	Self.DisplayDateTime = ko.pureComputed(function () {
-		return FormatDate(new Date(this.StartTime()));
+		return FormatDate(this.StartTime());
 	}, Self);
 
 	if (data) {
-		Self.StartTime(data.StartTime);
-		Self.EndTime(data.EndTime);
+		Self.StartTime(new Date(data.StartTime));
+		Self.EndTime(new Date(data.EndTime));
 	}
 }
 
