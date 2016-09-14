@@ -62,7 +62,7 @@ namespace DevSpace.Api.Controllers {
 				return new HttpResponseMessage( HttpStatusCode.BadRequest );
 
 			// Check DataStore for existing code
-			IList<IStudentCode> ExistingCodes = await _DataStore.Get( "EmailAddress", NewStudentCode.Email );
+			IList<IStudentCode> ExistingCodes = await _DataStore.Get( "Email", NewStudentCode.Email );
 
 			//	If exists, resent existing code
 			if( ExistingCodes.Count > 0 ) {
