@@ -6,6 +6,7 @@ namespace DevSpace.Common {
 	[DataContract]
 	[KnownType( typeof( Tag ) )]
 	[KnownType( typeof( TimeSlot ) )]
+	[KnownType( typeof( Room ) )]
 	public class Session : ISession {
 		private Session() {
 			this._tags = new List<Tag>();
@@ -26,13 +27,25 @@ namespace DevSpace.Common {
 			}
 		}
 
-		[DataMember]	private TimeSlot _timeSlot;
+		[DataMember]
+		private TimeSlot _timeSlot;
 		public ITimeSlot TimeSlot {
 			get {
 				return _timeSlot;
 			}
 			private set {
 				_timeSlot = new TimeSlot( value );
+			}
+		}
+
+		[DataMember]
+		private Room _room;
+		public IRoom Room {
+			get {
+				return _room;
+			}
+			private set {
+				_room = new Room( value );
 			}
 		}
 
@@ -89,6 +102,12 @@ namespace DevSpace.Common {
 			newSession.TimeSlot = value;
 			return newSession;
 		}
+
+		public ISession UpdateRoom( IRoom value ) {
+			Session newSession = this.Clone();
+			newSession.Room = value;
+			return newSession;
+		}
 		#endregion
 
 		private Session Clone() {
@@ -102,6 +121,9 @@ namespace DevSpace.Common {
 
 			if( null != TimeSlot )
 				cloned.TimeSlot = new TimeSlot( this.TimeSlot );
+
+			if( null != Room )
+				cloned.Room = new Room( this.Room );
 
 			if( !string.IsNullOrWhiteSpace( this.Notes ) )
 				cloned.Notes = string.Copy( this.Notes );
