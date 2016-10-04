@@ -26,6 +26,7 @@ namespace DevSpace.Api.Controllers {
 			SessionData["Id"] = session.Id;
 			SessionData["Title"] = session.Title;
 			SessionData["Abstract"] = session.Abstract;
+			SessionData["Room"] = session.Room.DisplayName;
 
 			JArray Tags = new JArray();
 			foreach( ITag tag in session.Tags ) {
@@ -78,7 +79,7 @@ namespace DevSpace.Api.Controllers {
 				IList<ISession> Sessions = ( await _DataStore.GetAll() ).Where( ses => ses.Accepted ).ToList();
 
 				HttpResponseMessage Response = new HttpResponseMessage( HttpStatusCode.OK );
-				Response.Content = new StringContent( await CreateJsonSessionArray( Sessions.OrderBy( ses => ses.TimeSlot.StartTime ).ToList() ) ); // new StringContent( await Task.Factory.StartNew( () => JsonConvert.SerializeObject( Sessions.OrderBy( ses => ses.Title ), Formatting.None ) ) );
+				Response.Content = new StringContent( await CreateJsonSessionArray( Sessions.OrderBy( ses => ses.Room.Id ).OrderBy( ses => ses.TimeSlot.StartTime ).ToList() ) ); // new StringContent( await Task.Factory.StartNew( () => JsonConvert.SerializeObject( Sessions.OrderBy( ses => ses.Title ), Formatting.None ) ) );
 				return Response;
 			} catch {
 				return new HttpResponseMessage( HttpStatusCode.InternalServerError );
