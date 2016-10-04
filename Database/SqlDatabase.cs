@@ -206,6 +206,20 @@ ALTER TABLE Sessions ADD CONSTRAINT Sessions_TimeSlots_FK FOREIGN KEY ( TimeSlot
 
 UPDATE VersionInfo SET DbVersion = '01.00.02.0001';";
 
+				case "01.00.02.0001":
+					return
+@"CREATE TABLE Rooms (
+	Id			INTEGER		IDENTITY	(1,1)	NOT NULL,
+	DisplayName	VARCHAR(	16)					NOT NULL,
+
+	CONSTRAINT Rooms_PK PRIMARY KEY ( Id )
+);
+
+ALTER TABLE Sessions ADD RoomId INTEGER NULL;
+ALTER TABLE Sessions ADD CONSTRAINT Sessions_Rooms_FK FOREIGN KEY ( RoomId ) REFERENCES Rooms( Id );
+
+UPDATE VersionInfo SET DbVersion = '01.00.02.0002';";
+
 				default:
 					return string.Empty;
 			}

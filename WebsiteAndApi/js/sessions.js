@@ -31,6 +31,7 @@ function Session(data) {
 	Self.Speaker = ko.observable();
 	Self.Title = ko.observable();
 	Self.Abstract = ko.observable();
+	Self.Room = ko.observable();
 	Self.TimeSlot = ko.observable();
 	Self.Tags = ko.observableArray([]);
 
@@ -46,6 +47,7 @@ function Session(data) {
 		Self.Speaker(new Profile(data.Speaker));
 		Self.Title(data.Title);
 		Self.Abstract('<p>' + data.Abstract.trim().replace('\n', '</p><p>') + '</p>');
+		Self.Room(data.Room);
 		Self.TimeSlot(new TimeSlot(data.TimeSlot));
 
 		if (data.Tags)
