@@ -220,6 +220,12 @@ ALTER TABLE Sessions ADD CONSTRAINT Sessions_Rooms_FK FOREIGN KEY ( RoomId ) REF
 
 UPDATE VersionInfo SET DbVersion = '01.00.02.0002';";
 
+				case "01.00.02.0002":
+					return
+@"ALTER TABLE Sponsors ALTER COLUMN DisplayName VARCHAR(32) NOT NULL;
+
+UPDATE VersionInfo SET DbVersion = '01.00.02.0003';";
+
 				default:
 					return string.Empty;
 			}
