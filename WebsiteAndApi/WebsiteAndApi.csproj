@@ -98,6 +98,7 @@
     <Content Include="images\ajax-loader.gif" />
     <Content Include="images\DevSpace_ForWeb_400wide.png" />
     <Content Include="images\Edit.png" />
+    <Content Include="images\logos\large\cabinet.png" />
     <Content Include="images\logos\large\ColsaLarge.png" />
     <Content Include="images\logos\large\CR-Large.png" />
     <Content Include="images\logos\large\curse-large.png" />
