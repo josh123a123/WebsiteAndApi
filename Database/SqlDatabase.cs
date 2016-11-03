@@ -191,6 +191,41 @@ UPDATE VersionInfo SET DbVersion = '01.00.01.0004';";
 
 UPDATE VersionInfo SET DbVersion = '01.00.02.0000';";
 
+				case "01.00.02.0000":
+					return
+@"CREATE TABLE TimeSlots (
+	Id			INTEGER		IDENTITY	(1,1)	NOT NULL,
+	StartTime	DATETIME						NOT NULL,
+	EndTime		DATETIME						NOT NULL,
+
+	CONSTRAINT TimeSlots_PK PRIMARY KEY ( Id )
+);
+
+ALTER TABLE Sessions ADD TimeSlotId INTEGER NULL;
+ALTER TABLE Sessions ADD CONSTRAINT Sessions_TimeSlots_FK FOREIGN KEY ( TimeSlotId ) REFERENCES TimeSlots( Id );
+
+UPDATE VersionInfo SET DbVersion = '01.00.02.0001';";
+
+				case "01.00.02.0001":
+					return
+@"CREATE TABLE Rooms (
+	Id			INTEGER		IDENTITY	(1,1)	NOT NULL,
+	DisplayName	VARCHAR(	16)					NOT NULL,
+
+	CONSTRAINT Rooms_PK PRIMARY KEY ( Id )
+);
+
+ALTER TABLE Sessions ADD RoomId INTEGER NULL;
+ALTER TABLE Sessions ADD CONSTRAINT Sessions_Rooms_FK FOREIGN KEY ( RoomId ) REFERENCES Rooms( Id );
+
+UPDATE VersionInfo SET DbVersion = '01.00.02.0002';";
+
+				case "01.00.02.0002":
+					return
+@"ALTER TABLE Sponsors ALTER COLUMN DisplayName VARCHAR(32) NOT NULL;
+
+UPDATE VersionInfo SET DbVersion = '01.00.02.0003';";
+
 				default:
 					return string.Empty;
 			}

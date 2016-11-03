@@ -70,13 +70,16 @@
   <ItemGroup>
     <Compile Include="Interfaces\IDatabase.cs" />
     <Compile Include="Interfaces\IDataStore.cs" />
+    <Compile Include="Interfaces\IRoom.cs" />
     <Compile Include="Interfaces\ISession.cs" />
     <Compile Include="Interfaces\ISponsor.cs" />
     <Compile Include="Interfaces\ISponsorLevel.cs" />
     <Compile Include="Interfaces\IStudentCode.cs" />
     <Compile Include="Interfaces\ITag.cs" />
     <Compile Include="Interfaces\IAuthToken.cs" />
+    <Compile Include="Interfaces\ITimeSlot.cs" />
     <Compile Include="Interfaces\IUser.cs" />
+    <Compile Include="Room.cs" />
     <Compile Include="Session.cs" />
     <Compile Include="Sponsor.cs" />
     <Compile Include="SponsorLevel.cs" />
@@ -84,6 +87,7 @@
     <Compile Include="StudentCode.cs" />
     <Compile Include="Tag.cs" />
     <Compile Include="AuthToken.cs" />
+    <Compile Include="TimeSlot.cs" />
     <Compile Include="User.cs" />
   </ItemGroup>
   <ItemGroup>

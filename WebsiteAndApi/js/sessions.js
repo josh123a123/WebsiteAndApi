@@ -12,12 +12,26 @@
 	}
 }
 
+function TimeSlot(data) {
+	var Self = this;
+	Self.StartTime = ko.observable();
+	Self.EndTime = ko.observable();
+	Self.DisplayDateTime = ko.observable();
+
+	if (data) {
+		Self.StartTime(new Date(data.StartTime));
+		Self.EndTime(new Date(data.EndTime));
+		Self.DisplayDateTime( data.DisplayDateTime)
+	}
+}
+
 function Session(data) {
 	var Self = this;
 	Self.Id = ko.observable();
 	Self.Speaker = ko.observable();
 	Self.Title = ko.observable();
 	Self.Abstract = ko.observable();
+	Self.Room = ko.observable();
 	Self.TimeSlot = ko.observable();
 	Self.Tags = ko.observableArray([]);
 
@@ -33,7 +47,8 @@ function Session(data) {
 		Self.Speaker(new Profile(data.Speaker));
 		Self.Title(data.Title);
 		Self.Abstract('<p>' + data.Abstract.trim().replace('\n', '</p><p>') + '</p>');
-		Self.TimeSlot(data.TimeSlot);
+		Self.Room(data.Room);
+		Self.TimeSlot(new TimeSlot(data.TimeSlot));
 
 		if (data.Tags)
 			for (var index = 0; index < data.Tags.length; ++index)

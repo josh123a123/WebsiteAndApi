@@ -9,6 +9,8 @@ namespace DevSpace.Common {
 		string Notes { get; }
 		bool Accepted { get; }
 		ImmutableList<ITag> Tags { get; }
+		ITimeSlot TimeSlot { get; }
+		IRoom Room { get; }
 		
 		ISession UpdateId( int value );
 		ISession UpdateUserId( int value );
@@ -18,5 +20,7 @@ namespace DevSpace.Common {
 		ISession UpdateAccepted( bool value );
 		ISession AddTag( ITag value );
 		ISession RemoveTag( ITag value );
+		ISession UpdateTimeSlot( ITimeSlot value );
+		ISession UpdateRoom( IRoom value );
 	}
 }
