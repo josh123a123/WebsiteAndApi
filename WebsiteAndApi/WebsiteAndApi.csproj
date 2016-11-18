@@ -172,6 +172,7 @@
     <Content Include="rightSidebar.shtml" />
     <Content Include="2015\2015sessions.json" />
     <Content Include="Files\sponsors.ppt" />
+    <Content Include="Files\Schedule.pdf" />
     <None Include="Properties\PublishProfiles\Staging - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\Production - Web Deploy.pubxml" />
     <None Include="Web.Debug.config">
