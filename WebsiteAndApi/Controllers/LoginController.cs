@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http;
 using DevSpace.Common;
 using DevSpace.Database;
+using Octokit;
 
 namespace DevSpace.Api.Controllers {
 	[AllowAnonymous]
@@ -46,6 +48,27 @@ https://www.devspaceconf.com/login.html?force={2}", DateTime.UtcNow.AddMinutes( 
 
 			Mail.Send();
 			return "Email Sent";
+		}
+
+		[Route( "api/v1/login/github" )]
+		public async Task<int> GetFromGithub( [FromUri] string code, [FromUri] string state = "" ) {
+			if( string.IsNullOrWhiteSpace( code ) ) {
+				return -1;
+			}
+
+			GitHubClient client = new GitHubClient( new ProductHeaderValue( "DevSpace-Website-Staging" ) );
+			OauthTokenRequest request = new OauthTokenRequest( ConfigurationManager.AppSettings["GithubClientId"], ConfigurationManager.AppSettings["GithubClientSecret"], code );
+			OauthToken token = await client.Oauth.CreateAccessToken( request );
+
+			client.Credentials = new Credentials( token.AccessToken );
+			Octokit.User githubUser = await client.User.Current();
+
+			IList<IUser> Users = await _DataStore.GetAll();
+			Users = Users.Where( u => u.GithubId == githubUser.Id ).ToList();
+			if( 0 < Users.Count )
+				return Users[0].Id;
+
+			return -1;
 		}
 	}
 }

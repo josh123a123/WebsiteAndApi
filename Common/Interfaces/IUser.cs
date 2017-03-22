@@ -10,6 +10,7 @@ namespace DevSpace.Common {
 		byte Permissions { get; }
 		string PasswordHash { get; }
 		string Website { get; }
+		int GithubId { get; }
 		Guid SessionToken { get; }
 		DateTime SessionExpires { get; }
 
@@ -21,6 +22,7 @@ namespace DevSpace.Common {
 		IUser UpdatePermissions( byte newPermissions );
 		IUser UpdatePasswordHash( string newPasswordHash );
 		IUser UpdateWebsite( string newWebsite );
+		IUser UpdateGithubId( int newGithubId );
 		IUser UpdateSessionToken( Guid newSessionToken );
 		IUser UpdateSessionExpires( DateTime newSessionExpires );
 	}

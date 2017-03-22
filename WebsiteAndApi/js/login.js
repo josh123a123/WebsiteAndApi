@@ -15,7 +15,7 @@ function Login() {
 	Request.send();
 
 	Request.onreadystatechange = function () {
-		if (Request.readyState == Request.DONE) {
+		if (Request.readyState === Request.DONE) {
 			document.body.style.cursor = '';
 			switch (Request.status) {
 				case 200:
@@ -54,7 +54,7 @@ function Force() {
 	Request.send();
 
 	Request.onreadystatechange = function () {
-		if (Request.readyState == Request.DONE) {
+		if (Request.readyState === Request.DONE) {
 			document.body.style.cursor = '';
 			switch (Request.status) {
 				case 200:
@@ -75,7 +75,7 @@ function Force() {
 }
 
 function GetToken() {
-	if ('' == document.getElementById('Email').value.trim()) {
+	if ('' === document.getElementById('Email').value.trim()) {
 		alert('You must enter an email address.');
 		return;
 	}
@@ -87,17 +87,16 @@ function GetToken() {
 	Request.send();
 
 	Request.onreadystatechange = function () {
-		if (Request.readyState == Request.DONE) {
+		if (Request.readyState === Request.DONE) {
 			document.body.style.cursor = '';
+			var ErrorMessage = document.getElementById('ErrorMessage');
 			switch (Request.status) {
 				case 200:
-					var ErrorMessage = document.getElementById('ErrorMessage');
 					ErrorMessage.innerText = Request.responseText.replace('\"', '').replace('\"', '');
 					ErrorMessage.style.display = '';
 					break;
 
 				default:
-					var ErrorMessage = document.getElementById('ErrorMessage');
 					ErrorMessage.innerText = "Error Processing Request";
 					ErrorMessage.style.display = '';
 					break;
@@ -123,21 +122,20 @@ function Register() {
 		Request.send(JSON.stringify(RequestJson));
 
 		Request.onreadystatechange = function () {
-			if (Request.readyState == Request.DONE) {
+			if (Request.readyState === Request.DONE) {
 				document.body.style.cursor = '';
+				var ErrorMessage = document.getElementById('ErrorMessage');
 				switch (Request.status) {
 					case 201:
 						Login();
 						break;
 
 					case 401:
-						var ErrorMessage = document.getElementById('ErrorMessage');
 						ErrorMessage.innerText = "Registration Failed. Email Already Registered.";
 						ErrorMessage.style.display = '';
 						break;
 
 					default:
-						var ErrorMessage = document.getElementById('ErrorMessage');
 						ErrorMessage.innerText = "Unknown Error";
 						ErrorMessage.style.display = '';
 						break;
@@ -153,7 +151,7 @@ function VerifyPassword() {
 	var Verify = document.getElementById('Verify');
 	var Password = document.getElementById('Password');
 
-	if (Password.value && (document.getElementById('Password').value == Verify.value)) {
+	if (Password.value && (document.getElementById('Password').value === Verify.value)) {
 		document.getElementById('ErrorMessage').style.display = 'none';
 		Verify.style.borderColor = '#000000';
 		return true;
@@ -202,7 +200,7 @@ function ShowLogin() {
 }
 
 function ActionOnEnter(e, f) {
-	if (e.char == '\n') {
+	if (e.char === '\n') {
 		f();
 	}
 }

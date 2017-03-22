@@ -27,6 +27,7 @@ namespace DevSpace.Database.Models {
 		public byte Permissions { get; internal set; }
 		public string Twitter { get; internal set; }
 		public string Website { get; internal set; }
+		public int GithubId { get; internal set; }
 		public Guid SessionToken { get; internal set; }
 		public DateTime SessionExpires { get; internal set; }
 
@@ -78,6 +79,12 @@ namespace DevSpace.Database.Models {
 			return newUser;
 		}
 
+		public IUser UpdateGithubId( int newGithubId ) {
+			UserModel newUser = Clone();
+			newUser.GithubId = newGithubId;
+			return newUser;
+		}
+
 		public IUser UpdateSessionToken( Guid newSessionToken ) {
 			UserModel newUser = Clone();
 			newUser.SessionToken = newSessionToken;
@@ -100,6 +107,7 @@ namespace DevSpace.Database.Models {
 			if( null != this.PasswordHash ) cloned.PasswordHash = string.Copy( this.PasswordHash );
 			if( null != this.Twitter ) cloned.Twitter = string.Copy( this.Twitter );
 			if( null != this.Website ) cloned.Website = string.Copy( this.Website );
+			cloned.GithubId = this.GithubId;
 			cloned.SessionToken = this.SessionToken;
 			cloned.SessionExpires = this.SessionExpires;
 			return cloned;

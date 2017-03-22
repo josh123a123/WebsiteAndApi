@@ -71,6 +71,8 @@ namespace DevSpace.WebsiteAndApi.Test {
 				}
 			}
 
+			public int GithubId => throw new NotImplementedException();
+
 			public IUser UpdateBio( string newBio ) {
 				throw new NotImplementedException();
 			}
@@ -80,6 +82,10 @@ namespace DevSpace.WebsiteAndApi.Test {
 			}
 
 			public IUser UpdateEmailAddress( string newEmailAddress ) {
+				throw new NotImplementedException();
+			}
+
+			public IUser UpdateGithubId( int newGithubId ) {
 				throw new NotImplementedException();
 			}
 
