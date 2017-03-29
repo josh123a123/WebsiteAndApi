@@ -18,6 +18,11 @@ namespace DevSpace {
 				routeTemplate: "api/v1/{controller}/{id}",
 				defaults: new { id = RouteParameter.Optional }
 			);
+
+			config.Routes.MapHttpRoute(
+				name: "DynamicFiles",
+				routeTemplate: "dynamic/{controller}/{name}"
+			);
 		}
 	}
 }
