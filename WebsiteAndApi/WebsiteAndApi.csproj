@@ -121,7 +121,6 @@
     <Content Include="images\menu.png" />
     <Content Include="images\Trash.png" />
     <Content Include="index.html" />
-    <Content Include="js\analytics.js" />
     <Content Include="js\login.js" />
     <Content Include="js\profile.js" />
     <Content Include="js\sessions.js" />
@@ -150,6 +149,7 @@
     <Compile Include="App_Start\JsonBinder.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\ScriptsController.cs" />
     <Compile Include="Controllers\SessionController.cs" />
     <Compile Include="Controllers\SponsorController.cs" />
     <Compile Include="Controllers\TagController.cs" />
