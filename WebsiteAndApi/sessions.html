@@ -12,16 +12,14 @@
 
 	<section id="Content">
 		<article>
-			<h1>Alternate Views</h1>
+			<h1>Coming Soon</h1>
 			<p>
-				A cleaner, alternate view is available at <a href="http://dannagle.github.io">http://dannagle.github.io</a>. This view does not contain session descriptions.
-			</p>
-			<p>
-				A printable PDF is available at <a href="/Files/schedule.pdf">https://www.devspaceconf.com/Files/schedule.pdf</a>. This view does not contain session description, but it print nicely on one page if printed on both sides.
+				We'll have more show here in Mid June.
+				Until then, check out the content from previous years down below.
 			</p>
 		</article>
 
-		<section data-bind="foreach: Sessions">
+		<!-- section data-bind="foreach: Sessions">
 			<article>
 				<h1 data-bind="text: Title"></h1>
 				<p data-bind="html: Abstract"></p>
@@ -29,14 +27,17 @@
 				<h2 data-bind="text: Room"></h2>
 				<h2 data-bind="text: TimeSlot().DisplayDateTime"></h2>
 				<h2>Speaker: <a data-bind="text: Speaker().DisplayName, attr: { href: Speaker().Link }"></a></h2>
-				<h2>Tags: <!-- ko foreach: Tags --><a data-bind="text: Text, attr: { href: Link }"></a>; <!-- /ko --></h2>
+				<h2>Tags: <!-- ko foreach: Tags --><!--a data-bind="text: Text, attr: { href: Link }"></!--a>; <!-- /ko --><!--/h2>
 			</article>
-		</section>
+		</section -->
 
 		<article>
 			<h1>Previous Sessions</h1>
 			<p>
-				If you would like to look at the <a href="/2015/sessions.html">sessions from last year</a>, just follow the link.
+				<a href="/2015/sessions.html">Sessions from 2015</a>
+			</p>
+			<p>
+				<a href="/2016/sessions.html">Sessions from 2016</a>
 			</p>
 		</article>
 	</section>
