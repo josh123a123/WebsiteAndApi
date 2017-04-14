@@ -11,7 +11,15 @@
 	<!-- #include file="menu.shtml" -->
 
 	<section id="Content">
-		<section data-bind="foreach: Profiles">
+		<article>
+			<h1>Call For Speakers Coming Soon</h1>
+			<p>
+				Our call for speakers <i>should</i> open on May 1st.
+				Check back then to submit your awesome session we'll totally want to see.
+			</p>
+		</article>
+
+		<section data-bind="foreach: Profiles" style="display: none;">
 			<article>
 				<h1 data-bind="text: DisplayName"></h1>
 				<p data-bind="text: Bio"></p>
