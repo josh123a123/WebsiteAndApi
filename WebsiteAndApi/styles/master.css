@@ -43,6 +43,7 @@ p {
 			font-size: xx-large;
 			font-variant: small-caps;
 			background-color: #3852A4;
+			cursor: pointer;
 		}
 
 		textarea {
