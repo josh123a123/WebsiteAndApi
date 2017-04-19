@@ -32,6 +32,7 @@ namespace DevSpace.Database.Models {
 		public ImmutableList<ITag> Tags { get; private set; }
 		public string Title { get; internal set; }
 		public int UserId { get; internal set; }
+		public int SessionLength { get; internal set; }
 
 		public int TimeSlotId { get; internal set; }
 		public ITimeSlot TimeSlot { get; internal set; }
@@ -66,6 +67,12 @@ namespace DevSpace.Database.Models {
 		public ISession UpdateTitle( string value ) {
 			SessionModel newSession = this.Clone();
 			newSession.Title = value;
+			return newSession;
+		}
+
+		public ISession UpdateSessionLength( int value ) {
+			SessionModel newSession = this.Clone();
+			newSession.SessionLength = value;
 			return newSession;
 		}
 
@@ -118,6 +125,7 @@ namespace DevSpace.Database.Models {
 				UserId = this.UserId,
 				Title = string.Copy( this.Title ),
 				Abstract = string.Copy( this.Abstract ),
+				SessionLength = this.SessionLength,
 				Accepted = this.Accepted,
 				Tags = this.Tags?.ToImmutableList(),
 				TimeSlotId = this.TimeSlotId,

@@ -33,6 +33,7 @@ function Session(data) {
 	Self.Title = ko.observable();
 	Self.Abstract = ko.observable();
 	Self.Notes = ko.observable();
+	Self.SessionLength = ko.observable();
 	Self.Tags = ko.observableArray([]);
 
 	if (data) {
@@ -41,6 +42,7 @@ function Session(data) {
 		Self.Title(data.Title);
 		Self.Abstract(data.Abstract);
 		Self.Notes(data.Notes);
+		Self.SessionLength(data.SessionLength);
 
 		if (data.Tags)
 			for (var index = 0; index < data.Tags.length; ++index)
