@@ -230,9 +230,11 @@ UPDATE VersionInfo SET DbVersion = '01.00.02.0003';";
 					return
 @"ALTER TABLE Sessions ADD SessionLength INTEGER NULL;
 
-GO
+UPDATE VersionInfo SET DbVersion = '01.00.02.0004';";
 
-UPDATE Sessions SET SessionLength = 60;
+				case "01.00.02.0004":
+					return
+@"UPDATE Sessions SET SessionLength = 60;
 ALTER TABLE Sessions ALTER COLUMN SessionLength INTEGER NOT NULL;
 
 UPDATE VersionInfo SET DbVersion = '01.00.03.0000';";
