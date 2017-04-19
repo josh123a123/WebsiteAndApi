@@ -27,6 +27,7 @@ namespace DevSpace.Api.Controllers {
 			SessionData["Title"] = session.Title;
 			SessionData["Abstract"] = session.Abstract;
 			SessionData["Room"] = session.Room.DisplayName;
+			SessionData["SessionLength"] = session.SessionLength;
 
 			JArray Tags = new JArray();
 			foreach( ITag tag in session.Tags ) {
