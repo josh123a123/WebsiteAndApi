@@ -26,7 +26,7 @@ namespace DevSpace.Database.Models {
 
 		#region ISession
 		public string Abstract { get; internal set; }
-		public bool Accepted { get; internal set; }
+		public bool? Accepted { get; internal set; }
 		public int Id { get; internal set; }
 		public string Notes { get; internal set; }
 		public ImmutableList<ITag> Tags { get; private set; }
@@ -46,7 +46,7 @@ namespace DevSpace.Database.Models {
 			return newSession;
 		}
 
-		public ISession UpdateAccepted( bool value ) {
+		public ISession UpdateAccepted( bool? value ) {
 			SessionModel newSession = this.Clone();
 			newSession.Accepted = value;
 			return newSession;

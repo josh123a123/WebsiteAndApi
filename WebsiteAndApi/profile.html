@@ -25,6 +25,7 @@
 			<textarea data-bind="value: Profile().Bio"></textarea>
 			<input type="button" data-bind="click: SaveProfile" value="Save Profile" />
 			<input type="button" data-bind="click: ShowCredentials" value="Update Credentials" />
+			<input type="button" data-bind="click: function () { ShowSession(null) }" value="New Session" />
 			<h1>Sessions</h1>
 			<table>
 				<tbody id="SessionList" data-bind="foreach: Sessions">
@@ -35,7 +36,15 @@
 					</tr>
 				</tbody>
 			</table>
-			<input type="button" data-bind="click: function () { ShowSession(null) }" value="New Session" />
+			<h1>Past Sessions</h1>
+			<table>
+				<tbody id="SessionList" data-bind="foreach: PastSessions">
+					<tr>
+						<td class="Title" data-bind="text: Title"></td>
+						<td><img src="/images/Resubmit.png" alt="Resubmit" data-bind="click: $root.ResubmitSession" /></td>
+					</tr>
+				</tbody>
+			</table>
 		</article>
 		<article id="Session" style="display: none;">
 			<h1>Session</h1>

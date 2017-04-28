@@ -58,7 +58,7 @@ namespace DevSpace.Api.Controllers {
 
 		private async Task<string> CreateJsonUserArray( IList<IUser> Users ) {
 			Database.SessionDataStore SessionsDS = new Database.SessionDataStore();
-			IList<ISession> SessionList = ( await SessionsDS.GetAll() ).Where( ses => ses.Accepted ).ToList();
+			IList<ISession> SessionList = ( await SessionsDS.GetAll() ).Where( ses => ses.Accepted ?? false ).ToList();
 
 			JArray JsonArray = new JArray();
 			foreach( IUser User in Users ) {
@@ -98,7 +98,7 @@ namespace DevSpace.Api.Controllers {
 			} else {
 				try {
 					Database.SessionDataStore SessionsDS = new Database.SessionDataStore();
-					IList<ISession> SessionList = ( await SessionsDS.GetAll() ).Where( ses => ses.UserId == Id ).Where( ses => ses.Accepted ).ToList();
+					IList<ISession> SessionList = ( await SessionsDS.GetAll() ).Where( ses => ses.UserId == Id ).Where( ses => ses.Accepted ?? false ).ToList();
 
 					HttpResponseMessage Response = new HttpResponseMessage( HttpStatusCode.OK );
 					Response.Content = new StringContent( await CreateJsonUser( await _DataStore.Get( Id ), SessionList ) );
