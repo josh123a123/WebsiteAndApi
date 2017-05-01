@@ -33,6 +33,7 @@ function Session(data) {
 	Self.Title = ko.observable();
 	Self.Abstract = ko.observable();
 	Self.Notes = ko.observable();
+	Self.SessionLength = ko.observable();
 	Self.Tags = ko.observableArray([]);
 
 	if (data) {
@@ -41,6 +42,7 @@ function Session(data) {
 		Self.Title(data.Title);
 		Self.Abstract(data.Abstract);
 		Self.Notes(data.Notes);
+		Self.SessionLength(data.SessionLength);
 
 		if (data.Tags)
 			for (var index = 0; index < data.Tags.length; ++index)
@@ -61,6 +63,7 @@ function ViewModel() {
 	var Self = this;
 	Self.Profile = ko.observable(new Profile());
 	Self.Sessions = ko.observableArray([]);
+	Self.PastSessions = ko.observableArray([]);
 	Self.Tags = ko.observableArray([]);
 	Self.SelectedSession = ko.observable(new Session());
 	Self.Verify = ko.observable();
@@ -104,8 +107,12 @@ function ViewModel() {
 			switch (SessionsRequest.status) {
 				case 200:
 					var SessionList = JSON.parse(SessionsRequest.responseText);
-					for (var index = 0; index < SessionList.length; ++index)
-						Self.Sessions.push(new Session(SessionList[index]));
+					for (var index = 0; index < SessionList.length; ++index) {
+						if (SessionList[index].Accepted == null)
+							Self.Sessions.push(new Session(SessionList[index]));
+						else
+							Self.PastSessions.push(new Session(SessionList[index]));
+					}
 					break;
 	
 				case 401:
@@ -257,6 +264,36 @@ function ViewModel() {
 		};
 	}
 	
+	Self.ResubmitSession = function (data) {
+		// Hacky way to create a deep clone
+		var json = ko.toJSON(data);
+		var copy = new Session(JSON.parse(json));
+		copy.Id(-1);
+
+		var Request = new XMLHttpRequest();
+		Request.withCredentials = true;
+		Request.open('POST', '/api/v1/session', true);
+		Request.setRequestHeader('Accept', 'application/json');
+		Request.setRequestHeader('Content-Type', 'application/json');
+		Request.send(ko.toJSON(copy));
+
+		Request.onreadystatechange = function () {
+			if (Request.readyState == Request.DONE) {
+				switch (Request.status) {
+					case 201:
+						Self.Sessions.push(new Session(JSON.parse(Request.responseText)));
+
+					case 204:
+						Self.ShowProfile();
+						break;
+
+					default:
+						break;
+				}
+			}
+		};
+	}
+
 	Self.DeleteSession = function (data) {
 		var Request = new XMLHttpRequest();
 		Request.withCredentials = true;

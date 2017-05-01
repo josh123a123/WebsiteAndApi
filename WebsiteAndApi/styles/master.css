@@ -23,14 +23,14 @@ p {
 	margin-bottom: 20px;
 }
 
-	input, textarea {
+	input, textarea, select {
 		width: 90%;
 		margin: 10px 5%;
 		height: 50px;
 		display: block;
 	}
 
-		input[type=text], input[type=email], input[type=password], textarea {
+		input[type=text], input[type=email], input[type=password], textarea, select, option {
 			text-indent: 5%;
 			font-weight: 400;
 			font-size: x-large;

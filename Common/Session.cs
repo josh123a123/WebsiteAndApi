@@ -14,11 +14,12 @@ namespace DevSpace.Common {
 
 		#region ISession
 		[DataMember]public string Abstract { get; private set; }
-		[DataMember]public bool Accepted { get; private set; }
+		[DataMember]public bool? Accepted { get; private set; }
 		[DataMember]public int Id { get; private set; }
 		[DataMember]public string Notes { get; private set; }
 		[DataMember]public string Title { get; private set; }
-		[DataMember]	public int UserId { get; private set; }
+		[DataMember] public int SessionLength { get; private set; }
+		[DataMember]public int UserId { get; private set; }
 
 		[DataMember( Name = "Tags" )]private List<Tag> _tags;
 		public ImmutableList<ITag> Tags {
@@ -55,7 +56,7 @@ namespace DevSpace.Common {
 			return newSession;
 		}
 
-		public ISession UpdateAccepted( bool value ) {
+		public ISession UpdateAccepted( bool? value ) {
 			Session newSession = this.Clone();
 			newSession.Accepted = value;
 			return newSession;
@@ -76,6 +77,12 @@ namespace DevSpace.Common {
 		public ISession UpdateTitle( string value ) {
 			Session newSession = this.Clone();
 			newSession.Title = value;
+			return newSession;
+		}
+
+		public ISession UpdateSessionLength( int value ) {
+			Session newSession = this.Clone();
+			newSession.SessionLength = value;
 			return newSession;
 		}
 
@@ -116,6 +123,7 @@ namespace DevSpace.Common {
 				UserId = this.UserId,
 				Title = string.Copy( this.Title ),
 				Abstract = string.Copy( this.Abstract ),
+				SessionLength = this.SessionLength,
 				Accepted = this.Accepted
 			};
 

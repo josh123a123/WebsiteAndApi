@@ -25,6 +25,7 @@
 			<textarea data-bind="value: Profile().Bio"></textarea>
 			<input type="button" data-bind="click: SaveProfile" value="Save Profile" />
 			<input type="button" data-bind="click: ShowCredentials" value="Update Credentials" />
+			<input type="button" data-bind="click: function () { ShowSession(null) }" value="New Session" />
 			<h1>Sessions</h1>
 			<table>
 				<tbody id="SessionList" data-bind="foreach: Sessions">
@@ -35,7 +36,15 @@
 					</tr>
 				</tbody>
 			</table>
-			<input type="button" data-bind="click: function () { ShowSession(null) }" value="New Session" />
+			<h1>Past Sessions</h1>
+			<table>
+				<tbody id="SessionList" data-bind="foreach: PastSessions">
+					<tr>
+						<td class="Title" data-bind="text: Title"></td>
+						<td><img src="/images/Resubmit.png" alt="Resubmit" data-bind="click: $root.ResubmitSession" /></td>
+					</tr>
+				</tbody>
+			</table>
 		</article>
 		<article id="Session" style="display: none;">
 			<h1>Session</h1>
@@ -45,6 +54,11 @@
 			<textarea data-bind="value: SelectedSession().Abstract"></textarea>
 			<h2>Notes to Reviewer</h2>
 			<textarea data-bind="value: SelectedSession().Notes"></textarea>
+			<h2>Session Length</h2>
+			<select data-bind="value: SelectedSession().SessionLength">
+				<option value="60">60 Minutes</option>
+				<option value="30">30 Minutes</option>
+			</select>
 			<h2>Selected Tags (Click to Remove)</h2>
 			<ul data-bind="foreach: SelectedSession().Tags">
 				<li data-bind="text: Text, click: $root.AddOrRemoveTagToSession" />

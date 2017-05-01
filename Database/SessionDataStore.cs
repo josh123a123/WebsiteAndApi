@@ -14,10 +14,11 @@ namespace DevSpace.Database {
 				connection.Open();
 
 				ISession addedSession = null;
-				using( SqlCommand sessionCommand = new SqlCommand( "INSERT Sessions ( UserId, Title, Abstract, Notes ) VALUES ( @UserId, @Title, @Abstract, @Notes ); SELECT SCOPE_IDENTITY();", connection ) ) {
+				using( SqlCommand sessionCommand = new SqlCommand( "INSERT Sessions ( UserId, Title, Abstract, Notes, SessionLength ) VALUES ( @UserId, @Title, @Abstract, @Notes, @SessionLength ); SELECT SCOPE_IDENTITY();", connection ) ) {
 					sessionCommand.Parameters.Add( "UserId", SqlDbType.Int ).Value = ItemToAdd.UserId;
 					sessionCommand.Parameters.Add( "Title", SqlDbType.VarChar ).Value = ItemToAdd.Title;
 					sessionCommand.Parameters.Add( "Abstract", SqlDbType.VarChar ).Value = ItemToAdd.Abstract;
+					sessionCommand.Parameters.Add( "SessionLength", SqlDbType.Int ).Value = ItemToAdd.SessionLength;
 
 					if( string.IsNullOrWhiteSpace( ItemToAdd.Notes ) )
 						sessionCommand.Parameters.Add( "Notes", SqlDbType.VarChar ).Value = DBNull.Value;
@@ -186,11 +187,12 @@ namespace DevSpace.Database {
 			using( SqlConnection connection = new SqlConnection( Settings.ConnectionString ) ) {
 				connection.Open();
 
-				using( SqlCommand sessionCommand = new SqlCommand( "UPDATE Sessions SET UserId = @UserId, Title = @Title, Abstract = @Abstract, Notes = @Notes WHERE Id = @Id; DELETE FROM SessionTags WHERE SessionId = @Id;", connection ) ) {
+				using( SqlCommand sessionCommand = new SqlCommand( "UPDATE Sessions SET UserId = @UserId, Title = @Title, Abstract = @Abstract, Notes = @Notes, SessionLength = @SessionLength WHERE Id = @Id; DELETE FROM SessionTags WHERE SessionId = @Id;", connection ) ) {
 					sessionCommand.Parameters.Add( "Id", SqlDbType.Int ).Value = ItemToUpdate.Id;
 					sessionCommand.Parameters.Add( "UserId", SqlDbType.Int ).Value = ItemToUpdate.UserId;
 					sessionCommand.Parameters.Add( "Title", SqlDbType.VarChar ).Value = ItemToUpdate.Title;
 					sessionCommand.Parameters.Add( "Abstract", SqlDbType.VarChar ).Value = ItemToUpdate.Abstract;
+					sessionCommand.Parameters.Add( "SessionLength", SqlDbType.Int ).Value = ItemToUpdate.SessionLength;
 
 					if( string.IsNullOrWhiteSpace( ItemToUpdate.Notes ) )
 						sessionCommand.Parameters.Add( "Notes", SqlDbType.VarChar ).Value = DBNull.Value;
